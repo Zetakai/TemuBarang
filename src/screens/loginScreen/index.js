@@ -25,7 +25,7 @@ export default class index extends Component {
   render() {
     return (
       <View style={{flex:1}}>
-      <Text>allo</Text>
+        <Text>allo</Text>
       </View>
     )
   }
