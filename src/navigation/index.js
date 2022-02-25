@@ -10,9 +10,9 @@ export default class App extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login Screen">
+        <Stack.Navigator>
           <Stack.Screen
-            name="Login Screen"
+            name="LoginScreen"
             component={LoginScreen}
             options={{headerShown: false}}
           />
