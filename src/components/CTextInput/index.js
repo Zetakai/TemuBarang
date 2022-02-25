@@ -1,7 +1,7 @@
 import {Text, StyleSheet, View, TextInput} from 'react-native';
 import React, {Component} from 'react';
 
-export default class index extends Component {
+export default class CTextInput extends Component {
   render() {
     return (
       <View style={{...styles.inputbox, ...this.props.style}}>
