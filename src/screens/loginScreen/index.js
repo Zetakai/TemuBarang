@@ -25,7 +25,7 @@ export default class index extends Component {
     };
   }
   _userLogin = async () => {
-    if(this.state.email === '' && this.state.password === '') {
+    if(this.state.email === '' || this.state.password === '') {
       Alert.alert('Enter Email and Password to log in')
     } else {
       auth()
