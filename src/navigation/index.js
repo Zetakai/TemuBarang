@@ -11,7 +11,7 @@ export default class App extends Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="loginScreen"
+            name="LoginScreen"
             component={LoginScreen}
             options={{headerShown: false}}
           />

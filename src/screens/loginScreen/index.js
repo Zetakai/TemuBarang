@@ -16,7 +16,7 @@ import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
 
-export default class index extends Component {
+export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,22 +25,25 @@ export default class index extends Component {
     };
   }
   _userLogin = async () => {
-    if(this.state.email === '' || this.state.password === '') {
-      Alert.alert('Enter Email and Password to log in')
+    if (this.state.email === '' || this.state.password === '') {
+      Alert.alert('Enter your email and password to log in');
     } else {
       auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then((res) => {
-        console.log(res)
-        console.log('User logged-in successfully!')
-        Alert.alert(`You're Logged in`)
-        // this.props.navigation.navigate('Dashboard')
-      })
-      .catch(error => {console.log(error),
-      Alert.alert(JSON.stringify(error))}
-      )
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(res => {
+          console.log(res);
+          console.log('User logged-in successfully!');
+          Alert.alert(`You're Logged in`);
+          // this.props.navigation.navigate('Dashboard')
+        })
+        .catch(error => {
+          console.log(error)
+          if(error.code=="auth/invalid-email")Alert.alert("Enter a correct email address")
+          if(error.code=="auth/wrong-password")Alert.alert("You have entered an invalid username or password")
+          if(error.code=="auth/user-not-found")Alert.alert("You are not registered yet")
+        });
     }
-  }
+  };
 
   render() {
     const {email, password} = this.state;
@@ -67,10 +70,7 @@ export default class index extends Component {
               secureTextEntry={true}
             />
           </View>
-          <CButton
-            title={'Login'}
-            onPress={() => this._userLogin()}
-          />
+          <CButton title={'Login'} onPress={() => this._userLogin()} />
         </View>
       </View>
     );
