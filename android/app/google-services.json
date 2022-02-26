@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "954608335456",
+    "project_id": "temubarang",
+    "storage_bucket": "temubarang.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954608335456:android:98da22067d0f3920ab2105",
+        "android_client_info": {
+          "package_name": "com.temubarang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "954608335456-hn0qhmdl6b1qs988ptnlc18dnbg3jt9j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.temubarang",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "954608335456-se6uo221786aegpqbh9vccctv93gnq17.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHTyjvklMdWD9QgcoTaX2GOthI_wokXqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "954608335456-se6uo221786aegpqbh9vccctv93gnq17.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
