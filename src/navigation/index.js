@@ -2,7 +2,7 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Component} from 'react/cjs/react.production.min';
-import loginScreen from "../screens/loginScreen"
+import LoginScreen from "../screens/loginScreen"
 
 const Stack = createNativeStackNavigator();
 export default class App extends Component {
@@ -12,7 +12,7 @@ export default class App extends Component {
         <Stack.Navigator>
           <Stack.Screen
             name="loginScreen"
-            component={loginScreen}
+            component={LoginScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
