@@ -7,10 +7,11 @@ export default class CButton extends Component {
     return (
       <View>
         <TouchableOpacity {...this.props} style={{...styles.button, ...style}}>
-          <Text>
+        {this.props.children}
+          <Text style={styles.text}>
             {title}
           </Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
       </View>
     );
   }
@@ -19,11 +20,15 @@ export default class CButton extends Component {
 const styles = StyleSheet.create({
   button: {
     borderRadius: 25,
-    borderColor: 'blue',
-    borderWidth: 2,
+    borderColor: 'black',
+    borderWidth: 1,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5
+    width: 150,
+    height: 60,
   },
+  text:{
+    color:'black'
+  }
 });
