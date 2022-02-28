@@ -35,6 +35,7 @@ export default class RegisterScreen extends Component {
           this.props.navigation.navigate('LoginScreen');
         })
         .catch(error => {
+          console.log(error);
           if (error.code === 'auth/email-already-in-use') {
             Alert.alert('That email address is already in use!');
           }
@@ -43,8 +44,6 @@ export default class RegisterScreen extends Component {
           }
           if (error.code === 'auth/weak-password') {
             Alert.alert('Password should be at least 6 characters');
-          } else {
-            console.error(error);
           }
         });
     }
