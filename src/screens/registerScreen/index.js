@@ -16,7 +16,7 @@ import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
 
-export default class LoginScreen extends Component {
+export default class RegisterScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,23 +24,26 @@ export default class LoginScreen extends Component {
       password: '',
     };
   }
-  _userLogin = async () => {
+  _userSignup = async () => {
     if (this.state.email === '' || this.state.password === '') {
-      Alert.alert('Enter your email and password to log in');
+      Alert.alert('Enter your email and password to sign up');
     } else {
       auth()
-        .signInWithEmailAndPassword(this.state.email, this.state.password)
-        .then(res => {
-          console.log(res);
-          console.log('User logged-in successfully!');
-          Alert.alert(`You're Logged in`);
-          // this.props.navigation.navigate('Dashboard')
+        .createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then(() => {
+          Alert.alert('User account created & signed in!');
+          this.props.navigation.navigate('LoginScreen');
         })
         .catch(error => {
-          console.log(error)
-          if(error.code=="auth/invalid-email")Alert.alert("Enter a correct email address")
-          if(error.code=="auth/wrong-password")Alert.alert("You have entered an invalid username or password")
-          if(error.code=="auth/user-not-found")Alert.alert("You are not registered yet")
+          if (error.code === 'auth/email-already-in-use') {
+            Alert.alert('That email address is already in use!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            Alert.alert('That email address is invalid!');
+          }
+
+          console.error(error);
         });
     }
   };
@@ -50,9 +53,9 @@ export default class LoginScreen extends Component {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1 / 3, justifyContent: 'center'}}>
-          <Text style={styles.pagetitle}>Sign In</Text>
+          <Text style={styles.pagetitle}>Sign Up</Text>
         </View>
-        <View style={{flex:2/3,alignItems: 'center'}}>
+        <View style={{flex: 2 / 3,alignItems: 'center'}}>
           <View style={{marginBottom: 25}}>
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput
@@ -70,9 +73,7 @@ export default class LoginScreen extends Component {
               secureTextEntry={true}
             />
           </View>
-          <CButton style={{marginBottom:20}} title={'Login'} onPress={() => this._userLogin()} />
-          <Text style={{color: 'black',marginBottom:20}}>or</Text>
-          <CButton style={{width:300,borderRadius:15}} title={'Forgot Your Password?'} onPress={() => this.props.navigation.navigate('ForgotScreen')} />
+          <CButton title={'Register'} onPress={() => this._userSignup()} />
         </View>
       </View>
     );
