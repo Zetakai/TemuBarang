@@ -42,7 +42,7 @@ export default class RegisterScreen extends Component {
             Alert.alert('That email address is invalid!');
           }
           if (error.code === 'auth/weak-password') {
-            Alert.alert('Your password is weak. Try another ones');
+            Alert.alert('Password should be at least 6 characters');
           } else {
             console.error(error);
           }
