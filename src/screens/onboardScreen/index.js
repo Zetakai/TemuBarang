@@ -15,7 +15,6 @@ import React, {Component} from 'react';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
-import LoginScreen from '../loginScreen'
 
 export default class OnboardScreen extends Component {
   constructor(props) {
@@ -59,7 +58,6 @@ export default class OnboardScreen extends Component {
         </View>
       </View>
     );
-    <LoginScreen></LoginScreen>
   }
 }
 

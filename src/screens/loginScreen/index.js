@@ -72,7 +72,7 @@ export default class LoginScreen extends Component {
           </View>
           <CButton style={{marginBottom:20}} title={'Login'} onPress={() => this._userLogin()} />
           <Text style={{color: 'black',marginBottom:20}}>or</Text>
-          <CButton style={{width:300,borderRadius:15}} title={'Forgot Your Password?'} onPress={() => this.props.navigation.navigate('ForgotScreen')} />
+          <CButton style={styles.button} title={'Forgot Your Password?'} onPress={() => this.props.navigation.navigate('ForgotScreen')} />
         </View>
       </View>
     );
@@ -86,4 +86,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'green',
   },
+  button:{width:300,borderRadius:15
+
+  }
 });
