@@ -38,12 +38,14 @@ export default class RegisterScreen extends Component {
           if (error.code === 'auth/email-already-in-use') {
             Alert.alert('That email address is already in use!');
           }
-
           if (error.code === 'auth/invalid-email') {
             Alert.alert('That email address is invalid!');
           }
-
-          console.error(error);
+          if (error.code === 'auth/weak-password') {
+            Alert.alert('Your password is weak. Try another ones');
+          } else {
+            console.error(error);
+          }
         });
     }
   };
@@ -55,7 +57,7 @@ export default class RegisterScreen extends Component {
         <View style={{flex: 1 / 3, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Sign Up</Text>
         </View>
-        <View style={{flex: 2 / 3,alignItems: 'center'}}>
+        <View style={{flex: 2 / 3, alignItems: 'center'}}>
           <View style={{marginBottom: 25}}>
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput

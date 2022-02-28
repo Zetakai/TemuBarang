@@ -26,7 +26,7 @@ export default class ForgotScreen extends Component {
   }
   _userForgot = async () => {
     if (this.state.email === '') {
-      Alert.alert('Enter your email and password to sign up');
+      Alert.alert('Enter your email');
     } else {
       auth()
         .sendPasswordResetEmail(this.state.email)
