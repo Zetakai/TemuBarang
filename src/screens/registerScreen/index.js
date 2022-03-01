@@ -42,21 +42,24 @@ export default class RegisterScreen extends Component {
           if (error.code === 'auth/email-already-in-use') {
             Alert.alert('That email address is already in use!');
             this.setState({emailBox: '1'});
+            this.setState({passwordBox: '0'});
           }
           if (error.code === 'auth/invalid-email') {
             Alert.alert('That email address is invalid!');
             this.setState({emailBox: '1'});
+            this.setState({passwordBox: '0'});
           }
           if (error.code === 'auth/weak-password') {
-            Alert.alert('Password should be at least 6 characters');
+            Alert.alert('Password should be at least 6 characters.');
             this.setState({passwordBox: '1'});
+            this.setState({emailBox: '0'});
           }
         });
     }
   };
 
   render() {
-    const {email, password} = this.state;
+    const {email, password,emailBox,passwordBox} = this.state;
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1 / 3, justifyContent: 'center'}}>
@@ -67,7 +70,7 @@ export default class RegisterScreen extends Component {
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput
               style={{
-                borderColor: this.state.emailBox == '0' ? 'black' : 'red',
+                borderColor: emailBox == '0' ? 'black' : 'red',
               }}
               value={email}
               placeholder="Enter email"
@@ -78,7 +81,7 @@ export default class RegisterScreen extends Component {
             <Text style={{color: 'black'}}>Your Password</Text>
             <CTextInput
               style={{
-                borderColor: this.state.passwordBox == '0' ? 'black' : 'red',
+                borderColor: passwordBox == '0' ? 'black' : 'red',
               }}
               value={password}
               placeholder="Enter password"

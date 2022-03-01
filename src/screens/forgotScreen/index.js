@@ -25,6 +25,9 @@ export default class ForgotScreen extends Component {
       password: '',
     };
   }
+  componentDidMount(){
+    const {passEmail}=this.props.route.params;
+    this.setState({email:passEmail})}
   _userForgot = () => {
     if (this.state.email === '') {
       Alert.alert('Enter your email');
@@ -39,11 +42,11 @@ export default class ForgotScreen extends Component {
         .catch(error => {
           console.log(error);
           if (error.code == 'auth/invalid-email') {
-            Alert.alert('Enter a correct email address');
+            Alert.alert('Enter a correct email address!');
             this.setState({emailBox: '1'});
           }
           if (error.code == 'auth/user-not-found') {
-            Alert.alert('You are not registered yet');
+            Alert.alert('You are not registered yet.');
             this.setState({emailBox: '1'});
           }
         });
@@ -51,7 +54,8 @@ export default class ForgotScreen extends Component {
   };
 
   render() {
-    const {email, password} = this.state;
+    const {email, password,emailBox} = this.state;
+    
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1 / 2, justifyContent: 'center'}}>
@@ -62,7 +66,7 @@ export default class ForgotScreen extends Component {
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput
               style={{
-                borderColor: this.state.emailBox == '0' ? 'black' : 'red',
+                borderColor: emailBox == '0' ? 'black' : 'red',
               }}
               value={email}
               placeholder="Enter email"

@@ -25,6 +25,7 @@ export default class LoginScreen extends Component {
       password: '',
       passwordBox: '0',
       showForgot: '0',
+      showRegister:'0'
     };
   }
   _userLogin = () => {
@@ -43,24 +44,31 @@ export default class LoginScreen extends Component {
         .catch(error => {
           console.log(error);
           if (error.code == 'auth/invalid-email') {
-            Alert.alert('Enter a correct email address');
+            Alert.alert('Enter a correct email address!');
             this.setState({emailBox: '1'});
+            this.setState({passwordBox: '0'});
           }
           if (error.code == 'auth/user-not-found') {
-            Alert.alert('You are not registered yet');
+            Alert.alert('You are not registered yet.');
+            this.setState({showRegister: '1'});
             this.setState({emailBox: '1'});
+            this.setState({passwordBox: '0'});
           }
           if (error.code == 'auth/wrong-password') {
-            Alert.alert('You have entered an invalid username or password');
+            Alert.alert('You have entered an invalid username or password.');
             this.setState({showForgot: '1'});
             this.setState({passwordBox: '1'});
+            this.setState({emailBox: '0'});
+          }
+          if (error.code == 'auth/too-many-requests'){
+            Alert.alert('Too many failed login attempts. Try again later!');
           }
         });
     }
   };
 
   render() {
-    const {email, password} = this.state;
+    const {email, password,emailBox,passwordBox,showForgot,showRegister} = this.state;
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1 / 3, justifyContent: 'center'}}>
@@ -72,7 +80,7 @@ export default class LoginScreen extends Component {
             <CTextInput
               style={{
                 ...styles.button,
-                borderColor: this.state.emailBox == '0' ? 'black' : 'red',
+                borderColor: emailBox == '0' ? 'black' : 'red',
               }}
               value={email}
               placeholder="Enter email"
@@ -84,7 +92,7 @@ export default class LoginScreen extends Component {
             <CTextInput
               style={{
                 ...styles.button,
-                borderColor: this.state.emailBox == '0' ? 'black' : 'red',
+                borderColor: passwordBox == '0' ? 'black' : 'red',
               }}
               value={password}
               placeholder="Enter password"
@@ -97,18 +105,23 @@ export default class LoginScreen extends Component {
             title={'Login'}
             onPress={() => this._userLogin()}
           />
-          {this.state.showForgot == '1' ? (
+          
             <View style={{alignItems: 'center'}}>
-              <Text style={{color: 'black', marginBottom: 20}}>or</Text>
-              <CButton
+            {showForgot == '1'||showRegister=="1" ? 
+              <Text style={{color: 'black', marginBottom: 20}}>or</Text>:<View></View>}
+              {showRegister=="1"?<CButton
                 style={styles.button}
+                title={'Create New Account.'}
+                onPress={() => this.props.navigation.navigate('RegisterScreen')}
+              />:<View></View>}
+               {showForgot == '1'?<CButton
+                style={{...styles.button,marginBottom:5}}
                 title={'Forgot Your Password?'}
-                onPress={() => this.props.navigation.navigate('ForgotScreen')}
-              />
+                onPress={() => this.props.navigation.navigate('ForgotScreen',{passEmail: email})}
+              />:<View></View>}
+              
             </View>
-          ) : (
-            <View></View>
-          )}
+          
         </View>
       </View>
     );
