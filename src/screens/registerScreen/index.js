@@ -21,12 +21,18 @@ export default class RegisterScreen extends Component {
     super(props);
     this.state = {
       email: '',
+      emailBox: '0',
       password: '',
+      passwordBox: '0',
     };
   }
   _userSignup = async () => {
     if (this.state.email === '' || this.state.password === '') {
       Alert.alert('Enter your email and password to sign up');
+      this.setState({emailBox: '1', passwordBox: '1'});
+      setTimeout(() => {
+        this.setState({emailBox: '0', passwordBox: '0'});
+      }, 15000);
     } else {
       auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -38,12 +44,24 @@ export default class RegisterScreen extends Component {
           console.log(error);
           if (error.code === 'auth/email-already-in-use') {
             Alert.alert('That email address is already in use!');
+            this.setState({emailBox: '1'});
+            setTimeout(() => {
+              this.setState({emailBox: '0'});
+            }, 15000);
           }
           if (error.code === 'auth/invalid-email') {
             Alert.alert('That email address is invalid!');
+            this.setState({emailBox: '1'});
+            setTimeout(() => {
+              this.setState({emailBox: '0'});
+            }, 15000);
           }
           if (error.code === 'auth/weak-password') {
             Alert.alert('Password should be at least 6 characters');
+            this.setState({passwordBox: '1'});
+            setTimeout(() => {
+              this.setState({passwordBox: '0'});
+            }, 15000);
           }
         });
     }
@@ -60,6 +78,9 @@ export default class RegisterScreen extends Component {
           <View style={{marginBottom: 25}}>
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput
+              style={{
+                borderColor: this.state.emailBox == '0' ? 'black' : 'red',
+              }}
               value={email}
               placeholder="Enter email"
               onChangeText={value => this.setState({email: value})}
@@ -68,6 +89,9 @@ export default class RegisterScreen extends Component {
           <View style={{marginBottom: 45}}>
             <Text style={{color: 'black'}}>Your Password</Text>
             <CTextInput
+              style={{
+                borderColor: this.state.passwordBox == '0' ? 'black' : 'red',
+              }}
               value={password}
               placeholder="Enter password"
               onChangeText={value => this.setState({password: value})}

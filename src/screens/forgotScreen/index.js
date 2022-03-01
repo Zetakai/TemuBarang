@@ -22,11 +22,16 @@ export default class ForgotScreen extends Component {
     this.state = {
       email: '',
       password: '',
+      passwordBox: '0',
     };
   }
   _userForgot = async () => {
     if (this.state.email === '') {
       Alert.alert('Enter your email');
+      this.setState({passwordBox: '1'});
+      setTimeout(() => {
+        this.setState({passwordBox: '0'});
+      }, 15000);
     } else {
       auth()
         .sendPasswordResetEmail(this.state.email)
@@ -36,12 +41,20 @@ export default class ForgotScreen extends Component {
         })
         .catch(error => {
           console.log(error);
-          if (error.code == 'auth/invalid-email')
+          if (error.code == 'auth/invalid-email') {
             Alert.alert('Enter a correct email address');
-          if (error.code == 'auth/wrong-password')
-            Alert.alert('You have entered an invalid username or password');
-          if (error.code == 'auth/user-not-found')
+            this.setState({passwordBox: '1'});
+            setTimeout(() => {
+              this.setState({passwordBox: '0'});
+            }, 15000);
+          }
+          if (error.code == 'auth/user-not-found') {
             Alert.alert('You are not registered yet');
+            this.setState({passwordBox: '1'});
+            setTimeout(() => {
+              this.setState({passwordBox: '0'});
+            }, 15000);
+          }
         });
     }
   };
@@ -57,6 +70,9 @@ export default class ForgotScreen extends Component {
           <View style={{marginBottom: 45}}>
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput
+              style={{
+                borderColor: this.state.passwordBox == '0' ? 'black' : 'red',
+              }}
               value={email}
               placeholder="Enter email"
               onChangeText={value => this.setState({email: value})}
