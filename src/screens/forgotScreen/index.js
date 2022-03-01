@@ -21,16 +21,16 @@ export default class ForgotScreen extends Component {
     super(props);
     this.state = {
       email: '',
+      emailBox: '0',
       password: '',
-      passwordBox: '0',
     };
   }
   _userForgot = async () => {
     if (this.state.email === '') {
       Alert.alert('Enter your email');
-      this.setState({passwordBox: '1'});
+      this.setState({emailBox: '1'});
       setTimeout(() => {
-        this.setState({passwordBox: '0'});
+        this.setState({emailBox: '0'});
       }, 15000);
     } else {
       auth()
@@ -43,16 +43,16 @@ export default class ForgotScreen extends Component {
           console.log(error);
           if (error.code == 'auth/invalid-email') {
             Alert.alert('Enter a correct email address');
-            this.setState({passwordBox: '1'});
+            this.setState({emailBox: '1'});
             setTimeout(() => {
-              this.setState({passwordBox: '0'});
+              this.setState({emailBox: '0'});
             }, 15000);
           }
           if (error.code == 'auth/user-not-found') {
             Alert.alert('You are not registered yet');
-            this.setState({passwordBox: '1'});
+            this.setState({emailBox: '1'});
             setTimeout(() => {
-              this.setState({passwordBox: '0'});
+              this.setState({emailBox: '0'});
             }, 15000);
           }
         });
@@ -71,7 +71,7 @@ export default class ForgotScreen extends Component {
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput
               style={{
-                borderColor: this.state.passwordBox == '0' ? 'black' : 'red',
+                borderColor: this.state.emailBox == '0' ? 'black' : 'red',
               }}
               value={email}
               placeholder="Enter email"

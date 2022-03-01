@@ -57,6 +57,9 @@ export default class LoginScreen extends Component {
           if (error.code == 'auth/wrong-password') {
             Alert.alert('You have entered an invalid username or password');
             this.setState({showForgot: '1'});
+            setTimeout(() => {
+              this.setState({passwordBox: '0'});
+            }, 15000);
           }
         });
     }
