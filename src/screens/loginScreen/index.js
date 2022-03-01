@@ -110,13 +110,13 @@ export default class LoginScreen extends Component {
             {showForgot == '1'||showRegister=="1" ? 
               <Text style={{color: 'black', marginBottom: 20}}>or</Text>:<View></View>}
               {showRegister=="1"?<CButton
-                style={styles.button}
+                style={{...styles.button,marginBottom:5}}
                 title={'Create New Account.'}
                 onPress={() => this.props.navigation.navigate('RegisterScreen')}
               />:<View></View>}
                {showForgot == '1'?<CButton
-                style={{...styles.button,marginBottom:5}}
-                title={'Forgot Your Password?'}
+                style={{...styles.button}}
+                title={'Reset Your Password.'}
                 onPress={() => this.props.navigation.navigate('ForgotScreen',{passEmail: email})}
               />:<View></View>}
               

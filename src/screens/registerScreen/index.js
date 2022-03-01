@@ -34,7 +34,7 @@ export default class RegisterScreen extends Component {
       auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(() => {
-          Alert.alert('User account created & signed in!');
+          Alert.alert('Your account is created!');
           this.props.navigation.navigate('LoginScreen');
         })
         .catch(error => {

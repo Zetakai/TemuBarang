@@ -58,7 +58,7 @@ export default class ForgotScreen extends Component {
     
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1 / 2, justifyContent: 'center'}}>
+        <View style={{flex: 1 / 2,alignItems:'center', justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Reset Password</Text>
         </View>
         <View style={{alignItems: 'center'}}>
@@ -82,7 +82,6 @@ export default class ForgotScreen extends Component {
 
 const styles = StyleSheet.create({
   pagetitle: {
-    marginLeft: 50,
     fontSize: 30,
     fontWeight: 'bold',
     color: 'green',
