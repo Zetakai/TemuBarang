@@ -31,9 +31,6 @@ export default class LoginScreen extends Component {
     if (this.state.email === '' || this.state.password === '') {
       Alert.alert('Enter your email and password to log in');
       this.setState({emailBox: '1', passwordBox: '1'});
-      setTimeout(() => {
-        this.setState({emailBox: '0', passwordBox: '0'});
-      }, 15000);
     } else {
       auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
@@ -48,24 +45,15 @@ export default class LoginScreen extends Component {
           if (error.code == 'auth/invalid-email') {
             Alert.alert('Enter a correct email address');
             this.setState({emailBox: '1'});
-            setTimeout(() => {
-              this.setState({emailBox: '0'});
-            }, 15000);
           }
           if (error.code == 'auth/user-not-found') {
             Alert.alert('You are not registered yet');
             this.setState({emailBox: '1'});
-            setTimeout(() => {
-              this.setState({emailBox: '0'});
-            }, 15000);
           }
           if (error.code == 'auth/wrong-password') {
             Alert.alert('You have entered an invalid username or password');
             this.setState({showForgot: '1'});
             this.setState({passwordBox: '1'});
-            setTimeout(() => {
-              this.setState({passwordBox: '0'});
-            }, 15000);
           }
         });
     }

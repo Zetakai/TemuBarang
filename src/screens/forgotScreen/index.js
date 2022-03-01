@@ -25,13 +25,10 @@ export default class ForgotScreen extends Component {
       password: '',
     };
   }
-  _userForgot = async () => {
+  _userForgot = () => {
     if (this.state.email === '') {
       Alert.alert('Enter your email');
       this.setState({emailBox: '1'});
-      setTimeout(() => {
-        this.setState({emailBox: '0'});
-      }, 15000);
     } else {
       auth()
         .sendPasswordResetEmail(this.state.email)
@@ -44,16 +41,10 @@ export default class ForgotScreen extends Component {
           if (error.code == 'auth/invalid-email') {
             Alert.alert('Enter a correct email address');
             this.setState({emailBox: '1'});
-            setTimeout(() => {
-              this.setState({emailBox: '0'});
-            }, 15000);
           }
           if (error.code == 'auth/user-not-found') {
             Alert.alert('You are not registered yet');
             this.setState({emailBox: '1'});
-            setTimeout(() => {
-              this.setState({emailBox: '0'});
-            }, 15000);
           }
         });
     }

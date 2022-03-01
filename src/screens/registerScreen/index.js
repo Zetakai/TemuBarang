@@ -26,13 +26,10 @@ export default class RegisterScreen extends Component {
       passwordBox: '0',
     };
   }
-  _userSignup = async () => {
+  _userSignup = () => {
     if (this.state.email === '' || this.state.password === '') {
       Alert.alert('Enter your email and password to sign up');
       this.setState({emailBox: '1', passwordBox: '1'});
-      setTimeout(() => {
-        this.setState({emailBox: '0', passwordBox: '0'});
-      }, 15000);
     } else {
       auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -45,23 +42,14 @@ export default class RegisterScreen extends Component {
           if (error.code === 'auth/email-already-in-use') {
             Alert.alert('That email address is already in use!');
             this.setState({emailBox: '1'});
-            setTimeout(() => {
-              this.setState({emailBox: '0'});
-            }, 15000);
           }
           if (error.code === 'auth/invalid-email') {
             Alert.alert('That email address is invalid!');
             this.setState({emailBox: '1'});
-            setTimeout(() => {
-              this.setState({emailBox: '0'});
-            }, 15000);
           }
           if (error.code === 'auth/weak-password') {
             Alert.alert('Password should be at least 6 characters');
             this.setState({passwordBox: '1'});
-            setTimeout(() => {
-              this.setState({passwordBox: '0'});
-            }, 15000);
           }
         });
     }
