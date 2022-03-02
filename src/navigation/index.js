@@ -6,6 +6,7 @@ import LoginScreen from "../screens/loginScreen"
 import RegisterScreen from "../screens/registerScreen"
 import ForgotScreen from "../screens/forgotScreen"
 import OnboardScreen from "../screens/onboardScreen"
+import HomeScreen from "../screens/homeScreen";
 
 const Stack = createNativeStackNavigator();
 export default class App extends Component {
@@ -31,6 +32,11 @@ export default class App extends Component {
           <Stack.Screen
             name="ForgotScreen"
             component={ForgotScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="HomeScreen"
+            component={HomeScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
