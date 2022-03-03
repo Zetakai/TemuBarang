@@ -14,6 +14,7 @@ export default class App extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName='OnboardScreen'>
+        
         <Stack.Screen
             name="OnboardScreen"
             component={OnboardScreen}
