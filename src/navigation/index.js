@@ -6,6 +6,7 @@ import LoginScreen from "../screens/loginScreen"
 import RegisterScreen from "../screens/registerScreen"
 import ForgotScreen from "../screens/forgotScreen"
 import OnboardScreen from "../screens/onboardScreen"
+import Upload from "../screens/uploadPicture"
 
 const Stack = createNativeStackNavigator();
 export default class App extends Component {
@@ -13,6 +14,11 @@ export default class App extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName='OnboardScreen'>
+        <Stack.Screen
+            name="Upoade picture"
+            component={Upload}
+            options={{headerShown: false}}
+          />
         <Stack.Screen
             name="OnboardScreen"
             component={OnboardScreen}
@@ -33,6 +39,7 @@ export default class App extends Component {
             component={ForgotScreen}
             options={{headerShown: false}}
           />
+          
         </Stack.Navigator>
       </NavigationContainer>
     );
