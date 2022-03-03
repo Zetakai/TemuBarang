@@ -14,11 +14,7 @@ export default class App extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName='OnboardScreen'>
-        <Stack.Screen
-            name="Upoade picture"
-            component={Upload}
-            options={{headerShown: false}}
-          />
+        
         <Stack.Screen
             name="OnboardScreen"
             component={OnboardScreen}
