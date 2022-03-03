@@ -39,7 +39,7 @@ export default class LoginScreen extends Component {
           console.log(res);
           console.log('User logged-in successfully!');
           Alert.alert(`You're Logged in`);
-          // this.props.navigation.navigate('Dashboard')
+          this.props.navigation.navigate('HomeScreen')
         })
         .catch(error => {
           console.log(error);

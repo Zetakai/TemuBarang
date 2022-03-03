@@ -7,6 +7,7 @@ import RegisterScreen from "../screens/registerScreen"
 import ForgotScreen from "../screens/forgotScreen"
 import OnboardScreen from "../screens/onboardScreen"
 import HomeScreen from "../screens/homeScreen";
+import UploadScreen from "../screens/uploadScreen"
 
 const Stack = createNativeStackNavigator();
 export default class App extends Component {
@@ -38,6 +39,11 @@ export default class App extends Component {
           <Stack.Screen
             name="HomeScreen"
             component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="uploadScreen"
+            component={UploadScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
