@@ -25,21 +25,29 @@ export default class LoginScreen extends Component {
       password: '',
       passwordBox: '0',
       showForgot: '0',
-      showRegister:'0'
+      showRegister: '0',
     };
   }
-  _userLogin = () => {
+  _userLogin = async () => {
     if (this.state.email === '' || this.state.password === '') {
       Alert.alert('Enter your email and password to log in');
       this.setState({emailBox: '1', passwordBox: '1'});
     } else {
-      auth()
+      await auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
+
         .then(res => {
           console.log(res);
-          console.log('User logged-in successfully!');
-          Alert.alert(`You're Logged in`);
-          this.props.navigation.navigate('HomeScreen')
+          if (auth().currentUser.emailVerified == true) {
+            console.log('User logged-in successfully!');
+            Alert.alert(`You're Logged in`);
+            this.props.navigation.navigate('HomeScreen');
+          }
+          if (auth().currentUser.emailVerified == false) {
+            Alert.alert(
+              'Your email has not been verified. Please check your email!',
+            );
+          }
         })
         .catch(error => {
           console.log(error);
@@ -60,7 +68,7 @@ export default class LoginScreen extends Component {
             this.setState({passwordBox: '1'});
             this.setState({emailBox: '0'});
           }
-          if (error.code == 'auth/too-many-requests'){
+          if (error.code == 'auth/too-many-requests') {
             Alert.alert('Too many failed login attempts. Try again later!');
           }
         });
@@ -68,7 +76,8 @@ export default class LoginScreen extends Component {
   };
 
   render() {
-    const {email, password,emailBox,passwordBox,showForgot,showRegister} = this.state;
+    const {email, password, emailBox, passwordBox, showForgot, showRegister} =
+      this.state;
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{flex: 1 / 3, justifyContent: 'center'}}>
@@ -105,23 +114,36 @@ export default class LoginScreen extends Component {
             title={'Login'}
             onPress={() => this._userLogin()}
           />
-          
-            <View style={{alignItems: 'center'}}>
-            {showForgot == '1'||showRegister=="1" ? 
-              <Text style={{color: 'black', marginBottom: 20}}>or</Text>:<View></View>}
-              {showRegister=="1"?<CButton
-                style={{...styles.button,marginBottom:5}}
+
+          <View style={{alignItems: 'center'}}>
+            {showForgot == '1' || showRegister == '1' ? (
+              <Text style={{color: 'black', marginBottom: 20}}>or</Text>
+            ) : (
+              <View></View>
+            )}
+            {showRegister == '1' ? (
+              <CButton
+                style={{...styles.button, marginBottom: 5}}
                 title={'Create New Account.'}
                 onPress={() => this.props.navigation.navigate('RegisterScreen')}
-              />:<View></View>}
-               {showForgot == '1'?<CButton
+              />
+            ) : (
+              <View></View>
+            )}
+            {showForgot == '1' ? (
+              <CButton
                 style={{...styles.button}}
                 title={'Reset Your Password.'}
-                onPress={() => this.props.navigation.navigate('ForgotScreen',{passEmail: email})}
-              />:<View></View>}
-              
-            </View>
-          
+                onPress={() =>
+                  this.props.navigation.navigate('ForgotScreen', {
+                    passEmail: email,
+                  })
+                }
+              />
+            ) : (
+              <View></View>
+            )}
+          </View>
         </View>
       </View>
     );
