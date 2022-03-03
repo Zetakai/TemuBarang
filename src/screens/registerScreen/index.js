@@ -26,15 +26,17 @@ export default class RegisterScreen extends Component {
       passwordBox: '0',
     };
   }
-  _userSignup = () => {
+  _userSignup = async () => {
     if (this.state.email === '' || this.state.password === '') {
       Alert.alert('Enter your email and password to sign up');
       this.setState({emailBox: '1', passwordBox: '1'});
     } else {
-      auth()
+     await auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then((result)=>{
+          result.user.sendEmailVerification()})
         .then(() => {
-          Alert.alert('Your account is created!');
+          Alert.alert('Your account is created and check your email for verification!');
           this.props.navigation.navigate('LoginScreen');
         })
         .catch(error => {

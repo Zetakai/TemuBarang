@@ -28,12 +28,12 @@ export default class ForgotScreen extends Component {
   componentDidMount(){
     const {passEmail}=this.props.route.params;
     this.setState({email:passEmail})}
-  _userForgot = () => {
+  _userForgot = async () => {
     if (this.state.email === '') {
       Alert.alert('Enter your email');
       this.setState({emailBox: '1'});
     } else {
-      auth()
+     await auth()
         .sendPasswordResetEmail(this.state.email)
         .then(() => {
           Alert.alert('Please check your email...');
