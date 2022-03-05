@@ -6,8 +6,14 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {Component} from 'react';
-
+import auth from '@react-native-firebase/auth'
+ 
 export default class Index extends Component {
+  _userLogout=()=>{auth()
+    .signOut()
+    .then(() =>{ console.log('User signed out!');
+    this.props.navigation.replace('OnboardScreen')});
+  }
   render() {
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
@@ -15,6 +21,9 @@ export default class Index extends Component {
           <View>
             <Text style={{fontSize: 25, fontWeight: 'bold', color: 'green'}}>
               TemuBarang
+            </Text>
+            <Text onPress={()=>{this._userLogout()}} style={{fontSize: 25, fontWeight: 'bold', color: 'green'}}>
+              Log out
             </Text>
           </View>
           <View>

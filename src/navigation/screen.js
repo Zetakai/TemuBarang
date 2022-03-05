@@ -4,4 +4,6 @@ import ForgotScreen from '../screens/forgotScreen';
 import OnboardScreen from '../screens/onboardScreen';
 import HomeScreen from '../screens/homeScreen';
 
-export {LoginScreen, RegisterScreen, ForgotScreen, OnboardScreen, HomeScreen}
+import SplashScreen from '../screens/splashScreen';
+
+export {LoginScreen, RegisterScreen, ForgotScreen, OnboardScreen, HomeScreen,SplashScreen}
