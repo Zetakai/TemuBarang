@@ -9,6 +9,7 @@ import {
   RegisterScreen,
   ForgotScreen,
   OnboardScreen,
+  SplashScreen
 } from '../navigation/screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -45,10 +46,16 @@ const TabNav = () => {
   );
 };
 export default class App extends Component {
+ 
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="TabNav">
+        <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="OnboardScreen"
             component={OnboardScreen}
