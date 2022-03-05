@@ -16,7 +16,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
-const TabNav = () => {
+export class TabNav extends Component {
+  render(){
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -44,7 +45,7 @@ const TabNav = () => {
       />
     </Tab.Navigator>
   );
-};
+}};
 export default class App extends Component {
  
   render() {
@@ -54,6 +55,11 @@ export default class App extends Component {
         <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="TabNav"
+            component={TabNav}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -81,11 +87,7 @@ export default class App extends Component {
             component={HomeScreen}
             options={{headerShown: false}}
           />
-          <Stack.Screen
-            name="TabNav"
-            component={TabNav}
-            options={{headerShown: false}}
-          />
+          
         </Stack.Navigator>
       </NavigationContainer>
     );
