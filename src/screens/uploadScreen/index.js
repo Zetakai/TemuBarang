@@ -1,13 +1,29 @@
-import { Text, StyleSheet, View,SafeAreaView, Pressable,Image} from 'react-native'
+import { Text, StyleSheet, View,SafeAreaView, Pressable,Image,PermissionsAndroid} from 'react-native'
 import React, { Component } from 'react'
 import {launchCamera,launchImageLibrary} from 'react-native-image-picker'
-import Vector from '../../../assets/Vector 9.svg'
+
 
 export default class Index extends Component {
     constructor(){
         super()
         this.state={imageCamera:null}
     }
+    _requestCameraPermission = async () => {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log("You can use the camera");
+            this._openCamera()
+          } else {
+            console.log("Camera permission denied");
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      };
+      
     _openCamera =()=>{
         
 
@@ -17,7 +33,7 @@ export default class Index extends Component {
 
         }
 
-        launchImageLibrary(options,(res)=>{
+        launchCamera(options,(res)=>{
             if(res.didCancel){
                 console.log('user cancel')
             }else if(res.errorCode){
@@ -28,6 +44,9 @@ export default class Index extends Component {
             }
 
         })
+    }
+    componentDidMount(){
+        this._requestCameraPermission();
     }
   render() {
       const {imageCamera}=this.state;

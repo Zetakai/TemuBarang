@@ -9,7 +9,9 @@ import {
   RegisterScreen,
   ForgotScreen,
   OnboardScreen,
-  SplashScreen
+  SplashScreen,
+  UploadScreen,
+  DetailScreen
 } from '../navigation/screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -21,8 +23,8 @@ export class TabNav extends Component {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      activeColor="#e91e63"
-      barStyle={{backgroundColor: 'tomato'}}>
+      activeColor="green"
+      barStyle={{backgroundColor: 'white',borderTopColor:'silver',borderTopWidth:1}}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -34,14 +36,44 @@ export class TabNav extends Component {
         }}
       />
       <Tab.Screen
-        options={{headerShown: false}}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
         name="LoginScreen"
         component={LoginScreen}
       />
       <Tab.Screen
-        options={{headerShown: false}}
+        name="UploadScreen"
+        component={UploadScreen}
+        options={{
+          tabBarLabel: 'Camera',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="camera-enhance" color={color} size={26} />
+          )
+        }}
+      />
+      <Tab.Screen
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
         name="RegisterScreen"
         component={RegisterScreen}
+      />
+       <Tab.Screen
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
+        name="DetailScreen"
+        component={DetailScreen}
       />
     </Tab.Navigator>
   );
@@ -87,7 +119,11 @@ export default class App extends Component {
             component={HomeScreen}
             options={{headerShown: false}}
           />
-          
+          <Stack.Screen
+            name="UploadScreen"
+            component={UploadScreen}
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
