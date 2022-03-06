@@ -1,4 +1,5 @@
 import {
+  Image,
   Text,
   StyleSheet,
   View,
@@ -6,14 +7,19 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {Component} from 'react';
-import auth from '@react-native-firebase/auth'
- 
+import auth from '@react-native-firebase/auth';
+import CTextInput from '../../components/atoms/CTextInput';
+import CButton from '../../components/atoms/CButton';
+
 export default class Index extends Component {
-  _userLogout=()=>{auth()
-    .signOut()
-    .then(() =>{ console.log('User signed out!');
-    this.props.navigation.replace('OnboardScreen')});
-  }
+  _userLogout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        this.props.navigation.replace('OnboardScreen');
+      });
+  };
   render() {
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
@@ -22,28 +28,101 @@ export default class Index extends Component {
             <Text style={{fontSize: 25, fontWeight: 'bold', color: 'green'}}>
               TemuBarang
             </Text>
-            <Text onPress={()=>{this._userLogout()}} style={{fontSize: 25, fontWeight: 'bold', color: 'green'}}>
+          </View>
+
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              onPress={() => {
+                this._userLogout();
+              }}
+              style={{
+                fontSize: 10,
+                fontWeight: 'bold',
+                color: 'green',
+                marginRight: 5,
+              }}>
               Log out
             </Text>
-          </View>
-          <View>
             <TouchableOpacity>
-              <Text>Icon profile here</Text>
+              <View>
+                <Image
+                  style={styles.circleImage}
+                  source={require('../../../src/assets/dummy.png')}
+                />
+              </View>
             </TouchableOpacity>
           </View>
         </View>
-        <View>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 20}}>
-            <TouchableOpacity style={{...styles.menu, backgroundColor: 'green'}}>
-              <Text style={styles.cardText}>Barang Ditemukan</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 15,
+            justifyContent: 'space-around',
+          }}>
+          <CTextInput
+            placeholder="cari barang"
+            style={{borderColor: 'silver', alignItems: 'center'}}
+          />
+          <CButton style={{borderColor: 'silver', width: 60}} />
+        </View>
+        <View style={{marginTop:25,flexDirection:'row',justifyContent:'space-around'}}>
+          <TouchableOpacity style={{width:60,height:60,borderWidth:1,borderColor:'silver',borderRadius:10}}></TouchableOpacity>
+          <TouchableOpacity style={{width:60,height:60,borderWidth:1,borderColor:'silver',borderRadius:10}}></TouchableOpacity>
+          <TouchableOpacity style={{width:60,height:60,borderWidth:1,borderColor:'silver',borderRadius:10}}></TouchableOpacity>
+          <TouchableOpacity style={{width:60,height:60,borderWidth:1,borderColor:'silver',borderRadius:10}}></TouchableOpacity>
+        </View>
+        <ScrollView  style={{marginTop:25}}>
+        <View style={{marginBottom:20}}>
+          <Text style={{color:'grey',marginLeft:25}}>Recently Lost Items</Text>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity
+              style={{...styles.menu,}}>
+              <Image
+                  style={{width: 220,
+                    height: 220,
+                    borderRadius: 25}}
+                  source={require('../../../src/assets/dummy.png')}
+                />
             </TouchableOpacity>
-            <TouchableOpacity style={{...styles.menu, backgroundColor: 'brown'}}>
-              <Text style={styles.cardText}>Barang Hilang</Text>
+            <TouchableOpacity
+              style={{...styles.menu,}}>
+              <Image
+                  style={{width: 220,
+                    height: 220,
+                    borderRadius: 25}}
+                  source={require('../../../src/assets/dummy.png')}
+                />
             </TouchableOpacity>
           </ScrollView>
         </View>
-        <ScrollView style={{flex: 1, marginTop: 20}}>
-          <Text>Something here..</Text>
+        <View style={{marginBottom:20}}>
+          <Text style={{color:'grey',marginLeft:25}}>Recently Found Items</Text>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            >
+            <TouchableOpacity
+              style={{...styles.menu,}}>
+              <Image
+                  style={{width: 220,
+                    height: 220,
+                    borderRadius: 25}}
+                  source={require('../../../src/assets/dummy.png')}
+                />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{...styles.menu,}}>
+              <Image
+                  style={{width: 220,
+                    height: 220,
+                    borderRadius: 25}}
+                  source={require('../../../src/assets/dummy.png')}
+                />
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
         </ScrollView>
       </View>
     );
@@ -57,20 +136,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
-    borderColor: 'silver'
+    borderColor: 'silver',
   },
   menu: {
-    flex: 1,
-    width: 220,
-    height: 220,
     marginHorizontal: 10,
     borderRadius: 25,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   cardText: {
-    fontStyle: 'italic', 
-    fontWeight:'bold', 
-    fontSize: 20
-  }
+    fontStyle: 'italic',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  circleImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 150 / 2,
+    borderWidth: 1,
+    borderColor: 'green',
+  },
 });
