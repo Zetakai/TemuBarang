@@ -10,8 +10,20 @@ import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
+import {connect} from 'react-redux';
 
-export default class Index extends Component {
+export class HomeScreen extends Component {
+  async componentDidMount() {
+    const update = {
+      displayName: 'Muhammad Farid Zaki',
+      photoURL:
+        'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+    };
+
+    await auth().currentUser.updateProfile(update);
+    //this.props.addProfile(auth().currentUser);
+    console.log(this.props.userNow);
+  }
   _userLogout = () => {
     auth()
       .signOut()
@@ -47,7 +59,7 @@ export default class Index extends Component {
               <View>
                 <Image
                   style={styles.circleImage}
-                  source={require('../../../src/assets/dummy.png')}
+                  source={{uri: `${auth().currentUser.photoURL}`}}
                 />
               </View>
             </TouchableOpacity>
@@ -65,64 +77,72 @@ export default class Index extends Component {
           />
           <CButton style={{borderColor: 'silver', width: 60}} />
         </View>
-        <View style={{marginTop:25,flexDirection:'row',justifyContent:'space-around'}}>
-          <TouchableOpacity style={{width:60,height:60,borderWidth:1,borderColor:'silver',borderRadius:10}}></TouchableOpacity>
-          <TouchableOpacity style={{width:60,height:60,borderWidth:1,borderColor:'silver',borderRadius:10}}></TouchableOpacity>
-          <TouchableOpacity style={{width:60,height:60,borderWidth:1,borderColor:'silver',borderRadius:10}}></TouchableOpacity>
-          <TouchableOpacity style={{width:60,height:60,borderWidth:1,borderColor:'silver',borderRadius:10}}></TouchableOpacity>
+        <View
+          style={{
+            marginTop: 25,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+          }}>
+          <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
+          <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
+          <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
+          <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
         </View>
-        <ScrollView  style={{marginTop:25}}>
-        <View style={{marginBottom:20}}>
-          <Text style={{color:'grey',marginLeft:25}}>Recently Lost Items</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity
-              style={{...styles.menu,}}>
-              <Image
-                  style={{width: 220,
-                    height: 220,
-                    borderRadius: 25}}
+        <ScrollView style={{marginTop: 25}}>
+          <View style={{marginBottom: 20}}>
+            <Text style={{color: 'grey', marginLeft: 25}}>
+              Recently Lost Items
+            </Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <TouchableOpacity style={{...styles.menu}}>
+                <Image
+                  style={{width: 220, height: 220, borderRadius: 25}}
                   source={require('../../../src/assets/dummy.png')}
                 />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{...styles.menu,}}>
-              <Image
-                  style={{width: 220,
-                    height: 220,
-                    borderRadius: 25}}
+              </TouchableOpacity>
+              <TouchableOpacity style={{...styles.menu}}>
+                <Image
+                  style={{width: 220, height: 220, borderRadius: 25}}
                   source={require('../../../src/assets/dummy.png')}
                 />
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-        <View style={{marginBottom:20}}>
-          <Text style={{color:'grey',marginLeft:25}}>Recently Found Items</Text>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            >
-            <TouchableOpacity
-              style={{...styles.menu,}}>
-              <Image
-                  style={{width: 220,
-                    height: 220,
-                    borderRadius: 25}}
+              </TouchableOpacity>
+              <TouchableOpacity style={{...styles.menu}}>
+                <Image
+                  style={{width: 220, height: 220, borderRadius: 25}}
                   source={require('../../../src/assets/dummy.png')}
                 />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{...styles.menu,}}>
-              <Image
-                  style={{width: 220,
-                    height: 220,
-                    borderRadius: 25}}
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+          <View style={{marginBottom: 20}}>
+            <Text style={{color: 'grey', marginLeft: 25}}>
+              Recently Found Items
+            </Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <TouchableOpacity style={{...styles.menu}}>
+                <Image
+                  style={{width: 220, height: 220, borderRadius: 25}}
                   source={require('../../../src/assets/dummy.png')}
                 />
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={{...styles.menu}}>
+                <Image
+                  style={{width: 220, height: 220, borderRadius: 25}}
+                  source={require('../../../src/assets/dummy.png')}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity style={{...styles.menu}}>
+                <Image
+                  style={{width: 220, height: 220, borderRadius: 25}}
+                  source={require('../../../src/assets/dummy.png')}
+                />
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </ScrollView>
       </View>
     );
@@ -156,4 +176,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'green',
   },
+  buttonMenu: {
+    width: 60,
+    height: 60,
+    borderWidth: 1,
+    borderColor: 'silver',
+    borderRadius: 10,
+  },
 });
+const mapStateToProps = state => {
+  return {
+    userNow: state.userNow,
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    addProfile: data => {
+      dispatch({
+        type: 'ADD-PROFILE',
+        payload: data,
+      });
+    },
+    deleteProfile: data => {
+      dispatch({
+        type: 'DELETE-PROFILE',
+        payload: data,
+      });
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
