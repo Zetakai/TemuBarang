@@ -69,11 +69,11 @@ export class HomeScreen extends Component {
           style={{
             flexDirection: 'row',
             marginTop: 15,
-            justifyContent: 'space-around',
+            justifyContent: 'space-evenly',
           }}>
           <CTextInput
             placeholder="cari barang"
-            style={{borderColor: 'silver', alignItems: 'center'}}
+            style={{borderColor: 'silver',alignItems:'center',width:'80%'}}
           />
           <CButton style={{borderColor: 'silver', width: 60}} />
         </View>
