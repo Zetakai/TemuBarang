@@ -55,7 +55,7 @@ export class HomeScreen extends Component {
               }}>
               Log out
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> this.props.navigation.navigate('ProfileScreen')}>
               <View>
                 <Image
                   style={styles.circleImage}
