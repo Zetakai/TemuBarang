@@ -11,7 +11,7 @@ import {
   OnboardScreen,
   SplashScreen,
   UploadScreen,
-  DetailScreen
+  ProfileScreen,
 } from '../navigation/screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -62,18 +62,18 @@ export class TabNav extends Component {
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
         }}
-        name="RegisterScreen"
+        name="EditProfile"
         component={RegisterScreen}
       />
        <Tab.Screen
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="account" color={color} size={26} />
           ),
         }}
-        name="DetailScreen"
-        component={DetailScreen}
+        name="ProfileScreen"
+        component={ProfileScreen}
       />
     </Tab.Navigator>
   );
@@ -122,6 +122,11 @@ export default class App extends Component {
           <Stack.Screen
             name="UploadScreen"
             component={UploadScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="ProfileScreen"
+            component={ProfileScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
