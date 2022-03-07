@@ -12,7 +12,9 @@ export default class Index extends Component {
         try {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.CAMERA
-          );
+          )&&await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+          )
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             console.log("You can use the camera");
             this._openCamera()
@@ -29,7 +31,9 @@ export default class Index extends Component {
 
         const options ={
             mediaType :'photo',
-            quality:1
+            quality:1,
+            cameraType: 'back',
+            saveToPhotos: true
 
         }
 
@@ -39,27 +43,31 @@ export default class Index extends Component {
             }else if(res.errorCode){
                 console.log(res.errorMessage)
             }else{
-                const data=res.assets
+                let data=res.assets
                 console.log(data)
+                this.setState({imageCamera:data})
+              
             }
 
         })
     }
     componentDidMount(){
-        this._requestCameraPermission();
+        
     }
   render() {
       const {imageCamera}=this.state;
+      console.log(imageCamera)
     return (
-     <SafeAreaView>
+     <SafeAreaView style={{flex:1}}>
         
 
          <Text>camera</Text>
-         <Image source={imageCamera}/>
-         <Pressable onPress={this._openCamera} style={styles.tombol}> 
+         
+         <Pressable onPress={this._requestCameraPermission} style={styles.tombol}> 
          
              <Text>opencamera</Text>
          </Pressable>
+         <Image source={imageCamera} style={{width:100,height:100}}/>
      </SafeAreaView>
     )
   }
