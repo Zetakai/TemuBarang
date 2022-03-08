@@ -171,197 +171,84 @@ const styles = StyleSheet.create({
 //     launchImageLibrary(options, (response) => {
 //       console.log('Response = ', response);
 
-//       if (response.didCancel) {
-//         console.log('User cancelled image picker');
-//       } else if (response.error) {
-//         console.log('ImagePicker Error: ', response.error);
-//       } else if (response.customButton) {
-//         console.log('User tapped custom button: ', response.customButton);
-//         alert(response.customButton);
-//       } else {
-//         const source = { uri: response.uri };
+  _openCamera = () => {
 
-//         // You can also display the image using data:
-//         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-//         // alert(JSON.stringify(response));s
-//         console.log('response', JSON.stringify(response));
-//         this.setState({
-//           filePath: response,
-//           fileData: response.data,
-//           fileUri: response.uri
-//         });
-//       }
-//     });
-//   }
 
-//   launchCamera = () => {
-//     let options = {
-//       storageOptions: {
-//         skipBackup: true,
-//         path: 'images',
-//       },
-//     };
-//    launchCamera(options, (response) => {
-//       console.log('Response = ', response);
+    const options = {
+      mediaType: 'photo',
+      quality: 1
 
-//       if (response.didCancel) {
-//         console.log('User cancelled image picker');
-//       } else if (response.error) {
-//         console.log('ImagePicker Error: ', response.error);
-//       } else if (response.customButton) {
-//         console.log('User tapped custom button: ', response.customButton);
-//         alert(response.customButton);
-//       } else {
-//         const source = { uri: response.uri };
-//         console.log('response', JSON.stringify(response));
-//         this.setState({
-//           filePath: response,
-//           fileData: response.data,
-//           fileUri: response.uri
-//         });
-//       }
-//     });
+    }
 
-//   }
+    launchCamera(options, (res) => {
+      if (res.didCancel) {
+        console.log('user cancel')
+      } else if (res.errorCode) {
+        console.log(res.errorMessage)
+      } else {
+        const data = res.assets
 
-//   launchImageLibrary = () => {
-//     let options = {
-//       storageOptions: {
-//         skipBackup: true,
-//         path: 'images',
-//       },
-//     };
-//     launchImageLibrary(options, (response) => {
-//       console.log('Response = ', response);
+        console.log(data)
+      }
 
-//       if (response.didCancel) {
-//         console.log('User cancelled image picker');
-//       } else if (response.error) {
-//         console.log('ImagePicker Error: ', response.error);
-//       } else if (response.customButton) {
-//         console.log('User tapped custom button: ', response.customButton);
-//         alert(response.customButton);
-//       } else {
-//         const source = { uri: response.uri };
-//         console.log('response', JSON.stringify(response));
-//         this.setState({
-//           filePath: response,
-//           fileData: response.data,
-//           fileUri: response.uri
-//         });
-//       }
-//     });
+    })
+  }
+  _openLibarary = () => {
 
-//   }
 
-//   renderFileData() {
-//     if (this.state.fileData) {
-//       return <Image source={{ uri: 'data:image/jpeg;base64,' + this.state.fileData }}
-//         style={styles.images}
-//       />
-//     } else {
-//       return <Image source={require('../../../assets/dummy.png')}
-//         style={styles.images}
-//       />
-//     }
-//   }
+    const options = {
+      mediaType: 'photo',
+      quality: 1
 
-//   renderFileUri() {
-//     if (this.state.fileUri) {
-//       return <Image
-//         source={{ uri: this.state.fileUri }}
-//         style={styles.images}
-//       />
-//     } else {
-//       return <Image
-//         source={require('../../../assets/galeryImages.jpeg')}
-//         style={styles.images}
-//       />
-//     }
-//   }
-//   render() {
-//     return (
-//       <Fragment>
-//         <StatusBar barStyle="dark-content" />
-//         <SafeAreaView>
-//           <View style={styles.body}>
-//             <Text style={{textAlign:'center',fontSize:20,paddingBottom:10}} >Pick Images from Camera & Gallery</Text>
-//             <View style={styles.ImageSections}>
-//               <View>
-//                 {this.renderFileData()}
-//                 <Text  style={{textAlign:'center'}}>Base 64 String</Text>
-//               </View>
-//               <View>
-//                 {this.renderFileUri()}
-//                 <Text style={{textAlign:'center'}}>File Uri</Text>
-//               </View>
-//             </View>
+    }
 
-//             <View style={styles.btnParentSection}>
-//               <TouchableOpacity onPress={this.chooseImage} style={styles.btnSection}  >
-//                 <Text style={styles.btnText}>Choose File</Text>
-//               </TouchableOpacity>
+    launchImageLibrary(options, (res) => {
+      if (res.didCancel) {
+        console.log('user cancel')
+      } else if (res.errorCode) {
+        console.log(res.errorMessage)
+      } else {
+        const data = res.assets[0]
+        console.log(data)
+        this.setState({ imageCamera: data })
+      }
 
-//               <TouchableOpacity onPress={this.launchCamera} style={styles.btnSection}  >
-//                 <Text style={styles.btnText}>Directly Launch Camera</Text>
-//               </TouchableOpacity>
+    })
+  }
+  componentDidMount() {
+    this._requestCameraPermission();
+  }
+  render() {
+    const { imageCamera } = this.state;
+    return (
+      <SafeAreaView>
 
-//               <TouchableOpacity onPress={this.launchImageLibrary} style={styles.btnSection}  >
-//                 <Text style={styles.btnText}>Directly Launch Image Library</Text>
-//               </TouchableOpacity>
-//             </View>
 
-//           </View>
-//         </SafeAreaView>
-//       </Fragment>
-//     );
-//   }
-// };
+        <Text>camera</Text>
+       <View>
+       {imageCamera!=null &&
+         <Image source={imageCamera} style={{ width: 100, height: 100 }} />
+         } 
+         
+       </View>
+       
+        <Pressable onPress={this._openCamera} style={styles.tombol}>
 
-// const styles = StyleSheet.create({
-//   scrollView: {
-//     backgroundColor: Colors.lighter,
-//   },
+          <Text>opencamera</Text>
+        </Pressable>
+        <Pressable onPress={this._openLibarary} style={styles.tombol}>
 
-//   body: {
-//     backgroundColor: Colors.white,
-//     justifyContent: 'center',
-//     borderColor: 'black',
-//     borderWidth: 1,
-//     height: Dimensions.get('screen').height - 20,
-//     width: Dimensions.get('screen').width
-//   },
-//   ImageSections: {
-//     display: 'flex',
-//     flexDirection: 'row',
-//     paddingHorizontal: 8,
-//     paddingVertical: 8,
-//     justifyContent: 'center'
-//   },
-//   images: {
-//     width: 150,
-//     height: 150,
-//     borderColor: 'black',
-//     borderWidth: 1,
-//     marginHorizontal: 3
-//   },
-//   btnParentSection: {
-//     alignItems: 'center',
-//     marginTop:10
-//   },
-//   btnSection: {
-//     width: 225,
-//     height: 50,
-//     backgroundColor: '#DCDCDC',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     borderRadius: 3,
-//     marginBottom:10
-//   },
-//   btnText: {
-//     textAlign: 'center',
-//     color: 'gray',
-//     fontSize: 14,
-//     fontWeight:'bold'
-//   }
-// });
+          <Text>Foto</Text>
+        </Pressable>
+      </SafeAreaView>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  tombol: {
+    padding: 10,
+    margin: 10,
+    backgroundColor: 'red'
+  }
+})

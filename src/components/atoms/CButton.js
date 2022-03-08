@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
     height: 60,
   },
   text:{
-    color:'black'
+    color:'#077B82'
   }
 });

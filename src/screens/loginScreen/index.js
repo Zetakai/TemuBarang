@@ -15,7 +15,8 @@ import React, {Component} from 'react';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
-import CommonActions from '@react-navigation/native'
+import Upvector from '../../assets/Vector9.svg'
+
 export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -82,8 +83,12 @@ export default class LoginScreen extends Component {
     const {email, password, emailBox, passwordBox, showForgot, showRegister} =
       this.state;
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1 / 3, justifyContent: 'center'}}>
+      <View style={{flex: 1, backgroundColor: '#D4CEC6'}}>
+        <View style={{  justifyContent:'center',flex:1/5,marginLeft:0,left:0}} >
+        <Upvector />
+        </View>
+
+        <View style={{flex: 1 / 2, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Sign In</Text>
         </View>
         <View style={{flex: 2 / 3, alignItems: 'center'}}>
@@ -113,7 +118,7 @@ export default class LoginScreen extends Component {
             />
           </View>
           <CButton
-            style={{marginBottom: 20}}
+            style={{marginBottom: 20,backgroundColor:'#AFA69F'}}
             title={'Login'}
             onPress={() => this._userLogin()}
           />
@@ -158,7 +163,9 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     fontSize: 30,
     fontWeight: 'bold',
-    color: 'green',
+    color:  '#0B7B86',
+    shadowRadius: 2
   },
-  button: {width: 300, borderRadius: 15},
+  button: {width: 300, borderRadius: 15,borderColor:'#AFA69F'
+  },
 });

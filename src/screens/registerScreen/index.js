@@ -15,6 +15,7 @@ import React, {Component} from 'react';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
+import Upvector from '../../assets/Vector9.svg'
 
 export default class RegisterScreen extends Component {
   constructor(props) {
@@ -63,8 +64,11 @@ export default class RegisterScreen extends Component {
   render() {
     const {email, password,emailBox,passwordBox} = this.state;
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1 / 3, justifyContent: 'center'}}>
+      <View style={{flex: 1, backgroundColor: '#201C1B'}}>
+         <View style={{  justifyContent:'center',flex:1/5,marginLeft:0,left:0}} >
+        <Upvector />
+        </View>
+        <View style={{flex: 1 / 2, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Sign Up</Text>
         </View>
         <View style={{flex: 2 / 3, alignItems: 'center'}}>
@@ -103,6 +107,6 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     fontSize: 30,
     fontWeight: 'bold',
-    color: 'green',
+    color: '#D4CEC6',
   },
 });
