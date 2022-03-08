@@ -106,7 +106,8 @@ export default class FoundScreen extends Component {
           }}>
           <CTextInput
             placeholder="cari barang"
-            style={{borderColor: 'silver', alignItems: 'center', width: '80%'}}
+            textAlign={'center'}
+            style={{borderColor: 'silver', width: '80%',alignItems:'center'}}
             value={searchData}
             onChangeText={value => this.setState({searchData: value})}
           />

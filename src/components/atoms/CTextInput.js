@@ -5,7 +5,7 @@ export default class CTextInput extends Component {
   render() {
     return (
       <View style={{...styles.inputbox, ...this.props.style}}>
-        <TextInput {...this.props} placeholderTextColor={'grey'} color={'black'} />
+        <TextInput {...this.props} textAlign={'center'} placeholderTextColor={'grey'} color={'black'} />
         {this.props.children}
       </View>
     );
