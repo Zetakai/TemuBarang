@@ -11,8 +11,12 @@ import auth from '@react-native-firebase/auth';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
-
+import firestore from '@react-native-firebase/firestore';
 export class HomeScreen extends Component {
+  constructor() {
+    super();
+    this.state = {dataFire: []};
+  }
   async componentDidMount() {
     const update = {
       displayName: 'Muhammad Farid Zaki',
@@ -23,6 +27,17 @@ export class HomeScreen extends Component {
     await auth().currentUser.updateProfile(update);
     //this.props.addProfile(auth().currentUser);
     console.log(this.props.userNow);
+    await firestore()
+      .collection('Users')
+      .onSnapshot(x => {
+        let user = x.docs.map(y => {
+          return y.data();
+        });
+        let cup = user.map(x => {
+          return x.posts;
+        });
+        this.setState({dataFire: cup.flat().slice(0,2)});
+      });
   }
   _userLogout = () => {
     auth()
@@ -33,6 +48,7 @@ export class HomeScreen extends Component {
       });
   };
   render() {
+    const {dataFire} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
@@ -55,7 +71,8 @@ export class HomeScreen extends Component {
               }}>
               Log out
             </Text>
-            <TouchableOpacity onPress={()=> this.props.navigation.navigate('ProfileScreen')}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('ProfileScreen')}>
               <View>
                 <Image
                   style={styles.circleImage}
@@ -73,7 +90,7 @@ export class HomeScreen extends Component {
           }}>
           <CTextInput
             placeholder="cari barang"
-            style={{borderColor: 'silver',alignItems:'center',width:'80%'}}
+            style={{borderColor: 'silver', alignItems: 'center', width: '80%'}}
           />
           <CButton style={{borderColor: 'silver', width: 60}} />
         </View>
@@ -123,25 +140,23 @@ export class HomeScreen extends Component {
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
+              {dataFire.map((x, i) => {
+                return (
+                  <TouchableOpacity key={i} style={{...styles.menu}}>
+                    <Image
+                      source={{uri: `${x.photoURL}`}}
+                      style={{width: 220, height: 220, borderRadius: 25}}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
               <TouchableOpacity style={{...styles.menu}}>
                 <Image
                   style={{width: 220, height: 220, borderRadius: 25}}
                   source={require('../../../src/assets/dummy.png')}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
-            </ScrollView>
+             </ScrollView>
           </View>
         </ScrollView>
       </View>
