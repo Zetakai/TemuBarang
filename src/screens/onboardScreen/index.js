@@ -15,6 +15,7 @@ import React, {Component} from 'react';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
+import Upvector from '../../assets/Vector9.svg'
 
 export default class OnboardScreen extends Component {
   constructor(props) {
@@ -27,8 +28,11 @@ export default class OnboardScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1 / 3, justifyContent: 'center'}}>
+      <View style={{flex: 1, backgroundColor: '#201C1B'}}>
+         <View style={{flex:1/5,justifyContent:'center'}} >
+        <Upvector />
+        </View>
+        <View style={{flex: 1 / 2, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>TemuBarang</Text>
         </View>
         <View style={{flex: 2 / 3,alignItems:'center'}}>
@@ -66,9 +70,10 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     fontSize: 40,
     fontWeight: 'bold',
-    color: 'green',
+    color: '#0B7B86',
   },
   button: {
     width: 300,
+    backgroundColor:'#1F1B1A'
   },
 });
