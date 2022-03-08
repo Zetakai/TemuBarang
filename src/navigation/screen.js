@@ -6,6 +6,7 @@ import HomeScreen from '../screens/homeScreen';
 import UploadScreen from '../screens/uploadScreen';
 import SplashScreen from '../screens/splashScreen';
 import ProfileScreen from '../screens/profileScreen';
+import FoundScreen from '../screens/foundScreen';
 
 export {
   LoginScreen,
@@ -16,4 +17,5 @@ export {
   ProfileScreen,
   UploadScreen,
   SplashScreen,
+  FoundScreen
 };
