@@ -42,7 +42,10 @@ export default class LoginScreen extends Component {
           if (auth().currentUser.emailVerified == true) {
             console.log('User logged-in successfully!');
             Alert.alert(`You're Logged in`);
-            this.props.navigation.replace('TabNav');
+            this.props.navigation.reset({
+              index: 0,
+              routes: [
+                { name: 'TabNav' }]})
           }
           if (auth().currentUser.emailVerified == false) {
             Alert.alert(
