@@ -46,10 +46,12 @@ export default class FoundScreen extends Component {
     });
     if (cari.length > 0) {
       this.setState({renderData: cari});
+      alert('barang ditemukan');
     }
     if (!searchData) {
       alert('input nama barang yang dicari');
-    } else {
+    }
+    if (cari.length < 1 && searchData) {
       alert('barang tidak ditemukan');
     }
   };
