@@ -100,8 +100,8 @@ export class HomeScreen extends Component {
             flexDirection: 'row',
             justifyContent: 'space-around',
           }}>
-          <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
-          <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
+          <TouchableOpacity style={styles.buttonMenu}><Text style={{color:'black'}}>Lost</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.buttonMenu} onPress={()=>{this.props.navigation.navigate('FoundScreen')}}><Text style={{color:'black'}}>Found</Text></TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
         </View>
@@ -197,6 +197,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'silver',
     borderRadius: 10,
+    justifyContent:'center',
+    alignItems:'center'
   },
 });
 const mapStateToProps = state => {

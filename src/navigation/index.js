@@ -12,6 +12,7 @@ import {
   SplashScreen,
   UploadScreen,
   ProfileScreen,
+  FoundScreen
 } from '../navigation/screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -75,7 +76,7 @@ export class TabNav extends Component {
         name="ProfileScreen"
         component={ProfileScreen}
       />
-    </Tab.Navigator>
+      </Tab.Navigator>
   );
 }};
 export default class App extends Component {
@@ -129,6 +130,12 @@ export default class App extends Component {
             component={ProfileScreen}
             options={{headerShown: false}}
           />
+          <Stack.Screen
+            name="FoundScreen"
+            component={FoundScreen}
+            options={{headerShown: false}}
+          />
+         
         </Stack.Navigator>
       </NavigationContainer>
     );
