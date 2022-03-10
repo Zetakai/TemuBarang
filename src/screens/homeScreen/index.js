@@ -18,13 +18,7 @@ export class HomeScreen extends Component {
     this.state = {dataFire: []};
   }
   async componentDidMount() {
-    const update = {
-      displayName: 'Muhammad Farid Zaki',
-      photoURL:
-        'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-    };
-
-    await auth().currentUser.updateProfile(update);
+   
     //this.props.addProfile(auth().currentUser);
     console.log(this.props.userNow);
     await firestore()
