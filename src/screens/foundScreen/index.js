@@ -2,7 +2,7 @@ import {
   Image,
   Text,
   StyleSheet,
-  View,
+  View,RefreshControl,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -15,18 +15,11 @@ import firestore from '@react-native-firebase/firestore';
 export default class FoundScreen extends Component {
   constructor() {
     super();
-    this.state = {searchData: '', dataFire: [], renderData: []};
+    this.state = {searchData: '', dataFire: [], renderData: [],refreshing:false};
+    let cari;
   }
   async componentDidMount() {
-    const update = {
-      displayName: 'Muhammad Farid Zaki',
-      photoURL:
-        'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-    };
-
-    await auth().currentUser.updateProfile(update);
-    //this.props.addProfile(auth().currentUser);
-
+    
     await firestore()
       .collection('Found')
       .onSnapshot(x => {
@@ -40,8 +33,9 @@ export default class FoundScreen extends Component {
       });
   }
   _barangSearch = () => {
+    let{cari}=this
     const {dataFire, renderData, searchData} = this.state;
-    const cari = dataFire.filter(x => {
+    cari = dataFire.filter(x => {
       return x.namabarang == searchData;
     });
     if (cari.length > 0) {
@@ -49,12 +43,14 @@ export default class FoundScreen extends Component {
       alert('barang ditemukan');
     }
     if (!searchData) {
-      alert('input nama barang yang dicari');
+      this.setState({renderData:dataFire});
     }
     if (cari.length < 1 && searchData) {
       alert('barang tidak ditemukan');
+      this.setState({renderData:dataFire})
     }
   };
+  _wait=(timeout)=>{return new Promise(resolve=>setTimeout(resolve,timeout))}
   _userLogout = () => {
     auth()
       .signOut()
@@ -63,8 +59,9 @@ export default class FoundScreen extends Component {
         this.props.navigation.replace('OnboardScreen');
       });
   };
+  _onRefresh=()=>{this.setState({refreshing:true});this._wait(1000).then(()=>this.setState({dataFire:this.state.dataFire,renderData:this.cari,refreshing:false}))}
   render() {
-    const {dataFire, renderData, searchData} = this.state;
+    const {dataFire, renderData, searchData,refreshing} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
@@ -119,7 +116,14 @@ export default class FoundScreen extends Component {
           />
         </View>
 
-        <ScrollView style={{marginTop: 25}}>
+        <ScrollView style={{marginTop: 25}}
+       refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={this._onRefresh}
+        />
+      }
+          >
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
               Recently Lost Items
