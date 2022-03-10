@@ -15,16 +15,12 @@ import firestore from '@react-native-firebase/firestore';
 export class HomeScreen extends Component {
   constructor() {
     super();
-    this.state = {dataFire: []};
+    this.state = {
+      dataFire: [],
+      expandProfile: false,
+    };
   }
   async componentDidMount() {
-    const update = {
-      displayName: 'Muhammad Farid Zaki',
-      photoURL:
-        'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-    };
-
-    await auth().currentUser.updateProfile(update);
     //this.props.addProfile(auth().currentUser);
     console.log(this.props.userNow);
     await firestore()
@@ -36,7 +32,7 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
-        this.setState({dataFire: cup.flat().slice(0,2)});
+        this.setState({dataFire: cup.flat().slice(0, 2)});
       });
   }
   _userLogout = () => {
@@ -48,9 +44,10 @@ export class HomeScreen extends Component {
       });
   };
   render() {
-    const {dataFire} = this.state;
+    const {dataFire, expandProfile} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
+        <TouchableOpacity onPress={()=>this.setState({expandProfile: !expandProfile})}>
         <View style={styles.header}>
           <View>
             <Text style={{fontSize: 25, fontWeight: 'bold', color: 'green'}}>
@@ -82,6 +79,10 @@ export class HomeScreen extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        </TouchableOpacity>
+        {
+        }
+
         <View
           style={{
             flexDirection: 'row',
@@ -100,8 +101,16 @@ export class HomeScreen extends Component {
             flexDirection: 'row',
             justifyContent: 'space-around',
           }}>
-          <TouchableOpacity style={styles.buttonMenu}><Text style={{color:'black'}}>Lost</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.buttonMenu} onPress={()=>{this.props.navigation.navigate('FoundScreen')}}><Text style={{color:'black'}}>Found</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.buttonMenu}>
+            <Text style={{color: 'black'}}>Lost</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonMenu}
+            onPress={() => {
+              this.props.navigation.navigate('FoundScreen');
+            }}>
+            <Text style={{color: 'black'}}>Found</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
         </View>
@@ -156,7 +165,7 @@ export class HomeScreen extends Component {
                   source={require('../../../src/assets/dummy.png')}
                 />
               </TouchableOpacity>
-             </ScrollView>
+            </ScrollView>
           </View>
         </ScrollView>
       </View>
@@ -197,8 +206,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'silver',
     borderRadius: 10,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 const mapStateToProps = state => {
