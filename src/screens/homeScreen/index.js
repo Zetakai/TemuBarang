@@ -16,15 +16,15 @@ export class HomeScreen extends Component {
   constructor() {
     super();
     this.state = {
-      dataFire: [],
-      expandProfile: false,
+      dataLost: [],
+      dataFound: [],
+      expandProfile:false
     };
   }
   async componentDidMount() {
     //this.props.addProfile(auth().currentUser);
-    console.log(this.props.userNow);
     await firestore()
-      .collection('Users')
+      .collection('Lost')
       .onSnapshot(x => {
         let user = x.docs.map(y => {
           return y.data();
@@ -32,7 +32,19 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
-        this.setState({dataFire: cup.flat().slice(0, 2)});
+        this.setState({dataLost: cup.flat().slice(0, 3)});
+      });
+    console.log(this.props.userNow);
+    await firestore()
+      .collection('Found')
+      .onSnapshot(x => {
+        let user = x.docs.map(y => {
+          return y.data();
+        });
+        let cup = user.map(x => {
+          return x.posts;
+        });
+        this.setState({dataFound: cup.flat().slice(0, 3)});
       });
   }
   _userLogout = () => {
@@ -44,7 +56,7 @@ export class HomeScreen extends Component {
       });
   };
   render() {
-    const {dataFire, expandProfile} = this.state;
+    const {dataLost,dataFound,expandProfile} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <TouchableOpacity
@@ -134,34 +146,7 @@ export class HomeScreen extends Component {
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
-          <View style={{marginBottom: 20}}>
-            <Text style={{color: 'grey', marginLeft: 25}}>
-              Recently Found Items
-            </Text>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {dataFire.map((x, i) => {
+              {dataLost.map((x, i) => {
                 return (
                   <TouchableOpacity key={i} style={{...styles.menu}}>
                     <Image
@@ -171,13 +156,26 @@ export class HomeScreen extends Component {
                   </TouchableOpacity>
                 );
               })}
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
             </ScrollView>
+          </View>
+          <View style={{marginBottom: 20}}>
+            <Text style={{color: 'grey', marginLeft: 25}}>
+              Recently Found Items
+            </Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              {dataFound.map((x, i) => {
+                return (
+                  <TouchableOpacity key={i} style={{...styles.menu}}>
+                    <Image
+                      source={{uri: `${x.photoURL}`}}
+                      style={{width: 220, height: 220, borderRadius: 25}}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
+              </ScrollView>
           </View>
         </ScrollView>
       </View>
