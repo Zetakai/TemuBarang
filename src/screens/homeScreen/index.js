@@ -109,7 +109,10 @@ export class HomeScreen extends Component {
             flexDirection: 'row',
             justifyContent: 'space-around',
           }}>
-          <TouchableOpacity style={styles.buttonMenu}>
+          <TouchableOpacity style={styles.buttonMenu}
+          onPress={() => {
+            this.props.navigation.navigate('LostScreen');
+          }}>
             <Text style={{color: 'black'}}>Lost</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -117,6 +120,7 @@ export class HomeScreen extends Component {
             onPress={() => {
               this.props.navigation.navigate('FoundScreen');
             }}>
+              
             <Text style={{color: 'black'}}>Found</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>

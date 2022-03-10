@@ -12,6 +12,7 @@ import {
   SplashScreen,
   UploadScreen,
   ProfileScreen,
+  LostScreen,
   FoundScreen
 } from '../navigation/screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -135,7 +136,11 @@ export default class App extends Component {
             component={FoundScreen}
             options={{headerShown: false}}
           />
-         
+          <Stack.Screen
+            name="LostScreen"
+            component={LostScreen}
+            options={{headerShown: false}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
