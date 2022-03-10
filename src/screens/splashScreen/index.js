@@ -42,8 +42,8 @@ export default class SplashScreen extends Component {
 
 const styles = StyleSheet.create({
   test: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height: 150,
     resizeMode: 'stretch',
   },
   textInput: {

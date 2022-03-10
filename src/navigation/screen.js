@@ -7,6 +7,7 @@ import UploadScreen from '../screens/uploadScreen';
 import SplashScreen from '../screens/splashScreen';
 import ProfileScreen from '../screens/profileScreen';
 import FoundScreen from '../screens/foundScreen';
+import LostScreen from '../screens/LostScreen';
 
 export {
   LoginScreen,
@@ -17,5 +18,6 @@ export {
   ProfileScreen,
   UploadScreen,
   SplashScreen,
+  LostScreen,
   FoundScreen
 };
