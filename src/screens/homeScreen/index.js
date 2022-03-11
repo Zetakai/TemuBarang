@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  RefreshControl
 } from 'react-native';
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth';
@@ -18,7 +19,8 @@ export class HomeScreen extends Component {
     this.state = {
       dataLost: [],
       dataFound: [],
-      expandProfile:false
+      expandProfile:false,
+      refreshing:false
     };
   }
   async componentDidMount() {
@@ -56,8 +58,10 @@ export class HomeScreen extends Component {
         this.props.navigation.replace('OnboardScreen');
       });
   };
+  _wait=(timeout)=>{return new Promise(resolve=>setTimeout(resolve,timeout))}
+  _onRefresh=()=>{this.setState({refreshing:true});this._wait(1000).then(()=>this.setState({dataLost:this.state.dataLost,dataFound:this.state.dataFound,refreshing:false}))}
   render() {
-    const {dataLost,dataFound,expandProfile} = this.state;
+    const {dataLost,dataFound,expandProfile,refreshing} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <TouchableOpacity
@@ -139,7 +143,12 @@ export class HomeScreen extends Component {
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
         </View>
-        <ScrollView style={{marginTop: 25}}>
+        <ScrollView style={{marginTop: 25}} refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={this._onRefresh}
+        />
+      }>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
               Recently Lost Items

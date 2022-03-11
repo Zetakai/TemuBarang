@@ -126,7 +126,7 @@ export default class FoundScreen extends Component {
           >
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
-              Recently Lost Items
+              Recently Found Items
             </Text>
           </View>
           <View>
