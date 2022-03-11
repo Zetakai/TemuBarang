@@ -65,13 +65,13 @@ export default class RegisterScreen extends Component {
     const {email, password,emailBox,passwordBox} = this.state;
     return (
       <View style={{flex: 1, backgroundColor: '#201C1B'}}>
-         <View style={{  justifyContent:'center',flex:1/5,marginLeft:0,left:0}} >
+         <View style={{  justifyContent:'center',flex:1/10,marginLeft:0,left:0}} >
         <Upvector />
         </View>
-        <View style={{flex: 1 / 2, justifyContent: 'center'}}>
+        <View style={{flex: 3 / 10, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Sign Up</Text>
         </View>
-        <View style={{flex: 2 / 3, alignItems: 'center'}}>
+        <View style={{flex:6/10, alignItems: 'center'}}>
           <View style={{marginBottom: 25}}>
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput

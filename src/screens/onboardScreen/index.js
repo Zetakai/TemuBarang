@@ -29,13 +29,13 @@ export default class OnboardScreen extends Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#201C1B'}}>
-         <View style={{flex:1/5,justifyContent:'center'}} >
+         <View style={{flex:1/10,justifyContent:'center'}} >
         <Upvector />
         </View>
-        <View style={{flex: 1 / 2, justifyContent: 'center'}}>
+        <View style={{flex: 3 / 10, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>TemuBarang</Text>
         </View>
-        <View style={{flex: 2 / 3,alignItems:'center'}}>
+        <View style={{flex:6/10,alignItems:'center'}}>
           <View style={{marginHorizontal: 50,marginBottom:50}}>
             <Text style={{color: 'black', fontSize: 20}}>What's Up!</Text>
             <Text style={{color: 'brown', fontSize: 18}}>

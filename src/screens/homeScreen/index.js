@@ -22,6 +22,7 @@ export class HomeScreen extends Component {
     };
   }
   async componentDidMount() {
+    
     //this.props.addProfile(auth().currentUser);
     await firestore()
       .collection('Lost')

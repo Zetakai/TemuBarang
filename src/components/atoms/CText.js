@@ -6,7 +6,7 @@ export default class CText extends Component {
     const {style} = this.props;
     return (
       <View>
-        <Text {...this.props} style={{...styles.text, ...style}}>
+        <Text {...this.props} style={{...styles.text, ...this.props.style}}>
           {this.props.children}
         </Text>
       </View>

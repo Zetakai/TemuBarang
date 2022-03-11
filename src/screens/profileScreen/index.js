@@ -60,31 +60,34 @@ export default class Profile extends Component {
         <View style={styles.body}>
           {edit == true ? (
             <View style={styles.bodyContent}>
-              <CText>Name</CText>
+              <CText style={styles.textcolor}>Name</CText>
               <Text style={styles.profValue}>{auth().currentUser.displayName}</Text>
-              <CText>Email</CText>
+              <CText style={styles.textcolor}>Email</CText>
               <Text style={styles.profValue}>wajawaja@gmail.com</Text>
-              <CText>Phone Number</CText>
+              <CText style={styles.textcolor}>Phone Number</CText>
               <Text style={styles.profValue}>086232813721</Text>
               <TouchableOpacity>
-                <Text style={{color: 'green'}}>Change Password</Text>
+                <Text onPress={()=>{
+                  this.props.navigation.navigate('ForgotScreen', {
+                    passEmail: auth().currentUser.email,
+                  })}} style={{color: 'green'}}>Change Password</Text>
               </TouchableOpacity>
             </View>
           ) : (
             <View style={styles.bodyContent}>
-              <CText>Name</CText>
+              <CText style={styles.textcolor}>Name</CText>
               <View style={styles.profInput}>
-                <TextInput placeholder="Name" style={{width: '100%'}} />
+                <TextInput placeholder="Name" style={{width: '100%',color:'dimgrey',paddingLeft:10}} />
+                <AntDesign color={'black'} name="edit" size={24} />
+              </View>
+              <CText style={styles.textcolor}>Email</CText>
+              <View style={styles.profInput}>
+                <TextInput placeholder="Email" style={{width: '100%',color:'dimgrey',paddingLeft:10}} />
                 <AntDesign name="edit" size={24} />
               </View>
-              <CText>Email</CText>
+              <CText style={styles.textcolor}>Phone Number</CText>
               <View style={styles.profInput}>
-                <TextInput placeholder="Email" style={{width: '100%'}} />
-                <AntDesign name="edit" size={24} />
-              </View>
-              <CText>Phone Number</CText>
-              <View style={styles.profInput}>
-                <TextInput placeholder="Phone Number" style={{width: '100%'}} />
+                <TextInput placeholder="Phone Number" style={{width: '100%',color:'dimgrey',paddingLeft:10}} />
                 <AntDesign name="edit" size={22} />
               </View>
             </View>
@@ -129,11 +132,14 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     marginBottom: 20,
     marginTop: 5,
+    color:'dimgrey'
   },
   profInput: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginBottom: 10,
+    borderBottomWidth:1
   },
+  textcolor:{color:'black'}
 });
