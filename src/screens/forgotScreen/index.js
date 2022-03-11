@@ -59,7 +59,7 @@ export default class ForgotScreen extends Component {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{  justifyContent:'center',flex:1/10,marginLeft:0,left:0}} >
-        <Upvector />
+        <Upvector color={'green'} />
         </View>
         <View style={{flex: 3 / 10,alignItems:'center', justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Reset Password</Text>

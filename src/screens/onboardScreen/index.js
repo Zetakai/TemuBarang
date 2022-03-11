@@ -30,7 +30,7 @@ export default class OnboardScreen extends Component {
     return (
       <View style={{flex: 1, backgroundColor: '#201C1B'}}>
          <View style={{flex:1/10,justifyContent:'center'}} >
-        <Upvector />
+        <Upvector color={'green'} />
         </View>
         <View style={{flex: 3 / 10, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>TemuBarang</Text>

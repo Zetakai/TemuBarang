@@ -85,7 +85,7 @@ export default class LoginScreen extends Component {
     return (
       <View style={{flex: 1, backgroundColor: '#D4CEC6'}}>
         <View style={{  justifyContent:'center',flex:1/10,marginLeft:0,left:0}} >
-        <Upvector />
+        <Upvector color={'green'} />
         </View>
 
         <View style={{flex: 3/10, justifyContent: 'center'}}>

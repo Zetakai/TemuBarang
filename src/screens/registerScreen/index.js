@@ -66,7 +66,7 @@ export default class RegisterScreen extends Component {
     return (
       <View style={{flex: 1, backgroundColor: '#201C1B'}}>
          <View style={{  justifyContent:'center',flex:1/10,marginLeft:0,left:0}} >
-        <Upvector />
+        <Upvector color={'green'}/>
         </View>
         <View style={{flex: 3 / 10, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Sign Up</Text>
