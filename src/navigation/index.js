@@ -14,7 +14,7 @@ import {
   ProfileScreen,
   LostScreen,
   FoundScreen
-} from '../navigation/screen';
+} from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Stack = createNativeStackNavigator();
@@ -51,7 +51,7 @@ export class TabNav extends Component {
         name="UploadScreen"
         component={UploadScreen}
         options={{
-          tabBarLabel: 'Camera',
+          tabBarLabel: 'Upload',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="camera-enhance" color={color} size={26} />
           )
