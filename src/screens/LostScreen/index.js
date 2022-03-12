@@ -16,9 +16,10 @@ import {
     constructor() {
       super();
       this.state = {searchData: '', dataFire: [], renderData: [],refreshing:false};
-      let cari;
+      let cari;let mounted
     }
     async componentDidMount() {
+      this.mounted=true
       
       await firestore()
         .collection('Lost')
@@ -29,9 +30,10 @@ import {
           let cup = user.map(x => {
             return x.posts;
           });
-          this.setState({dataFire: cup.flat()});
+          this.mounted==true&&this.setState({dataFire: cup.flat()});
         });
     }
+    componentWillUnmount(){this.mounted=false}
     _barangSearch = () => {
       let{cari}=this
       const {dataFire, renderData, searchData} = this.state;
@@ -39,15 +41,15 @@ import {
         return x.namabarang == searchData;
       });
       if (cari.length > 0) {
-        this.setState({renderData: cari});
+        this.mounted==true&&this.setState({renderData: cari});
         alert('barang ditemukan');
       }
       if (!searchData) {
-        this.setState({renderData:dataFire});
+        this.mounted==true&&this.setState({renderData:dataFire});
       }
       if (cari.length < 1 && searchData) {
         alert('barang tidak ditemukan');
-        this.setState({renderData:dataFire})
+        this.mounted==true&&this.setState({renderData:dataFire})
       }
     };
     _wait=(timeout)=>{return new Promise(resolve=>setTimeout(resolve,timeout))}
@@ -59,7 +61,7 @@ import {
           this.props.navigation.replace('OnboardScreen');
         });
     };
-    _onRefresh=()=>{this.setState({refreshing:true});this._wait(1000).then(()=>this.setState({dataFire:this.state.dataFire,renderData:this.cari,refreshing:false}))}
+    _onRefresh=()=>{this.mounted==true&&this.setState({refreshing:true});this._wait(1000).then(()=>{this.mounted==true&&this.setState({dataFire:this.state.dataFire,renderData:this.cari,refreshing:false})})}
     render() {
       const {dataFire, renderData, searchData,refreshing} = this.state;
       return (

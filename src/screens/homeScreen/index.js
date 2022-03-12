@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth';
@@ -19,12 +19,13 @@ export class HomeScreen extends Component {
     this.state = {
       dataLost: [],
       dataFound: [],
-      expandProfile:false,
-      refreshing:false
+      expandProfile: false,
+      refreshing: false,
     };
+    let mounted;
   }
   async componentDidMount() {
-    
+    this.mounted = true;
     //this.props.addProfile(auth().currentUser);
     await firestore()
       .collection('Lost')
@@ -35,7 +36,8 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
-        this.setState({dataLost: cup.flat().slice(0, 3)});
+        this.mounted == true &&
+          this.setState({dataLost: cup.flat().slice(0, 3)});
       });
     console.log(this.props.userNow);
     await firestore()
@@ -47,9 +49,11 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
-        this.setState({dataFound: cup.flat().slice(0, 3)});
+        this.mounted == true &&
+          this.setState({dataFound: cup.flat().slice(0, 3)});
       });
   }
+  componentWillUnmount(){this.mounted=false}
   _userLogout = () => {
     auth()
       .signOut()
@@ -58,10 +62,22 @@ export class HomeScreen extends Component {
         this.props.navigation.replace('OnboardScreen');
       });
   };
-  _wait=(timeout)=>{return new Promise(resolve=>setTimeout(resolve,timeout))}
-  _onRefresh=()=>{this.setState({refreshing:true});this._wait(1000).then(()=>this.setState({dataLost:this.state.dataLost,dataFound:this.state.dataFound,refreshing:false}))}
+  _wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  _onRefresh = () => {
+    this.mounted == true && this.setState({refreshing: true});
+    this._wait(1000).then(() => {
+      this.mounted == true &&
+        this.setState({
+          dataLost: this.state.dataLost,
+          dataFound: this.state.dataFound,
+          refreshing: false,
+        });
+    });
+  };
   render() {
-    const {dataLost,dataFound,expandProfile,refreshing} = this.state;
+    const {dataLost, dataFound, expandProfile, refreshing} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <TouchableOpacity
@@ -98,15 +114,19 @@ export class HomeScreen extends Component {
             </View>
           </View>
         </TouchableOpacity>
-        {expandProfile == true ? <View style={styles.expProfile}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-            }}
-          />
-          <Text style={{alignSelf:'center', paddingLeft: 10}}>{auth().currentUser.displayName}</Text>
-        </View> : null}
+        {expandProfile == true ? (
+          <View style={styles.expProfile}>
+            <Image
+              style={styles.avatar}
+              source={{
+                uri: 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+              }}
+            />
+            <Text style={{alignSelf: 'center', paddingLeft: 10}}>
+              {auth().currentUser.displayName}
+            </Text>
+          </View>
+        ) : null}
 
         <View
           style={{
@@ -126,10 +146,11 @@ export class HomeScreen extends Component {
             flexDirection: 'row',
             justifyContent: 'space-around',
           }}>
-          <TouchableOpacity style={styles.buttonMenu}
-          onPress={() => {
-            this.props.navigation.navigate('LostScreen');
-          }}>
+          <TouchableOpacity
+            style={styles.buttonMenu}
+            onPress={() => {
+              this.props.navigation.navigate('LostScreen');
+            }}>
             <Text style={{color: 'black'}}>Lost</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -137,18 +158,19 @@ export class HomeScreen extends Component {
             onPress={() => {
               this.props.navigation.navigate('FoundScreen');
             }}>
-              
             <Text style={{color: 'black'}}>Found</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
         </View>
-        <ScrollView style={{marginTop: 25}} refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={this._onRefresh}
-        />
-      }>
+        <ScrollView
+          style={{marginTop: 25}}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
               Recently Lost Items
@@ -185,7 +207,7 @@ export class HomeScreen extends Component {
                   </TouchableOpacity>
                 );
               })}
-              </ScrollView>
+            </ScrollView>
           </View>
         </ScrollView>
       </View>
@@ -215,7 +237,7 @@ const styles = StyleSheet.create({
   },
   expProfile: {
     backgroundColor: 'green',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   avatar: {
     width: 100,
@@ -223,7 +245,7 @@ const styles = StyleSheet.create({
     borderRadius: 63,
     borderWidth: 3,
     borderColor: 'white',
-    margin : 10
+    margin: 10,
   },
   circleImage: {
     width: 50,
