@@ -1,8 +1,11 @@
-import {ScrollView,
+import {
+  ScrollView,
+  TouchableOpacity,
   Text,
   StyleSheet,
   View,
   SafeAreaView,
+  TextInput,
   Pressable,
   Image,
   PermissionsAndroid,
@@ -10,11 +13,15 @@ import {ScrollView,
 import React, {Component} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import CTextInput from '../../components/atoms/CTextInput';
+import CText from '../../components/atoms/CText';
+import {Picker} from '@react-native-picker/picker';
+import CButton from '../../components/atoms/CButton';
 export default class Index extends Component {
   constructor() {
     super();
-    this.state = {imageCamera: null, dataFire: []};
+    this.state = {imageCamera: null, dataFire: [], selectedChoice:[]};
   }
   _requestCameraPermission = async () => {
     try {
@@ -71,34 +78,84 @@ export default class Index extends Component {
         let user = x.docs.map(y => {
           return y.data();
         });
-        let cup=user.map(x=>{return x.posts})
-        this.setState({dataFire: cup.flat()})
+        let cup = user.map(x => {
+          return x.posts;
+        });
+        this.setState({dataFire: cup.flat()});
       });
   };
 
   componentDidMount() {}
   render() {
-    const {imageCamera, dataFire} = this.state;
+    const {imageCamera, dataFire, selectedChoice} = this.state;
     console.log(dataFire);
     return (
       <SafeAreaView style={{flex: 1}}>
         <ScrollView>
-        <Text>camera</Text>
-
-        <Pressable onPress={this._getFire} style={styles.tombol}>
+          {/* <Pressable onPress={this._requestCameraPermission} style={styles.tombol}>
           <Text>opencamera</Text>
-        </Pressable>
-        <Image source={imageCamera} style={{width: 100, height: 100}} />
-        {dataFire.map((x, i) => {
-          return (
-            <View>
-              <Image
-                source={{uri: `${x.photoURL}`}}
-                style={{width: 150, height: 150}}
-              />
+        </Pressable> */}
+          <View>
+            <View style={{flexDirection:'row'}}>
+              <TouchableOpacity onPress={this._requestCameraPermission}>
+                <Image
+                  source={
+                    imageCamera
+                      ? imageCamera
+                      : require('../../assets/dummy.png')
+                  }
+                  style={{
+                    width: 200,
+                    height: 200,
+                    borderWidth: 1,
+                    borderColor: 'black',
+                  }}
+                />
+              </TouchableOpacity><View style={{justifyContent:'center',alignItems:'center'}}>
+              <View style={{borderWidth:1,borderColor:'black'}}>
+                <Picker
+                mode='dropdown'
+                dropdownIconColor={'black'}
+                selectedValue={selectedChoice}
+                style={{height: 50, width: 200,color:'black'}}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({selectedChoice: itemValue})
+                }>
+                <Picker.Item label="Lost Item" value="lost" />
+                <Picker.Item label="Found Item" value="found" />
+              </Picker>
+                  </View></View>
             </View>
-          );
-        })}
+            <View style={styles.bodyContent}>
+              <CText style={styles.textcolor}>Nama Barang</CText>
+              <View style={styles.profInput}>
+                <TextInput
+                  placeholder="Name"
+                  style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                />
+                <AntDesign color={'black'} name="edit" size={24} />
+              </View>
+              <CText style={styles.textcolor}>Kategori Barang</CText>
+              <View style={styles.profInput}>
+                <TextInput
+                  placeholder="Email"
+                  style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                />
+                <AntDesign color={'black'} name="edit" size={24} />
+              </View>
+              <CText style={styles.textcolor}>
+                Lokasi hilang atau ditemukan
+              </CText>
+              <View style={styles.profInput}>
+                <TextInput
+                  placeholder="Phone Number"
+                  style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                />
+                <AntDesign color={'black'} name="edit" size={24} />
+              </View>
+            </View>
+            <View style={{justifyContent:'center',alignItems:'center'}}><CButton title="post" /></View>
+          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -106,11 +163,19 @@ export default class Index extends Component {
 }
 
 const styles = StyleSheet.create({
+  profInput: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderBottomWidth: 1,
+  },
   tombol: {
     padding: 10,
     margin: 10,
     backgroundColor: 'red',
   },
+  textcolor: {color: 'black'},
 });
 
 // import React, { Fragment, Component } from 'react';
