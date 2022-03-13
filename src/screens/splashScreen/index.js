@@ -1,6 +1,9 @@
-import React, {Component} from 'react';
-import {Text, StyleSheet, View, Image} from 'react-native';
+import React, { Component } from 'react';
+import { Text, StyleSheet, View, Image } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import Upvector from '../../../src/assets/Vector7.svg';
+import Upvector10 from '../../../src/assets/Vector8.svg';
+import Upvector11 from '../../../src/assets/test-01.svg';
 export default class SplashScreen extends Component {
   componentDidMount() {
     if (auth().currentUser !== null) {
@@ -18,21 +21,21 @@ export default class SplashScreen extends Component {
   }
   render() {
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row',
-        }}>
-        <View>
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <View style={{ flex: 1, justifyContent:'center', alignContent:'center', height:200, width:600}} >
+        <Upvector />
+        </View>
+
+
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
           <View>
-            <View style={{alignItems: 'center'}}>
-              <Image
-                style={styles.test}
-                source={require('../../../src/assets/test-00-01.png')}
-              />
-            </View>
+
+            <Upvector11 />
+          </View>
+        </View>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+          <View style={{ justifyContent: 'center', flex: 1, marginLeft: 0, left: 0 }}>
+            <Upvector10 />
           </View>
         </View>
       </View>
