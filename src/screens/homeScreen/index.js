@@ -14,8 +14,8 @@ import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 export class HomeScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       dataLost: [],
       dataFound: [],
@@ -178,9 +178,9 @@ export class HomeScreen extends Component {
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              {dataLost.map((x, i) => {
+              {dataLost.map((x, i) => {console.log(x);
                 return (
-                  <TouchableOpacity key={i} style={{...styles.menu}}>
+                  <TouchableOpacity key={i} style={{...styles.menu}} onPress={()=>{this.props.navigation.navigate('DetailsScreen'),{link:x}}}>
                     <Image
                       source={{uri: `${x.photoURL?x.photoURL:null}`}}
                       style={{width: 220, height: 220, borderRadius: 25}}

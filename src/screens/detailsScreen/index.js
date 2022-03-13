@@ -3,14 +3,25 @@ import React, {Component} from 'react';
 import CText from '../../components/atoms/CText';
 
 export default class Index extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      
+    };
+  }
+  componentDidMount(){
+  
+  }
   render() {
+    
     return (
       <ScrollView style={styles.container}>
+        <View style={{margin:10,borderWidth:5,borderColor:'black'}}>
         <View style={{backgroundColor: 'white'}}>
           <Image
-            source={require('../../assets/dummy.png')}
-            style={{flex:1}}
-          />
+          source={require('../../assets/dummy.png')}
+          style={{width:'100%',height:200}}
+        />
         </View>
         <View style={{padding: 5, backgroundColor:'white'}}>
           <CText style={{fontSize: 30, fontWeight: 'bold'}}>Nama Barang</CText>
@@ -18,10 +29,10 @@ export default class Index extends Component {
         </View>
         <View style={{padding: 5, backgroundColor: 'white', marginBottom: 3}}>
           <CText style={{fontSize: 25}}>Deskripsi</CText>
-          <Text>Nomor apa</Text>
-          <Text>sesuatu</Text>
-          <Text>apa</Text>
-          <Text>ntah</Text>
+          <Text style={styles.textcolor}>Nomor apa</Text>
+          <Text style={styles.textcolor}>sesuatu</Text>
+          <Text style={styles.textcolor}>apa</Text>
+          <Text style={styles.textcolor}>ntah</Text>
         </View>
         <View style={{padding: 5, flexDirection: 'row', backgroundColor: 'white', marginBottom: 3}}>
           <View style={{marginRight: 10}}>
@@ -46,7 +57,7 @@ export default class Index extends Component {
           <View>
             
           </View>
-        </View>
+        </View></View>
       </ScrollView>
     );
   }
@@ -65,4 +76,5 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     margin: 10,
   },
+  textcolor:{color:'black'}
 });

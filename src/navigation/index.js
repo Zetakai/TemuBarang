@@ -65,8 +65,8 @@ export class TabNav extends Component {
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
         }}
-        name="EditProfile"
-        component={RegisterScreen}
+        name="fetail"
+        component={DetailsScreen}
       />
        <Tab.Screen
         options={{
