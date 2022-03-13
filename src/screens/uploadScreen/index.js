@@ -19,6 +19,7 @@ import CText from '../../components/atoms/CText';
 import {Picker} from '@react-native-picker/picker';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 export default class Index extends Component {
   constructor() {
     super();
@@ -32,6 +33,7 @@ export default class Index extends Component {
       lokasi: '',
       comment: [],
       uid: '',
+      path:''
     };
   }
   _requestCameraPermission = async () => {
@@ -60,18 +62,19 @@ export default class Index extends Component {
       quality: 1,
       cameraType: 'back',
       saveToPhotos: true,
-      includeBase64: true,
+      
     };
 
-    await launchCamera(options, res => {
+    await launchCamera(options,async res => {
       if (res.didCancel) {
         console.log('user cancel');
       } else if (res.errorCode) {
         console.log(res.errorMessage);
       } else {
         let data = res.assets;
-        // console.log(data[0].base64);
-        this.setState({imageCamera: data, photoURL: data[0].base64});
+        
+        this.setState({imageCamera: data,path:data[0].uri});
+        
       }
     });
   };
@@ -97,46 +100,31 @@ export default class Index extends Component {
   //     });
   // };
   _post = async () => {
-    const {namabarang, photoURL, kategori, lokasi, comment, uid} = this.state;
-    try {
-      await firestore()
-        .collection(this.state.selectedChoice)
-        .doc(auth().currentUser.uid)
-        .get()
-        .then(
-          firestore()
-            .collection(this.state.selectedChoice)
-            .doc(auth().currentUser.uid)
-            .update({
-              posts: firestore.FieldValue.arrayUnion({
-                namabarang: namabarang,
-                photoURL: "photoURL",
-                kategori: kategori,
-                lokasi: lokasi,
-                comment: [],
-               
-              }),
-            }),
-        );
-    } catch {
-     await firestore()
-        .collection(this.state.selectedChoice)
-        .doc(auth().currentUser.uid)
-        .set({
-          posts: [
-            {
-              namabarang: namabarang,
-              photoURL: "photoURL",
-              kategori: kategori,
-              lokasi: lokasi,
-              comment: [],
-            },
-          ],
-        });
-    }
+    const {namabarang, photoURL, kategori, lokasi, comment, uid,path} = this.state;
+    const reference = storage().ref(auth().currentUser.uid+this.state.namabarang)
+        const pathToFile = path
+        await reference.putFile(pathToFile);
+        const url = await storage().ref(auth().currentUser.uid+this.state.namabarang).getDownloadURL();
+        
+
+
+
+
+    await firestore().collection(this.state.selectedChoice).doc(auth().currentUser.uid).set({
+                posts: firestore.FieldValue.arrayUnion({
+                  namabarang: namabarang,
+                  photoURL: url,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  comment: [],
+                 })
+              },{merge:true})
+   
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+
+  }
   render() {
     const {
       imageCamera,
@@ -147,7 +135,7 @@ export default class Index extends Component {
       kategori,
       lokasi,
     } = this.state;
-    //console.log(this.state.photoURL);
+    
     return (
       <SafeAreaView style={{flex: 1}}>
         <ScrollView>

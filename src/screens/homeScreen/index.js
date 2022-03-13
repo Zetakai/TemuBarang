@@ -182,7 +182,7 @@ export class HomeScreen extends Component {
                 return (
                   <TouchableOpacity key={i} style={{...styles.menu}}>
                     <Image
-                      source={{uri: `${x.photoURL}`}}
+                      source={{uri: `${x.photoURL?x.photoURL:null}`}}
                       style={{width: 220, height: 220, borderRadius: 25}}
                     />
                   </TouchableOpacity>
@@ -201,7 +201,7 @@ export class HomeScreen extends Component {
                 return (
                   <TouchableOpacity key={i} style={{...styles.menu}}>
                     <Image
-                      source={{uri: `${x.photoURL}`}}
+                      source={{uri: `${x.photoURL?x.photoURL:null}`}}
                       style={{width: 220, height: 220, borderRadius: 25}}
                     />
                   </TouchableOpacity>
