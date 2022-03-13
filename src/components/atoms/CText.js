@@ -17,5 +17,6 @@ export default class CText extends Component {
 const styles = StyleSheet.create({
   text: {
     fontSize: 15,
+    color:'#4f4f4f'
   },
 });

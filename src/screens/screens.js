@@ -8,6 +8,7 @@ import SplashScreen from './splashScreen';
 import ProfileScreen from './profileScreen';
 import FoundScreen from './foundScreen';
 import LostScreen from './LostScreen';
+import DetailsScreen from './detailsScreen';
 
 export {
   LoginScreen,
@@ -19,5 +20,6 @@ export {
   UploadScreen,
   SplashScreen,
   LostScreen,
-  FoundScreen
+  FoundScreen,
+  DetailsScreen,
 };

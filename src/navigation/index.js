@@ -13,7 +13,8 @@ import {
   UploadScreen,
   ProfileScreen,
   LostScreen,
-  FoundScreen
+  FoundScreen,
+  DetailsScreen,
 } from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -139,6 +140,11 @@ export default class App extends Component {
           <Stack.Screen
             name="LostScreen"
             component={LostScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="DetailsScreen"
+            component={DetailsScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
