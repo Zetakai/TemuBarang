@@ -18,10 +18,21 @@ import CTextInput from '../../components/atoms/CTextInput';
 import CText from '../../components/atoms/CText';
 import {Picker} from '@react-native-picker/picker';
 import CButton from '../../components/atoms/CButton';
+import auth from '@react-native-firebase/auth';
 export default class Index extends Component {
   constructor() {
     super();
-    this.state = {imageCamera: null, dataFire: [], selectedChoice:[]};
+    this.state = {
+      imageCamera: null,
+      dataFire: [],
+      selectedChoice: '',
+      namabarang: '',
+      photoURL: '',
+      kategori: '',
+      lokasi: '',
+      comment: [],
+      uid: '',
+    };
   }
   _requestCameraPermission = async () => {
     try {
@@ -43,23 +54,24 @@ export default class Index extends Component {
     }
   };
 
-  _openCamera = () => {
+  _openCamera = async () => {
     const options = {
       mediaType: 'photo',
       quality: 1,
       cameraType: 'back',
       saveToPhotos: true,
+      includeBase64: true,
     };
 
-    launchCamera(options, res => {
+    await launchCamera(options, res => {
       if (res.didCancel) {
         console.log('user cancel');
       } else if (res.errorCode) {
         console.log(res.errorMessage);
       } else {
         let data = res.assets;
-        console.log(data);
-        this.setState({imageCamera: data});
+        // console.log(data[0].base64);
+        this.setState({imageCamera: data, photoURL: data[0].base64});
       }
     });
   };
@@ -71,32 +83,86 @@ export default class Index extends Component {
   //       this.setState({dataFire: user.data().posts});
   //     });
   // };
-  _getFire = async () => {
-    await firestore()
-      .collection('Users')
-      .onSnapshot(x => {
-        let user = x.docs.map(y => {
-          return y.data();
+  // _getFire = async () => {
+  //   await firestore()
+  //     .collection('Users')
+  //     .onSnapshot(x => {
+  //       let user = x.docs.map(y => {
+  //         return y.data();
+  //       });
+  //       let cup = user.map(x => {
+  //         return x.posts;
+  //       });
+  //       this.setState({dataFire: cup.flat()});
+  //     });
+  // };
+  _post = async () => {
+    const {namabarang, photoURL, kategori, lokasi, comment, uid} = this.state;
+    try {
+      await firestore()
+        .collection(this.state.selectedChoice)
+        .doc(auth().currentUser.uid)
+        .get()
+        .then(
+          firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .update({
+              posts: firestore.FieldValue.arrayUnion({
+                namabarang: namabarang,
+                photoURL: "photoURL",
+                kategori: kategori,
+                lokasi: lokasi,
+                comment: [],
+               
+              }),
+            }),
+        );
+    } catch {
+     await firestore()
+        .collection(this.state.selectedChoice)
+        .doc(auth().currentUser.uid)
+        .set({
+          posts: [
+            {
+              namabarang: namabarang,
+              photoURL: "photoURL",
+              kategori: kategori,
+              lokasi: lokasi,
+              comment: [],
+            },
+          ],
         });
-        let cup = user.map(x => {
-          return x.posts;
-        });
-        this.setState({dataFire: cup.flat()});
-      });
+    }
   };
 
   componentDidMount() {}
   render() {
-    const {imageCamera, dataFire, selectedChoice} = this.state;
-    console.log(dataFire);
+    const {
+      imageCamera,
+      dataFire,
+      selectedChoice,
+      namabarang,
+      photoURL,
+      kategori,
+      lokasi,
+    } = this.state;
+    //console.log(this.state.photoURL);
     return (
       <SafeAreaView style={{flex: 1}}>
         <ScrollView>
           {/* <Pressable onPress={this._requestCameraPermission} style={styles.tombol}>
           <Text>opencamera</Text>
         </Pressable> */}
-          <View>
-            <View style={{flexDirection:'row'}}>
+          <View
+            style={{
+              padding: 5,
+              margin: 15,
+              borderWidth: 1,
+              borderColor: 'black',
+              borderRadius: 25,
+            }}>
+            <View style={{flexDirection: 'row'}}>
               <TouchableOpacity onPress={this._requestCameraPermission}>
                 <Image
                   source={
@@ -109,37 +175,53 @@ export default class Index extends Component {
                     height: 200,
                     borderWidth: 1,
                     borderColor: 'black',
+                    borderRadius: 25,
                   }}
                 />
-              </TouchableOpacity><View style={{justifyContent:'center',alignItems:'center'}}>
-              <View style={{borderWidth:1,borderColor:'black'}}>
-                <Picker
-                mode='dropdown'
-                dropdownIconColor={'black'}
-                selectedValue={selectedChoice}
-                style={{height: 50, width: 200,color:'black'}}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({selectedChoice: itemValue})
-                }>
-                <Picker.Item label="Lost Item" value="lost" />
-                <Picker.Item label="Found Item" value="found" />
-              </Picker>
-                  </View></View>
+              </TouchableOpacity>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <CText style={styles.textcolor}>kategori post</CText>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: 'black',
+                    borderRadius: 10,
+                  }}>
+                  <Picker
+                    mode="dropdown"
+                    dropdownIconColor={'black'}
+                    selectedValue={selectedChoice}
+                    style={{height: 50, width: 170, color: 'black'}}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.setState({selectedChoice: itemValue})
+                    }>
+                    <Picker.Item label="..." value="" />
+                    <Picker.Item label="Lost Item" value="Lost" />
+                    <Picker.Item label="Found Item" value="Found" />
+                  </Picker>
+                </View>
+              </View>
             </View>
             <View style={styles.bodyContent}>
               <CText style={styles.textcolor}>Nama Barang</CText>
               <View style={styles.profInput}>
                 <TextInput
-                  placeholder="Name"
+                  placeholderTextColor={'dimgrey'}
+                  placeholder="nama barang"
                   style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                  value={namabarang}
+                  onChangeText={value => this.setState({namabarang: value})}
                 />
                 <AntDesign color={'black'} name="edit" size={24} />
               </View>
               <CText style={styles.textcolor}>Kategori Barang</CText>
               <View style={styles.profInput}>
                 <TextInput
-                  placeholder="Email"
+                  placeholderTextColor={'dimgrey'}
+                  placeholder="kategori barang"
                   style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                  value={kategori}
+                  onChangeText={value => this.setState({kategori: value})}
                 />
                 <AntDesign color={'black'} name="edit" size={24} />
               </View>
@@ -148,13 +230,23 @@ export default class Index extends Component {
               </CText>
               <View style={styles.profInput}>
                 <TextInput
-                  placeholder="Phone Number"
+                  placeholderTextColor={'dimgrey'}
+                  placeholder="lokasi"
                   style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                  value={lokasi}
+                  onChangeText={value => this.setState({lokasi: value})}
                 />
                 <AntDesign color={'black'} name="edit" size={24} />
               </View>
             </View>
-            <View style={{justifyContent:'center',alignItems:'center'}}><CButton title="post" /></View>
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <CButton
+                title="post"
+                onPress={() => {
+                  selectedChoice ? this._post() : alert('pilih kategori post');
+                }}
+              />
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
