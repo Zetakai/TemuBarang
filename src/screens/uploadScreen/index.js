@@ -33,6 +33,7 @@ export default class Index extends Component {
       lokasi: '',
       comment: [],
       uid: '',
+      path:''
     };
   }
   _requestCameraPermission = async () => {
@@ -71,13 +72,8 @@ export default class Index extends Component {
         console.log(res.errorMessage);
       } else {
         let data = res.assets;
-        const reference = storage().ref(auth().currentUser.uid+this.state.namabarang)
-        console.log(data)
-        const pathToFile = `${data[0].uri}`;
         
-        await reference.putFile(pathToFile);
-        const url = await storage().ref(auth().currentUser.uid+this.state.namabarang).getDownloadURL();
-        this.setState({imageCamera: data,photoURL:url});
+        this.setState({imageCamera: data,path:data[0].uri});
         
       }
     });
@@ -104,11 +100,20 @@ export default class Index extends Component {
   //     });
   // };
   _post = async () => {
-    const {namabarang, photoURL, kategori, lokasi, comment, uid} = this.state;
+    const {namabarang, photoURL, kategori, lokasi, comment, uid,path} = this.state;
+    const reference = storage().ref(auth().currentUser.uid+this.state.namabarang)
+        const pathToFile = path
+        await reference.putFile(pathToFile);
+        const url = await storage().ref(auth().currentUser.uid+this.state.namabarang).getDownloadURL();
+        
+
+
+
+
     await firestore().collection(this.state.selectedChoice).doc(auth().currentUser.uid).set({
                 posts: firestore.FieldValue.arrayUnion({
                   namabarang: namabarang,
-                  photoURL: photoURL,
+                  photoURL: url,
                   kategori: kategori,
                   lokasi: lokasi,
                   comment: [],
