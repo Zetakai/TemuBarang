@@ -120,7 +120,7 @@ export default class Index extends Component {
             kategori: kategori,
             lokasi: lokasi,
             comment: [],
-            time:new Date()
+            time: Math.round(new Date()/1000),
 
           }),
         },
