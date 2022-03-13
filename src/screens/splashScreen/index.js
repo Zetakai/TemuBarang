@@ -9,9 +9,9 @@ export default class SplashScreen extends Component {
     if (auth().currentUser !== null) {
       console.log('User is logged in');
       console.log(auth().currentUser.email);
-      // setTimeout(() => {
-      //   this.props.navigation.replace('TabNav');
-      // }, 4000);
+      setTimeout(() => {
+        this.props.navigation.replace('TabNav');
+      }, 4000);
     } else {
       setTimeout(() => {
         console.log('not logged in');
