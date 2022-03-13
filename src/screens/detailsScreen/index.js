@@ -36,14 +36,14 @@ export default class Index extends Component {
             <CText style={{fontSize: 30, fontWeight: 'bold'}}>
               {data.namabarang}
             </CText>
-            <Text>Lokasi : {data.lokasi}</Text>
+            <Text style={styles.textcolor}>Lokasi : {data.lokasi}</Text>
           </View>
           <View style={{padding: 5, backgroundColor: 'white', marginBottom: 3}}>
             <CText style={{fontSize: 25}}>Deskripsi</CText>
-            <Text style={styles.textcolor}>Nomor apa</Text>
-            <Text style={styles.textcolor}>sesuatu</Text>
-            <Text style={styles.textcolor}>apa</Text>
-            <Text style={styles.textcolor}>ntah</Text>
+            <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
+            <Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>
+            <Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>
+            <Text style={styles.textcolor}>{data.uid}</Text>
           </View>
           <View
             style={{

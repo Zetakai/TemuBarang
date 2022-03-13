@@ -34,6 +34,8 @@ export default class Index extends Component {
       comment: [],
       uid: '',
       path: '',
+      hadiah: '',
+      key:'',
     };
   }
   _requestCameraPermission = async () => {
@@ -98,8 +100,17 @@ export default class Index extends Component {
   //     });
   // };
   _post = async () => {
-    const {namabarang, photoURL, kategori, lokasi, comment, uid, path} =
-      this.state;
+    const {selectedChoice,
+      namabarang,
+      photoURL,
+      kategori,
+      lokasi,
+      comment,
+      uid,
+      path,
+      hadiah,
+      key,
+    } = this.state;
     const reference = storage().ref(
       auth().currentUser.uid + this.state.namabarang,
     );
@@ -109,26 +120,51 @@ export default class Index extends Component {
       .ref(auth().currentUser.uid + this.state.namabarang)
       .getDownloadURL();
 
-    await firestore()
-      .collection(this.state.selectedChoice)
-      .doc(auth().currentUser.uid)
-      .set(
-        {
-          posts: firestore.FieldValue.arrayUnion({
-            namabarang: namabarang,
-            photoURL: url,
-            kategori: kategori,
-            lokasi: lokasi,
-            comment: [],
-            time: Math.round(new Date()/1000),
-
-          }),
-        },
-        {merge: true},
-      );
+    {
+      selectedChoice == 'Found'
+        ? await firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .set(
+              {
+                posts: firestore.FieldValue.arrayUnion({
+                  namabarang: namabarang,
+                  photoURL: url,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  comment: [],
+                  time: Math.round(new Date() / 1000),
+                  uid: uid,
+                  keyunik: key,
+                }),
+              },
+              {merge: true},
+            )
+        : await firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .set(
+              {
+                posts: firestore.FieldValue.arrayUnion({
+                  namabarang: namabarang,
+                  photoURL: url,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  comment: [],
+                  time: Math.round(new Date() / 1000),
+                  hadiah: hadiah,
+                  uid: uid,
+                  keyunik: key,
+                }),
+              },
+              {merge: true},
+            );
+    }
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({uid: auth().currentUser.uid});
+  }
   render() {
     const {
       imageCamera,
@@ -138,10 +174,12 @@ export default class Index extends Component {
       photoURL,
       kategori,
       lokasi,
+      hadiah,
+      key,
     } = this.state;
 
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1,backgroundColor:'grey'}}>
         <ScrollView>
           {/* <Pressable onPress={this._requestCameraPermission} style={styles.tombol}>
           <Text>opencamera</Text>
@@ -153,6 +191,7 @@ export default class Index extends Component {
               borderWidth: 1,
               borderColor: 'black',
               borderRadius: 25,
+              backgroundColor:'white'
             }}>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity onPress={this._requestCameraPermission}>
@@ -218,7 +257,9 @@ export default class Index extends Component {
                 <AntDesign color={'black'} name="edit" size={24} />
               </View>
               <CText style={styles.textcolor}>
-                Lokasi hilang atau ditemukan
+                {selectedChoice == 'Found'
+                  ? 'Lokasi ditemukan'
+                  : 'Lokasi Hilang'}
               </CText>
               <View style={styles.profInput}>
                 <TextInput
@@ -230,6 +271,36 @@ export default class Index extends Component {
                 />
                 <AntDesign color={'black'} name="edit" size={24} />
               </View>
+              <CText style={styles.textcolor}>Kunci Pembeda</CText>
+              <View style={styles.profInput}>
+                <TextInput
+                  placeholderTextColor={'dimgrey'}
+                  placeholder="kategori barang"
+                  style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                  value={key}
+                  onChangeText={value => this.setState({key: value})}
+                />
+                <AntDesign color={'black'} name="edit" size={24} />
+              </View>
+              {selectedChoice == 'Lost' ? (
+                <View>
+                  <CText style={styles.textcolor}>
+                    Hadiah Bagi Yang Menemukan
+                  </CText>
+                  <View style={styles.profInput}>
+                    <TextInput
+                      placeholderTextColor={'dimgrey'}
+                      placeholder="kategori barang"
+                      style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                      value={hadiah}
+                      onChangeText={value => this.setState({hadiah: value})}
+                    />
+                    <AntDesign color={'black'} name="edit" size={24} />
+                  </View>
+                </View>
+              ) : (
+                <View></View>
+              )}
             </View>
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <CButton
