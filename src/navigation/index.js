@@ -66,7 +66,7 @@ export class TabNav extends Component {
           ),
         }}
         name="fetail"
-        component={DetailsScreen}
+        component={OnboardScreen}
       />
        <Tab.Screen
         options={{

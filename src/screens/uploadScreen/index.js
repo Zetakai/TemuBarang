@@ -35,7 +35,7 @@ export default class Index extends Component {
       uid: '',
       path: '',
       hadiah: '',
-      key:'',
+      key: '',
     };
   }
   _requestCameraPermission = async () => {
@@ -100,7 +100,8 @@ export default class Index extends Component {
   //     });
   // };
   _post = async () => {
-    const {selectedChoice,
+    const {
+      selectedChoice,
       namabarang,
       photoURL,
       kategori,
@@ -132,7 +133,6 @@ export default class Index extends Component {
                   photoURL: url,
                   kategori: kategori,
                   lokasi: lokasi,
-                  comment: [],
                   time: Math.round(new Date() / 1000),
                   uid: uid,
                   keyunik: key,
@@ -150,7 +150,6 @@ export default class Index extends Component {
                   photoURL: url,
                   kategori: kategori,
                   lokasi: lokasi,
-                  comment: [],
                   time: Math.round(new Date() / 1000),
                   hadiah: hadiah,
                   uid: uid,
@@ -179,7 +178,14 @@ export default class Index extends Component {
     } = this.state;
 
     return (
-      <SafeAreaView style={{flex: 1,backgroundColor:'grey'}}>
+      <SafeAreaView
+        style={
+          !selectedChoice
+            ? {flex: 1, backgroundColor: 'silver'}
+            : selectedChoice == 'Found'
+            ? {flex: 1, backgroundColor: 'green'}
+            : {flex: 1, backgroundColor: 'chocolate'}
+        }>
         <ScrollView>
           {/* <Pressable onPress={this._requestCameraPermission} style={styles.tombol}>
           <Text>opencamera</Text>
@@ -191,7 +197,7 @@ export default class Index extends Component {
               borderWidth: 1,
               borderColor: 'black',
               borderRadius: 25,
-              backgroundColor:'white'
+              backgroundColor: 'white',
             }}>
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity onPress={this._requestCameraPermission}>
@@ -226,83 +232,96 @@ export default class Index extends Component {
                     onValueChange={(itemValue, itemIndex) =>
                       this.setState({selectedChoice: itemValue})
                     }>
-                    <Picker.Item label="..." value="" />
+                    <Picker.Item label="..." value={null} />
                     <Picker.Item label="Lost Item" value="Lost" />
                     <Picker.Item label="Found Item" value="Found" />
                   </Picker>
                 </View>
               </View>
             </View>
-            <View style={styles.bodyContent}>
-              <CText style={styles.textcolor}>Nama Barang</CText>
-              <View style={styles.profInput}>
-                <TextInput
-                  placeholderTextColor={'dimgrey'}
-                  placeholder="nama barang"
-                  style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
-                  value={namabarang}
-                  onChangeText={value => this.setState({namabarang: value})}
-                />
-                <AntDesign color={'black'} name="edit" size={24} />
-              </View>
-              <CText style={styles.textcolor}>Kategori Barang</CText>
-              <View style={styles.profInput}>
-                <TextInput
-                  placeholderTextColor={'dimgrey'}
-                  placeholder="kategori barang"
-                  style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
-                  value={kategori}
-                  onChangeText={value => this.setState({kategori: value})}
-                />
-                <AntDesign color={'black'} name="edit" size={24} />
-              </View>
-              <CText style={styles.textcolor}>
-                {selectedChoice == 'Found'
-                  ? 'Lokasi ditemukan'
-                  : 'Lokasi Hilang'}
-              </CText>
-              <View style={styles.profInput}>
-                <TextInput
-                  placeholderTextColor={'dimgrey'}
-                  placeholder="lokasi"
-                  style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
-                  value={lokasi}
-                  onChangeText={value => this.setState({lokasi: value})}
-                />
-                <AntDesign color={'black'} name="edit" size={24} />
-              </View>
-              <CText style={styles.textcolor}>Kunci Pembeda</CText>
-              <View style={styles.profInput}>
-                <TextInput
-                  placeholderTextColor={'dimgrey'}
-                  placeholder="kategori barang"
-                  style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
-                  value={key}
-                  onChangeText={value => this.setState({key: value})}
-                />
-                <AntDesign color={'black'} name="edit" size={24} />
-              </View>
-              {selectedChoice == 'Lost' ? (
-                <View>
-                  <CText style={styles.textcolor}>
-                    Hadiah Bagi Yang Menemukan
-                  </CText>
-                  <View style={styles.profInput}>
-                    <TextInput
-                      placeholderTextColor={'dimgrey'}
-                      placeholder="kategori barang"
-                      style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
-                      value={hadiah}
-                      onChangeText={value => this.setState({hadiah: value})}
-                    />
-                    <AntDesign color={'black'} name="edit" size={24} />
-                  </View>
+            {!selectedChoice ? (
+              <View></View>
+            ) : (
+              <View style={styles.bodyContent}>
+                <CText style={styles.textcolor}>Nama Barang</CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="nama barang"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={namabarang}
+                    onChangeText={value => this.setState({namabarang: value})}
+                  />
+                  <AntDesign color={'black'} name="edit" size={24} />
                 </View>
-              ) : (
-                <View></View>
-              )}
-            </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <CText style={styles.textcolor}>Kategori Barang</CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="kategori barang"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={kategori}
+                    onChangeText={value => this.setState({kategori: value})}
+                  />
+                  <AntDesign color={'black'} name="edit" size={24} />
+                </View>
+                <CText style={styles.textcolor}>
+                  {selectedChoice == 'Found'
+                    ? 'Lokasi ditemukan'
+                    : 'Lokasi Hilang'}
+                </CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="lokasi"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={lokasi}
+                    onChangeText={value => this.setState({lokasi: value})}
+                  />
+                  <AntDesign color={'black'} name="edit" size={24} />
+                </View>
+                <CText style={styles.textcolor}>Kunci Pembeda</CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="ciri"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={key}
+                    onChangeText={value => this.setState({key: value})}
+                  />
+                  <AntDesign color={'black'} name="edit" size={24} />
+                </View>
+                {selectedChoice == 'Lost' ? (
+                  <View>
+                    <CText style={styles.textcolor}>
+                      Hadiah Bagi Yang Menemukan
+                    </CText>
+                    <View style={styles.profInput}>
+                      <TextInput
+                        placeholderTextColor={'dimgrey'}
+                        placeholder="nilai"
+                        style={{
+                          width: '80%',
+                          color: 'dimgrey',
+                          paddingLeft: 10,
+                        }}
+                        value={hadiah}
+                        onChangeText={value => this.setState({hadiah: value})}
+                      />
+                      <AntDesign color={'black'} name="edit" size={24} />
+                    </View>
+                  </View>
+                ) : (
+                  <View></View>
+                )}
+              </View>
+            )}
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 10,
+              }}>
               <CButton
                 title="post"
                 onPress={() => {
@@ -322,7 +341,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
     borderBottomWidth: 1,
   },
   tombol: {
@@ -330,7 +348,7 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: 'red',
   },
-  textcolor: {color: 'black'},
+  text: {color: 'black', marginTop: 10},
 });
 
 // import React, { Fragment, Component } from 'react';
