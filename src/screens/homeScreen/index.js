@@ -39,7 +39,6 @@ export class HomeScreen extends Component {
         this.mounted == true &&
           this.setState({dataLost: cup.flat().slice(0, 3)});
       });
-    console.log(this.props.userNow);
     await firestore()
       .collection('Found')
       .onSnapshot(x => {
@@ -178,7 +177,7 @@ export class HomeScreen extends Component {
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              {dataLost.map((x, i) => {console.log(x);
+              {dataLost.map((x, i) => {
                 return (
                   <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
                     <Image
@@ -199,7 +198,7 @@ export class HomeScreen extends Component {
               showsHorizontalScrollIndicator={false}>
               {dataFound.map((x, i) => {
                 return (
-                  <TouchableOpacity key={i} style={{...styles.menu}}>
+                  <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
                     <Image
                       source={{uri: `${x.photoURL?x.photoURL:null}`}}
                       style={{width: 220, height: 220, borderRadius: 25}}

@@ -2,7 +2,8 @@ import {
   Image,
   Text,
   StyleSheet,
-  View,RefreshControl,
+  View,
+  RefreshControl,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -15,11 +16,17 @@ import firestore from '@react-native-firebase/firestore';
 export default class FoundScreen extends Component {
   constructor() {
     super();
-    this.state = {searchData: '', dataFire: [], renderData: [],refreshing:false};
-    let cari; let mounted
+    this.state = {
+      searchData: '',
+      dataFire: [],
+      renderData: [],
+      refreshing: false,
+    };
+    let cari;
+    let mounted;
   }
   async componentDidMount() {
-    this.mounted=true
+    this.mounted = true;
     await firestore()
       .collection('Found')
       .onSnapshot(x => {
@@ -29,29 +36,33 @@ export default class FoundScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
-        this.mounted==true&&this.setState({dataFire: cup.flat()});
+        this.mounted == true && this.setState({dataFire: cup.flat()});
       });
   }
   _barangSearch = () => {
-    let{cari}=this
+    let {cari} = this;
     const {dataFire, renderData, searchData} = this.state;
     cari = dataFire.filter(x => {
       return x.namabarang == searchData;
     });
     if (cari.length > 0) {
-      this.mounted==true&&this.setState({renderData: cari});
+      this.mounted == true && this.setState({renderData: cari});
       alert('barang ditemukan');
     }
     if (!searchData) {
-      this.mounted==true&&this.setState({renderData:dataFire});
+      this.mounted == true && this.setState({renderData: dataFire});
     }
     if (cari.length < 1 && searchData) {
       alert('barang tidak ditemukan');
-      this.mounted==true&&this.setState({renderData:dataFire})
+      this.mounted == true && this.setState({renderData: dataFire});
     }
   };
-  componentWillUnmount(){this.mounted=false}
-  _wait=(timeout)=>{return new Promise(resolve=>setTimeout(resolve,timeout))}
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+  _wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
   _userLogout = () => {
     auth()
       .signOut()
@@ -60,9 +71,19 @@ export default class FoundScreen extends Component {
         this.props.navigation.replace('OnboardScreen');
       });
   };
-  _onRefresh=()=>{this.mounted==true&&this.setState({refreshing:true});this._wait(1000).then(()=>{this.mounted==true&&this.setState({dataFire:this.state.dataFire,renderData:this.cari,refreshing:false})})}
+  _onRefresh = () => {
+    this.mounted == true && this.setState({refreshing: true});
+    this._wait(1000).then(() => {
+      this.mounted == true &&
+        this.setState({
+          dataFire: this.state.dataFire,
+          renderData: this.cari,
+          refreshing: false,
+        });
+    });
+  };
   render() {
-    const {dataFire, renderData, searchData,refreshing} = this.state;
+    const {dataFire, renderData, searchData, refreshing} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
@@ -105,7 +126,7 @@ export default class FoundScreen extends Component {
           <CTextInput
             placeholder="cari barang"
             textAlign={'center'}
-            style={{borderColor: 'silver', width: '80%',alignItems:'center'}}
+            style={{borderColor: 'silver', width: '80%', alignItems: 'center'}}
             value={searchData}
             onChangeText={value => this.setState({searchData: value})}
           />
@@ -117,24 +138,27 @@ export default class FoundScreen extends Component {
           />
         </View>
 
-        <ScrollView style={{marginTop: 25}}
-       refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={this._onRefresh}
-        />
-      }
-          >
+        <ScrollView
+          style={{marginTop: 25}}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
               Recently Found Items
             </Text>
           </View>
           <View>
-            {renderData&&renderData.length > 0
+            {renderData && renderData.length > 0
               ? renderData.map((x, i) => {
                   return (
                     <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate('DetailsScreen', x)
+                      }
                       key={i}
                       style={{...styles.menu, borderWidth: 1}}>
                       <View
@@ -172,6 +196,9 @@ export default class FoundScreen extends Component {
               : dataFire.map((x, i) => {
                   return (
                     <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate('DetailsScreen', x)
+                      }
                       key={i}
                       style={{...styles.menu, borderWidth: 1}}>
                       <View
