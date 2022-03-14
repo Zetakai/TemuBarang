@@ -35,8 +35,10 @@ export default class FoundScreen extends Component {
         });
         let cup = user.map(x => {
           return x.posts;
+          
         });
-        this.mounted == true && this.setState({dataFire: cup.flat()});
+        let sorted= cup.flat().sort((a, b) => b.time - a.time)
+        this.mounted == true && this.setState({dataFire: sorted});
       });
   }
   _barangSearch = () => {

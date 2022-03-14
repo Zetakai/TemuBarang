@@ -36,8 +36,9 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
+        let sorted= cup.flat().sort((a, b) => b.time - a.time)
         this.mounted == true &&
-          this.setState({dataLost: cup.flat().slice(0, 3)});
+          this.setState({dataLost: sorted.slice(0, 3)});
       });
     await firestore()
       .collection('Found')
@@ -48,8 +49,9 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
+        let sorted= cup.flat().sort((a, b) => b.time - a.time)
         this.mounted == true &&
-          this.setState({dataFound: cup.flat().slice(0, 3)});
+          this.setState({dataFound: sorted.slice(0, 3)});
       });
   }
   componentWillUnmount(){this.mounted=false}
