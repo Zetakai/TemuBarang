@@ -99,7 +99,59 @@ export default class Index extends Component {
   //       this.setState({dataFire: cup.flat()});
   //     });
   // };
-  _post = async () => {
+  _postwoimg=async()=>{
+    const {
+      selectedChoice,
+      namabarang,
+      photoURL,
+      kategori,
+      lokasi,
+      comment,
+      uid,
+      path,
+      hadiah,
+      key,
+    } = this.state;
+    
+    {
+      selectedChoice == 'Found'
+        ? await firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .set(
+              {
+                posts: firestore.FieldValue.arrayUnion({
+                  namabarang: namabarang,
+                  photoURL: null,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  time: new Date(),
+                  uid: uid,
+                  keyunik: key,
+                }),
+              },
+              {merge: true},
+            )
+        : await firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .set(
+              {
+                posts: firestore.FieldValue.arrayUnion({
+                  namabarang: namabarang,
+                  photoURL: null,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  time: new Date(),
+                  hadiah: hadiah,
+                  uid: uid,
+                  keyunik: key,
+                }),
+              },
+              {merge: true},
+            );
+    }}
+  _postimg = async () => {
     const {
       selectedChoice,
       namabarang,
@@ -133,7 +185,7 @@ export default class Index extends Component {
                   photoURL: url,
                   kategori: kategori,
                   lokasi: lokasi,
-                  time: Math.round(new Date() / 1000),
+                  time: new Date(),
                   uid: uid,
                   keyunik: key,
                 }),
@@ -150,7 +202,7 @@ export default class Index extends Component {
                   photoURL: url,
                   kategori: kategori,
                   lokasi: lokasi,
-                  time: Math.round(new Date() / 1000),
+                  time: new Date(),
                   hadiah: hadiah,
                   uid: uid,
                   keyunik: key,
@@ -175,6 +227,7 @@ export default class Index extends Component {
       lokasi,
       hadiah,
       key,
+      path
     } = this.state;
 
     return (
@@ -325,7 +378,7 @@ export default class Index extends Component {
               <CButton
                 title="post"
                 onPress={() => {
-                  selectedChoice ? this._post() : alert('pilih kategori post');
+                  !selectedChoice ? alert('pilih kategori post'):path? this._postimg():this._postwoimg() 
                 }}
               />
             </View>

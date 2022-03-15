@@ -171,7 +171,7 @@ export default class FoundScreen extends Component {
                         }}>
                         <View>
                           <Image
-                            source={{uri: `${x.photoURL && x.photoURL}`}}
+                            source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/dummy.png')}
                             style={{width: 100, height: 100, borderRadius: 25}}
                           />
                         </View>
@@ -211,7 +211,7 @@ export default class FoundScreen extends Component {
                         }}>
                         <View>
                           <Image
-                            source={{uri: `${x.photoURL && x.photoURL}`}}
+                            source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/dummy.png')}
                             style={{width: 100, height: 100, borderRadius: 25}}
                           />
                         </View>
