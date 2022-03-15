@@ -183,7 +183,7 @@ export class HomeScreen extends Component {
                 return (
                   <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
                     <Image
-                     source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/dummy.png')}
+                     source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
                       style={{width: 220, height: 220, borderRadius: 25}}
                     />
                   </TouchableOpacity>
@@ -202,7 +202,7 @@ export class HomeScreen extends Component {
                 return (
                   <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
                     <Image
-                      source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/dummy.png')}
+                      source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
                       style={{width: 220, height: 220, borderRadius: 25}}
                     />
                   </TouchableOpacity>
