@@ -148,7 +148,7 @@ export default class FoundScreen extends Component {
               onRefresh={this._onRefresh}
             />
           }>
-          <View style={{marginBottom: 20}}>
+          <View style={{marginBottom: 10}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
               Recently Found Items
             </Text>
@@ -175,7 +175,7 @@ export default class FoundScreen extends Component {
                             style={{width: 100, height: 100, borderRadius: 25}}
                           />
                         </View>
-                        <View>
+                        <View style={{flexShrink: 1}}>
                           <Text style={{color: 'black'}}>
                             Nama Barang: {x.namabarang}
                           </Text>
@@ -215,7 +215,7 @@ export default class FoundScreen extends Component {
                             style={{width: 100, height: 100, borderRadius: 25}}
                           />
                         </View>
-                        <View>
+                        <View style={{flexShrink: 1}}>
                           <Text style={{color: 'black'}}>
                             Nama Barang: {x.namabarang}
                           </Text>
@@ -253,9 +253,8 @@ const styles = StyleSheet.create({
   },
   menu: {
     marginHorizontal: 10,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 15,
+    marginBottom:5
   },
   cardText: {
     fontStyle: 'italic',
