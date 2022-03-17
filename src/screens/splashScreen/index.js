@@ -3,7 +3,7 @@ import {Text, StyleSheet, View, Image} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import Upvector from '../../../src/assets/Vector7.svg';
 import Upvector10 from '../../../src/assets/Vector8.svg';
-import Upvector11 from '../../../src/assets/test-01.svg';
+import Upvector11 from '../../../src/assets/test-00-01.svg';
 export default class SplashScreen extends Component {
   componentDidMount() {
     if (auth().currentUser !== null) {
@@ -21,14 +21,18 @@ export default class SplashScreen extends Component {
   }
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1, top: -50}}>
-          <Upvector color={'green'} />
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', height: 200, width: 600 }} >
+          <Upvector />
         </View>
-        <View style={{flex: 1, backgroundColor: 'white'}}>
+
+
+        <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center' }}>
+          <Upvector11 style={{ width: 150, height: 150, alignSelf: 'center', justifyContent: 'center' }} />
           <View>
-            <Upvector11 />
+            <Text style={styles.logo} >Temu Barang</Text>
           </View>
+
         </View>
         <View style={{flex: 1, justifyContent: 'center'}}>
           <Upvector10 color={'green'} />
@@ -48,5 +52,23 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     resizeMode: 'stretch',
+  },
+  logo: {
+    fontFamily: 'Pacifico-Regular',
+    color: '#04977D',
+    fontSize: 30,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    fontWeight: 'bold'
+  },
+  logo1: {
+    fontFamily: 'Pacifico-Regular',
+    color: 'brown',
+    fontSize: 30,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    fontWeight: 'bold'
   },
 });
