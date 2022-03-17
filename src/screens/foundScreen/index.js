@@ -154,7 +154,7 @@ export default class FoundScreen extends Component {
             </Text>
           </View>
           <View>
-            {renderData && renderData.length > 0
+            {this.mounted==true&&renderData && renderData.length > 0
               ? renderData.map((x, i) => {
                   return (
                     <TouchableOpacity

@@ -49,6 +49,7 @@ export default class Index extends Component {
   }
   componentWillUnmount() {
     this.setState({modalVisible: false});
+    this.mounted=false
   }
   _postcomment = async () => {
     const {data, comment} = this.state;
@@ -66,8 +67,8 @@ export default class Index extends Component {
           }),
         },
         {merge: true},
-      );
-    this.setState({comment: ''});
+      ).then(
+  this.setState({comment: ''}))
   };
   render() {
     const {data, comment, dataComments, modalVisible} = this.state;
@@ -227,7 +228,7 @@ export default class Index extends Component {
                   width: '60%',
                 }}
               />
-              <Button title="comment" onPress={() => this._postcomment()} />
+              <Button title="comment" onPress={() => comment&&this._postcomment()} />
             </View>
           </View>
         </View>
