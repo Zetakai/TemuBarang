@@ -15,7 +15,7 @@ import React, {Component} from 'react';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
-
+import Upvector from '../../assets/Vector9.svg'
 export default class ForgotScreen extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +27,7 @@ export default class ForgotScreen extends Component {
   }
   componentDidMount(){
     const {passEmail}=this.props.route.params;
-    this.setState({email:passEmail})}
+    passEmail&&this.setState({email:passEmail})}
   _userForgot = async () => {
     if (this.state.email === '') {
       Alert.alert('Enter your email');
@@ -58,10 +58,13 @@ export default class ForgotScreen extends Component {
     
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{flex: 1 / 2,alignItems:'center', justifyContent: 'center'}}>
+        <View style={{  justifyContent:'center',flex:1/10,marginLeft:0,left:0}} >
+        <Upvector color={'green'} />
+        </View>
+        <View style={{flex: 3 / 10,alignItems:'center', justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Reset Password</Text>
         </View>
-        <View style={{alignItems: 'center'}}>
+        <View style={{flex:6/10,alignItems: 'center'}}>
           <View style={{marginBottom: 45}}>
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput

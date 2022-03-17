@@ -1,8 +1,11 @@
-import {ScrollView,
+import {
+  ScrollView,
+  TouchableOpacity,
   Text,
   StyleSheet,
   View,
   SafeAreaView,
+  TextInput,
   Pressable,
   Image,
   PermissionsAndroid,
@@ -10,11 +13,30 @@ import {ScrollView,
 import React, {Component} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import CTextInput from '../../components/atoms/CTextInput';
+import CText from '../../components/atoms/CText';
+import {Picker} from '@react-native-picker/picker';
+import CButton from '../../components/atoms/CButton';
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 export default class Index extends Component {
   constructor() {
     super();
-    this.state = {imageCamera: null, dataFire: []};
+    this.state = {
+      imageCamera: null,
+      dataFire: [],
+      selectedChoice: '',
+      namabarang: '',
+      photoURL: '',
+      kategori: '',
+      lokasi: '',
+      comment: [],
+      uid: '',
+      path: '',
+      hadiah: '',
+      key: '',
+    };
   }
   _requestCameraPermission = async () => {
     try {
@@ -36,7 +58,7 @@ export default class Index extends Component {
     }
   };
 
-  _openCamera = () => {
+  _openCamera = async () => {
     const options = {
       mediaType: 'photo',
       quality: 1,
@@ -44,15 +66,15 @@ export default class Index extends Component {
       saveToPhotos: true,
     };
 
-    launchCamera(options, res => {
+    await launchCamera(options, async res => {
       if (res.didCancel) {
         console.log('user cancel');
       } else if (res.errorCode) {
         console.log(res.errorMessage);
       } else {
         let data = res.assets;
-        console.log(data);
-        this.setState({imageCamera: data});
+
+        this.setState({imageCamera: data, path: data[0].uri});
       }
     });
   };
@@ -64,41 +86,305 @@ export default class Index extends Component {
   //       this.setState({dataFire: user.data().posts});
   //     });
   // };
-  _getFire = async () => {
-    await firestore()
-      .collection('Users')
-      .onSnapshot(x => {
-        let user = x.docs.map(y => {
-          return y.data();
-        });
-        let cup=user.map(x=>{return x.posts})
-        this.setState({dataFire: cup.flat()})
-      });
+  // _getFire = async () => {
+  //   await firestore()
+  //     .collection('Users')
+  //     .onSnapshot(x => {
+  //       let user = x.docs.map(y => {
+  //         return y.data();
+  //       });
+  //       let cup = user.map(x => {
+  //         return x.posts;
+  //       });
+  //       this.setState({dataFire: cup.flat()});
+  //     });
+  // };
+  _postwoimg=async()=>{
+    const {
+      selectedChoice,
+      namabarang,
+      photoURL,
+      kategori,
+      lokasi,
+      comment,
+      uid,
+      path,
+      hadiah,
+      key,
+    } = this.state;
+    
+    {
+      selectedChoice == 'Found'
+        ? await firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .set(
+              {
+                posts: firestore.FieldValue.arrayUnion({
+                  namabarang: namabarang,
+                  photoURL: null,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  time: new Date(),
+                  uid: uid,
+                  keyunik: key,
+                }),
+              },
+              {merge: true},
+            )
+        : await firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .set(
+              {
+                posts: firestore.FieldValue.arrayUnion({
+                  namabarang: namabarang,
+                  photoURL: null,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  time: new Date(),
+                  hadiah: hadiah,
+                  uid: uid,
+                  keyunik: key,
+                }),
+              },
+              {merge: true},
+            );
+    }}
+  _postimg = async () => {
+    const {
+      selectedChoice,
+      namabarang,
+      photoURL,
+      kategori,
+      lokasi,
+      comment,
+      uid,
+      path,
+      hadiah,
+      key,
+    } = this.state;
+    const reference = storage().ref(
+      auth().currentUser.uid + this.state.namabarang,
+    );
+    const pathToFile = path;
+    await reference.putFile(pathToFile);
+    const url = await storage()
+      .ref(auth().currentUser.uid + this.state.namabarang)
+      .getDownloadURL();
+
+    {
+      selectedChoice == 'Found'
+        ? await firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .set(
+              {
+                posts: firestore.FieldValue.arrayUnion({
+                  kategoripos:selectedChoice,
+                  namabarang: namabarang,
+                  photoURL: url,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  time: new Date(),
+                  uid: uid,
+                  keyunik: key,
+                }),
+              },
+              {merge: true},
+            )
+        : await firestore()
+            .collection(this.state.selectedChoice)
+            .doc(auth().currentUser.uid)
+            .set(
+              {
+                posts: firestore.FieldValue.arrayUnion({
+                  kategoripos:selectedChoice,
+                  namabarang: namabarang,
+                  photoURL: url,
+                  kategori: kategori,
+                  lokasi: lokasi,
+                  time: new Date(),
+                  hadiah: hadiah,
+                  uid: uid,
+                  keyunik: key,
+                }),
+              },
+              {merge: true},
+            );
+    }
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({uid: auth().currentUser.uid});
+  }
   render() {
-    const {imageCamera, dataFire} = this.state;
-    console.log(dataFire);
-    return (
-      <SafeAreaView style={{flex: 1}}>
-        <ScrollView>
-        <Text>camera</Text>
+    const {
+      imageCamera,
+      dataFire,
+      selectedChoice,
+      namabarang,
+      photoURL,
+      kategori,
+      lokasi,
+      hadiah,
+      key,
+      path
+    } = this.state;
 
-        <Pressable onPress={this._getFire} style={styles.tombol}>
+    return (
+      <SafeAreaView
+        style={
+          !selectedChoice
+            ? {flex: 1, backgroundColor: 'silver'}
+            : selectedChoice == 'Found'
+            ? {flex: 1, backgroundColor: 'green'}
+            : {flex: 1, backgroundColor: 'chocolate'}
+        }>
+        <ScrollView>
+          {/* <Pressable onPress={this._requestCameraPermission} style={styles.tombol}>
           <Text>opencamera</Text>
-        </Pressable>
-        <Image source={imageCamera} style={{width: 100, height: 100}} />
-        {dataFire.map((x, i) => {
-          return (
-            <View>
-              <Image
-                source={{uri: `${x.photoURL}`}}
-                style={{width: 150, height: 150}}
+        </Pressable> */}
+          <View
+            style={{
+              padding: 5,
+              margin: 15,
+              borderWidth: 1,
+              borderColor: 'black',
+              borderRadius: 25,
+              backgroundColor: 'white',
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity onPress={this._requestCameraPermission}>
+                <Image
+                  source={
+                    imageCamera
+                      ? imageCamera
+                      : require('../../assets/dummy.png')
+                  }
+                  style={{
+                    width: 200,
+                    height: 200,
+                    borderWidth: 1,
+                    borderColor: 'black',
+                    borderRadius: 25,
+                  }}
+                />
+              </TouchableOpacity>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <CText style={styles.textcolor}>kategori post</CText>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: 'black',
+                    borderRadius: 10,
+                  }}>
+                  <Picker
+                    mode="dropdown"
+                    dropdownIconColor={'black'}
+                    selectedValue={selectedChoice}
+                    style={{height: 50, width: 170, color: 'black'}}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.setState({selectedChoice: itemValue})
+                    }>
+                    <Picker.Item label="..." value={null} />
+                    <Picker.Item label="Lost Item" value="Lost" />
+                    <Picker.Item label="Found Item" value="Found" />
+                  </Picker>
+                </View>
+              </View>
+            </View>
+            {!selectedChoice ? (
+              <View></View>
+            ) : (
+              <View style={styles.bodyContent}>
+                <CText style={styles.textcolor}>Nama Barang</CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="nama barang"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={namabarang}
+                    onChangeText={value => this.setState({namabarang: value})}
+                  />
+                  <AntDesign color={'black'} name="edit" size={24} />
+                </View>
+                <CText style={styles.textcolor}>Kategori Barang</CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="kategori barang"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={kategori}
+                    onChangeText={value => this.setState({kategori: value})}
+                  />
+                  <AntDesign color={'black'} name="edit" size={24} />
+                </View>
+                <CText style={styles.textcolor}>
+                  {selectedChoice == 'Found'
+                    ? 'Lokasi ditemukan'
+                    : 'Lokasi Hilang'}
+                </CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="lokasi"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={lokasi}
+                    onChangeText={value => this.setState({lokasi: value})}
+                  />
+                  <AntDesign color={'black'} name="edit" size={24} />
+                </View>
+                <CText style={styles.textcolor}>Kunci Pembeda</CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="ciri"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={key}
+                    onChangeText={value => this.setState({key: value})}
+                  />
+                  <AntDesign color={'black'} name="edit" size={24} />
+                </View>
+                {selectedChoice == 'Lost' ? (
+                  <View>
+                    <CText style={styles.textcolor}>
+                      Hadiah Bagi Yang Menemukan
+                    </CText>
+                    <View style={styles.profInput}>
+                      <TextInput
+                        placeholderTextColor={'dimgrey'}
+                        placeholder="nilai"
+                        style={{
+                          width: '80%',
+                          color: 'dimgrey',
+                          paddingLeft: 10,
+                        }}
+                        value={hadiah}
+                        onChangeText={value => this.setState({hadiah: value})}
+                      />
+                      <AntDesign color={'black'} name="edit" size={24} />
+                    </View>
+                  </View>
+                ) : (
+                  <View></View>
+                )}
+              </View>
+            )}
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 10,
+              }}>
+              <CButton
+                title="post"
+                onPress={() => {
+                  !selectedChoice ? alert('pilih kategori post'):path? this._postimg():this._postwoimg() 
+                }}
               />
             </View>
-          );
-        })}
+          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -106,11 +392,18 @@ export default class Index extends Component {
 }
 
 const styles = StyleSheet.create({
+  profInput: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+  },
   tombol: {
     padding: 10,
     margin: 10,
     backgroundColor: 'red',
   },
+  text: {color: 'black', marginTop: 10},
 });
 
 // import React, { Fragment, Component } from 'react';

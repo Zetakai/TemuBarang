@@ -2,7 +2,8 @@ import {
   Image,
   Text,
   StyleSheet,
-  View,RefreshControl,
+  View,
+  RefreshControl,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -15,11 +16,17 @@ import firestore from '@react-native-firebase/firestore';
 export default class FoundScreen extends Component {
   constructor() {
     super();
-    this.state = {searchData: '', dataFire: [], renderData: [],refreshing:false};
+    this.state = {
+      searchData: '',
+      dataFire: [],
+      renderData: [],
+      refreshing: false,
+    };
     let cari;
+    let mounted;
   }
   async componentDidMount() {
-    
+    this.mounted = true;
     await firestore()
       .collection('Found')
       .onSnapshot(x => {
@@ -28,29 +35,36 @@ export default class FoundScreen extends Component {
         });
         let cup = user.map(x => {
           return x.posts;
+          
         });
-        this.setState({dataFire: cup.flat()});
+        let sorted= cup.flat().sort((a, b) => b.time - a.time)
+        this.mounted == true && this.setState({dataFire: sorted});
       });
   }
   _barangSearch = () => {
-    let{cari}=this
+    let {cari} = this;
     const {dataFire, renderData, searchData} = this.state;
     cari = dataFire.filter(x => {
       return x.namabarang == searchData;
     });
     if (cari.length > 0) {
-      this.setState({renderData: cari});
+      this.mounted == true && this.setState({renderData: cari});
       alert('barang ditemukan');
     }
     if (!searchData) {
-      this.setState({renderData:dataFire});
+      this.mounted == true && this.setState({renderData: dataFire});
     }
     if (cari.length < 1 && searchData) {
       alert('barang tidak ditemukan');
-      this.setState({renderData:dataFire})
+      this.mounted == true && this.setState({renderData: dataFire});
     }
   };
-  _wait=(timeout)=>{return new Promise(resolve=>setTimeout(resolve,timeout))}
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+  _wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
   _userLogout = () => {
     auth()
       .signOut()
@@ -59,9 +73,19 @@ export default class FoundScreen extends Component {
         this.props.navigation.replace('OnboardScreen');
       });
   };
-  _onRefresh=()=>{this.setState({refreshing:true});this._wait(1000).then(()=>this.setState({dataFire:this.state.dataFire,renderData:this.cari,refreshing:false}))}
+  _onRefresh = () => {
+    this.mounted == true && this.setState({refreshing: true});
+    this._wait(1000).then(() => {
+      this.mounted == true &&
+        this.setState({
+          dataFire: this.state.dataFire,
+          renderData: this.cari,
+          refreshing: false,
+        });
+    });
+  };
   render() {
-    const {dataFire, renderData, searchData,refreshing} = this.state;
+    const {dataFire, renderData, searchData, refreshing} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
@@ -104,7 +128,7 @@ export default class FoundScreen extends Component {
           <CTextInput
             placeholder="cari barang"
             textAlign={'center'}
-            style={{borderColor: 'silver', width: '80%',alignItems:'center'}}
+            style={{borderColor: 'silver', width: '80%', alignItems: 'center'}}
             value={searchData}
             onChangeText={value => this.setState({searchData: value})}
           />
@@ -116,24 +140,27 @@ export default class FoundScreen extends Component {
           />
         </View>
 
-        <ScrollView style={{marginTop: 25}}
-       refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={this._onRefresh}
-        />
-      }
-          >
-          <View style={{marginBottom: 20}}>
+        <ScrollView
+          style={{marginTop: 25}}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }>
+          <View style={{marginBottom: 10}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
-              Recently Lost Items
+              Recently Found Items
             </Text>
           </View>
           <View>
-            {renderData.length > 0
+            {this.mounted==true&&renderData && renderData.length > 0
               ? renderData.map((x, i) => {
                   return (
                     <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate('DetailsScreen', x)
+                      }
                       key={i}
                       style={{...styles.menu, borderWidth: 1}}>
                       <View
@@ -144,11 +171,11 @@ export default class FoundScreen extends Component {
                         }}>
                         <View>
                           <Image
-                            source={{uri: `${x.photoURL && x.photoURL}`}}
+                            source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
                             style={{width: 100, height: 100, borderRadius: 25}}
                           />
                         </View>
-                        <View>
+                        <View style={{flexShrink: 1}}>
                           <Text style={{color: 'black'}}>
                             Nama Barang: {x.namabarang}
                           </Text>
@@ -171,6 +198,9 @@ export default class FoundScreen extends Component {
               : dataFire.map((x, i) => {
                   return (
                     <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.navigate('DetailsScreen', x)
+                      }
                       key={i}
                       style={{...styles.menu, borderWidth: 1}}>
                       <View
@@ -181,11 +211,11 @@ export default class FoundScreen extends Component {
                         }}>
                         <View>
                           <Image
-                            source={{uri: `${x.photoURL && x.photoURL}`}}
+                            source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
                             style={{width: 100, height: 100, borderRadius: 25}}
                           />
                         </View>
-                        <View>
+                        <View style={{flexShrink: 1}}>
                           <Text style={{color: 'black'}}>
                             Nama Barang: {x.namabarang}
                           </Text>
@@ -223,9 +253,8 @@ const styles = StyleSheet.create({
   },
   menu: {
     marginHorizontal: 10,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 15,
+    marginBottom:5
   },
   cardText: {
     fontStyle: 'italic',

@@ -84,15 +84,15 @@ export default class LoginScreen extends Component {
       this.state;
     return (
       <View style={{flex: 1, backgroundColor: '#D4CEC6'}}>
-        <View style={{  justifyContent:'center',flex:1/5,marginLeft:0,left:0}} >
-        <Upvector />
+        <View style={{  justifyContent:'center',flex:1/10,marginLeft:0,left:0}} >
+        <Upvector color={'green'} />
         </View>
 
-        <View style={{flex: 1 / 2, justifyContent: 'center'}}>
+        <View style={{flex: 3/10, justifyContent: 'center'}}>
           <Text style={styles.pagetitle}>Sign In</Text>
         </View>
-        <View style={{flex: 2 / 3, alignItems: 'center'}}>
-          <View style={{marginBottom: 25}}>
+        <View style={{flex:6/10, alignItems: 'center',justifyContent:'flex-start'}}>
+          <View style={{marginBottom: 20}}>
             <Text style={{color: 'black'}}>Your Email</Text>
             <CTextInput
               style={{
@@ -104,7 +104,7 @@ export default class LoginScreen extends Component {
               onChangeText={value => this.setState({email: value})}
             />
           </View>
-          <View style={{marginBottom: 45}}>
+          <View style={{marginBottom: 40}}>
             <Text style={{color: 'black'}}>Your Password</Text>
             <CTextInput
               style={{
@@ -118,14 +118,14 @@ export default class LoginScreen extends Component {
             />
           </View>
           <CButton
-            style={{marginBottom: 20,backgroundColor:'#AFA69F'}}
+            style={{marginBottom: 10,backgroundColor:'#AFA69F'}}
             title={'Login'}
             onPress={() => this._userLogin()}
           />
 
           <View style={{alignItems: 'center'}}>
             {showForgot == '1' || showRegister == '1' ? (
-              <Text style={{color: 'black', marginBottom: 20}}>or</Text>
+              <Text style={{color: 'black', marginBottom: 10}}>or</Text>
             ) : (
               <View></View>
             )}

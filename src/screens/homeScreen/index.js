@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth';
@@ -13,18 +14,21 @@ import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 export class HomeScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      dataFire: [],
+      dataLost: [],
+      dataFound: [],
       expandProfile: false,
+      refreshing: false,
     };
+    let mounted;
   }
   async componentDidMount() {
+    this.mounted = true;
     //this.props.addProfile(auth().currentUser);
-    console.log(this.props.userNow);
     await firestore()
-      .collection('Users')
+      .collection('Lost')
       .onSnapshot(x => {
         let user = x.docs.map(y => {
           return y.data();
@@ -32,9 +36,25 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
-        this.setState({dataFire: cup.flat().slice(0, 2)});
+        let sorted= cup.flat().sort((a, b) => b.time - a.time)
+        this.mounted == true &&
+          this.setState({dataLost: sorted.slice(0, 3)});
+      });
+    await firestore()
+      .collection('Found')
+      .onSnapshot(x => {
+        let user = x.docs.map(y => {
+          return y.data();
+        });
+        let cup = user.map(x => {
+          return x.posts;
+        });
+        let sorted= cup.flat().sort((a, b) => b.time - a.time)
+        this.mounted == true &&
+          this.setState({dataFound: sorted.slice(0, 3)});
       });
   }
+  componentWillUnmount(){this.mounted=false}
   _userLogout = () => {
     auth()
       .signOut()
@@ -43,8 +63,22 @@ export class HomeScreen extends Component {
         this.props.navigation.replace('OnboardScreen');
       });
   };
+  _wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  _onRefresh = () => {
+    this.mounted == true && this.setState({refreshing: true});
+    this._wait(1000).then(() => {
+      this.mounted == true &&
+        this.setState({
+          dataLost: this.state.dataLost,
+          dataFound: this.state.dataFound,
+          refreshing: false,
+        });
+    });
+  };
   render() {
-    const {dataFire, expandProfile} = this.state;
+    const {dataLost, dataFound, expandProfile, refreshing} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <TouchableOpacity
@@ -81,15 +115,19 @@ export class HomeScreen extends Component {
             </View>
           </View>
         </TouchableOpacity>
-        {expandProfile == true ? <View style={styles.expProfile}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-            }}
-          />
-          <Text style={{alignSelf:'center', paddingLeft: 10}}>{auth().currentUser.displayName}</Text>
-        </View> : null}
+        {expandProfile == true ? (
+          <View style={styles.expProfile}>
+            <Image
+              style={styles.avatar}
+              source={{
+                uri: 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+              }}
+            />
+            <Text style={{alignSelf: 'center', paddingLeft: 10}}>
+              {auth().currentUser.displayName}
+            </Text>
+          </View>
+        ) : null}
 
         <View
           style={{
@@ -109,10 +147,11 @@ export class HomeScreen extends Component {
             flexDirection: 'row',
             justifyContent: 'space-around',
           }}>
-          <TouchableOpacity style={styles.buttonMenu}
-          onPress={() => {
-            this.props.navigation.navigate('LostScreen');
-          }}>
+          <TouchableOpacity
+            style={styles.buttonMenu}
+            onPress={() => {
+              this.props.navigation.navigate('LostScreen');
+            }}>
             <Text style={{color: 'black'}}>Lost</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -120,13 +159,19 @@ export class HomeScreen extends Component {
             onPress={() => {
               this.props.navigation.navigate('FoundScreen');
             }}>
-              
             <Text style={{color: 'black'}}>Found</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
         </View>
-        <ScrollView style={{marginTop: 25}}>
+        <ScrollView
+          style={{marginTop: 25}}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
               Recently Lost Items
@@ -134,24 +179,16 @@ export class HomeScreen extends Component {
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
+              {dataLost.map((x, i) => {
+                return (
+                  <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
+                    <Image
+                     source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
+                      style={{width: 220, height: 220, borderRadius: 25}}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
             </ScrollView>
           </View>
           <View style={{marginBottom: 20}}>
@@ -161,22 +198,16 @@ export class HomeScreen extends Component {
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              {dataFire.map((x, i) => {
+              {dataFound.map((x, i) => {
                 return (
-                  <TouchableOpacity key={i} style={{...styles.menu}}>
+                  <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
                     <Image
-                      source={{uri: `${x.photoURL}`}}
+                      source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
                       style={{width: 220, height: 220, borderRadius: 25}}
                     />
                   </TouchableOpacity>
                 );
               })}
-              <TouchableOpacity style={{...styles.menu}}>
-                <Image
-                  style={{width: 220, height: 220, borderRadius: 25}}
-                  source={require('../../../src/assets/dummy.png')}
-                />
-              </TouchableOpacity>
             </ScrollView>
           </View>
         </ScrollView>
@@ -207,7 +238,7 @@ const styles = StyleSheet.create({
   },
   expProfile: {
     backgroundColor: 'green',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   avatar: {
     width: 100,
@@ -215,7 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 63,
     borderWidth: 3,
     borderColor: 'white',
-    margin : 10
+    margin: 10,
   },
   circleImage: {
     width: 50,

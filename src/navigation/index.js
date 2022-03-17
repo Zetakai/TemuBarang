@@ -13,8 +13,9 @@ import {
   UploadScreen,
   ProfileScreen,
   LostScreen,
-  FoundScreen
-} from '../navigation/screen';
+  FoundScreen,
+  DetailsScreen,
+} from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Stack = createNativeStackNavigator();
@@ -51,7 +52,7 @@ export class TabNav extends Component {
         name="UploadScreen"
         component={UploadScreen}
         options={{
-          tabBarLabel: 'Camera',
+          tabBarLabel: 'Upload',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="camera-enhance" color={color} size={26} />
           )
@@ -64,8 +65,8 @@ export class TabNav extends Component {
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
         }}
-        name="EditProfile"
-        component={RegisterScreen}
+        name="fetail"
+        component={OnboardScreen}
       />
        <Tab.Screen
         options={{
@@ -139,6 +140,11 @@ export default class App extends Component {
           <Stack.Screen
             name="LostScreen"
             component={LostScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="DetailsScreen"
+            component={DetailsScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Text, StyleSheet, View, Image } from 'react-native';
+import React, {Component} from 'react';
+import {Text, StyleSheet, View, Image} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import Upvector from '../../../src/assets/Vector7.svg';
 import Upvector10 from '../../../src/assets/Vector8.svg';
@@ -34,10 +34,8 @@ export default class SplashScreen extends Component {
           </View>
 
         </View>
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
-          <View style={{ justifyContent: 'center', flex: 1, marginLeft: 0, left: 0 }}>
-            <Upvector10 />
-          </View>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <Upvector10 color={'green'} />
         </View>
       </View>
     );
