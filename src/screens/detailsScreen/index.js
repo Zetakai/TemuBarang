@@ -7,11 +7,14 @@ import {
   ScrollView,
   TextInput,
   Button,
+  Modal,
+  Alert,
 } from 'react-native';
 import React, {Component} from 'react';
 import CText from '../../components/atoms/CText';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import Close from 'react-native-vector-icons/AntDesign';
 
 export default class Index extends Component {
   constructor(props) {
@@ -20,11 +23,15 @@ export default class Index extends Component {
       data: [],
       comment: '',
       dataComments: [],
+      modalVisible: false,
     };
   }
+  _setModalVisible = visible => {
+    this.setState({modalVisible: visible});
+  };
   async componentDidMount() {
     const {params} = this.props.route;
-    const {data} = this.state;
+    const {data, showModal} = this.state;
     this.setState({data: params});
     this.mounted = true;
     await firestore()
@@ -40,6 +47,9 @@ export default class Index extends Component {
         }
       });
   }
+  componentWillUnmount() {
+    this.setState({modalVisible: false});
+  }
   _postcomment = async () => {
     const {data, comment} = this.state;
     await firestore()
@@ -52,29 +62,68 @@ export default class Index extends Component {
             photoURL: auth().currentUser.photoURL,
             comment: comment,
             time: new Date(),
-            uid:auth().currentUser.uid
+            uid: auth().currentUser.uid,
           }),
         },
         {merge: true},
-      );this.setState({comment:''})
+      );
+    this.setState({comment: ''});
   };
   render() {
-    const {data, comment, dataComments} = this.state;
+    const {data, comment, dataComments, modalVisible} = this.state;
     return (
       <ScrollView style={styles.container}>
         <View style={{margin: 10, borderWidth: 5, borderColor: 'black'}}>
           <View style={{backgroundColor: 'white'}}>
-            {data.photoURL != null ? (
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                this._setModalVisible(!modalVisible);
+              }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'black',
+                  backgroundColor: 'white',
+                }}>
+                <View>
+                  <Image
+                    source={
+                      data.photoURL
+                        ? {uri: `${data.photoURL}`}
+                        : require('../../assets/dummy.png')
+                    }
+                    style={{width: '100%', height: '100%'}}
+                  />
+                  <TouchableOpacity
+                    style={{position: 'absolute', top: 15, right: 15}}>
+                    <View>
+                      <Close
+                        name="closecircleo"
+                        color={'black'}
+                        size={40}
+                        onPress={() => {
+                          this._setModalVisible(!modalVisible);
+                        }}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+            <TouchableOpacity
+              onPress={() => data.photoURL && this._setModalVisible(true)}>
               <Image
-                source={{uri: `${data.photoURL}`}}
-                style={{width: 220, height: 220, borderRadius: 25}}
-              />
-            ) : (
-              <Image
-                source={require('../../assets/dummy.png')}
+                source={
+                  data.photoURL
+                    ? {uri: `${data.photoURL}`}
+                    : require('../../assets/dummy.png')
+                }
                 style={{width: '100%', height: 200}}
               />
-            )}
+            </TouchableOpacity>
           </View>
           <View style={{padding: 5, backgroundColor: 'white'}}>
             <CText style={{fontSize: 30, fontWeight: 'bold'}}>
@@ -118,27 +167,40 @@ export default class Index extends Component {
               }}>
               <CText>Comments</CText>
               <View
-                style={{borderWidth: 1, borderColor: 'black', borderRadius: 1}}
-                >
+                style={{borderWidth: 1, borderColor: 'black', borderRadius: 1}}>
                 {dataComments &&
                   dataComments.map((x, i) => {
                     return (
                       <View
                         key={i}
-                        style={x.uid!=auth().currentUser.uid?{
-                          padding:5,
-                          width:'50%',
-                          borderWidth: 1,
-                          borderColor: 'black',
-                          position:'relative',
-                          left:0,borderBottomEndRadius:25,borderBottomStartRadius:25,borderTopEndRadius:25
-                        }:{padding:5,
-                          width:'50%',
-                          borderWidth: 1,
-                          borderColor: 'black',
-                          position:'relative',
-                          left:'50%',borderBottomEndRadius:25,borderBottomStartRadius:25,borderTopStartRadius:25}}>
-                        <Text style={{...styles.textcolor,fontWeight:'bold'}}>{x.displayName}</Text>
+                        style={
+                          x.uid != auth().currentUser.uid
+                            ? {
+                                padding: 5,
+                                width: '50%',
+                                borderWidth: 1,
+                                borderColor: 'black',
+                                position: 'relative',
+                                left: 0,
+                                borderBottomEndRadius: 25,
+                                borderBottomStartRadius: 25,
+                                borderTopEndRadius: 25,
+                              }
+                            : {
+                                padding: 5,
+                                width: '50%',
+                                borderWidth: 1,
+                                borderColor: 'black',
+                                position: 'relative',
+                                left: '50%',
+                                borderBottomEndRadius: 25,
+                                borderBottomStartRadius: 25,
+                                borderTopStartRadius: 25,
+                              }
+                        }>
+                        <Text style={{...styles.textcolor, fontWeight: 'bold'}}>
+                          {x.displayName}
+                        </Text>
                         <Text style={styles.textcolor}>{x.comment}</Text>
                       </View>
                     );
