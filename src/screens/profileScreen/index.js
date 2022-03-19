@@ -12,6 +12,7 @@ import CText from '../../components/atoms/CText';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import Delete from 'react-native-vector-icons/Feather';
 
 export default class Profile extends Component {
   constructor() {
@@ -81,7 +82,7 @@ export default class Profile extends Component {
     this.mounted = false;
   }
   async componentDidMount() {
-    const {dataLost, dataFound,refreshing} = this.state;
+    const {dataLost, dataFound, refreshing} = this.state;
     this.mounted = true;
     await firestore()
       .collection('Lost')
@@ -90,10 +91,10 @@ export default class Profile extends Component {
         if (x.data() != null) {
           let cup = x.data().posts;
           if (cup) {
-            console.log(cup)
+            console.log(cup);
             let sorted = cup.flat();
-            this.mounted == true && this.setState({dataLost: sorted,refreshing:!refreshing});
-            
+            this.mounted == true &&
+              this.setState({dataLost: sorted, refreshing: !refreshing});
           }
         }
       });
@@ -105,7 +106,8 @@ export default class Profile extends Component {
           let cup = x.data().posts;
           if (cup) {
             let sorted = cup.flat();
-            this.mounted == true && this.setState({dataFound: sorted,refreshing:!refreshing});
+            this.mounted == true &&
+              this.setState({dataFound: sorted, refreshing: !refreshing});
           }
         }
       });
@@ -117,14 +119,14 @@ export default class Profile extends Component {
       imageCamera,
       displayName,
       phoneNumber,
-      photoURL, refreshing,
+      photoURL,
+      refreshing,
       dataLost,
       dataFound,
     } = this.state;
     const dataHistory = [...dataLost, ...dataFound].sort(
       (a, b) => b.time - a.time,
     );
-   
 
     return (
       <View style={styles.container}>
@@ -246,32 +248,60 @@ export default class Profile extends Component {
               </Text>
             </TouchableOpacity>
           </View>
-          {this.mounted==true&&dataHistory?<View ><View>
-            <Text style={{color: 'grey', marginLeft: 25}}>
-              Your Posts
-            </Text>
-          </View>
-          <ScrollView  horizontal={true} showsHorizontalScrollIndicator={false}>
-            {this.mounted==true&&dataHistory.map((x, i) => {
-              return (x&&
-                <TouchableOpacity
-                  key={i}
-                  style={{marginLeft:10}}
-                  onPress={() =>
-                    this.props.navigation.navigate('DetailsScreen', x)
-                  }>
-                  <Image
-                    source={
-                      x.photoURL
-                        ? {uri: `${x.photoURL}`}
-                        : require('../../assets/galeryImages.jpeg')
-                    }
-                    style={{width: 200, height: 200, borderRadius: 25,borderWidth:2,borderColor:x.kategoripos=='Found'?'green':'chocolate'}}
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView></View>:<View></View>}
+          {this.mounted == true && dataHistory ? (
+            <View>
+              <View>
+                <Text style={{color: 'grey', marginLeft: 25}}>Your Posts</Text>
+              </View>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {this.mounted == true &&
+                  dataHistory.map((x, i) => {
+                    return (
+                      x && (
+                        <TouchableOpacity
+                          key={i}
+                          style={{marginLeft: 10}}
+                          onPress={() =>
+                            this.props.navigation.navigate('DetailsScreen', x)
+                          }>
+                          <Image
+                            source={
+                              x.photoURL
+                                ? {uri: `${x.photoURL}`}
+                                : require('../../assets/galeryImages.jpeg')
+                            }
+                            style={{
+                              width: 200,
+                              height: 200,
+                              borderRadius: 25,
+                              borderWidth: 2,
+                              borderColor:
+                                x.kategoripos == 'Found'
+                                  ? 'green'
+                                  : 'chocolate',
+                            }}
+                          />
+                          {edit == true && (
+                            <TouchableOpacity
+                              style={{position: 'absolute', top: 10, right: 10}} onPress={()=>{}}>
+                              <Delete
+                                color={'white'}
+                                name="trash-2"
+                                size={30}
+                              />
+                            </TouchableOpacity>
+                          )}
+                        </TouchableOpacity>
+                      )
+                    );
+                  })}
+              </ScrollView>
+            </View>
+          ) : (
+            <View></View>
+          )}
         </View>
       </View>
     );
