@@ -180,7 +180,7 @@ export class HomeScreen extends Component {
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               {dataFound.map((x, i) => {
-                return (
+                return (x&&
                   <TouchableOpacity
                     key={i}
                     style={{...styles.menu, backgroundColor: '#ccb494'}}
@@ -199,7 +199,7 @@ export class HomeScreen extends Component {
                       </View>
                       <View style={{justifyContent: 'center', flex: 1}}>
                       <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 5}}>{x.namabarang}</Text>
-                        <Text>Kategori :</Text>
+                        <Text>Kategori :{x.ka}</Text>
                         <Text>Jenis Kendaraan :</Text>
                         <Text>Tahun : </Text>
                       </View>
@@ -216,7 +216,7 @@ export class HomeScreen extends Component {
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               {dataLost.map((x, i) => {
-                return (
+                return (x&&
                   <TouchableOpacity
                     key={i}
                     style={{...styles.menu, backgroundColor: '#a4d2ac'}}
