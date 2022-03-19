@@ -121,6 +121,7 @@ export default class Index extends Component {
             .set(
               {
                 posts: firestore.FieldValue.arrayUnion({
+                  kategoripos:selectedChoice,
                   namabarang: namabarang,
                   photoURL: null,
                   kategori: kategori,
@@ -138,6 +139,7 @@ export default class Index extends Component {
             .set(
               {
                 posts: firestore.FieldValue.arrayUnion({
+                  kategoripos:selectedChoice,
                   namabarang: namabarang,
                   photoURL: null,
                   kategori: kategori,

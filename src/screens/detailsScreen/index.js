@@ -74,7 +74,7 @@ export default class Index extends Component {
     const {data, comment, dataComments, modalVisible} = this.state;
     return (
       <ScrollView style={styles.container}>
-        <View style={{margin: 10, borderWidth: 5, borderColor: 'black'}}>
+        <View style={{ borderWidth: 5, borderColor: 'black'}}>
           <View style={{backgroundColor: 'white'}}>
             <Modal
               animationType="fade"
