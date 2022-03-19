@@ -180,7 +180,7 @@ export class HomeScreen extends Component {
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               {dataLost.map((x, i) => {
-                return (
+                return (x&&
                   <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
                     <Image
                      source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
@@ -199,7 +199,7 @@ export class HomeScreen extends Component {
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               {dataFound.map((x, i) => {
-                return (
+                return (x&&
                   <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
                     <Image
                       source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}

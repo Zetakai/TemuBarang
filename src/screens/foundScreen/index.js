@@ -157,7 +157,7 @@ export default class FoundScreen extends Component {
             {this.mounted==true&&renderData && renderData.length > 0
               ? renderData.map((x, i) => {
                   return (
-                    <TouchableOpacity
+                    x&&<TouchableOpacity
                       onPress={() =>
                         this.props.navigation.navigate('DetailsScreen', x)
                       }
@@ -196,7 +196,7 @@ export default class FoundScreen extends Component {
                   );
                 })
               : dataFire.map((x, i) => {
-                  return (
+                  return (x&&
                     <TouchableOpacity
                       onPress={() =>
                         this.props.navigation.navigate('DetailsScreen', x)

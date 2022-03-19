@@ -156,7 +156,7 @@ export default class LostScreen extends Component {
           <View>
             {this.mounted==true&&renderData && renderData.length > 0
               ? renderData.map((x, i) => {
-                  return (
+                  return (x&&
                     <TouchableOpacity
                       onPress={() =>
                         this.props.navigation.navigate('DetailsScreen', x)
@@ -171,7 +171,7 @@ export default class LostScreen extends Component {
                         }}>
                         <View>
                           <Image
-                            source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
+                            source={x!=null?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
                             style={{width: 100, height: 100, borderRadius: 25}}
                           />
                         </View>
@@ -196,7 +196,7 @@ export default class LostScreen extends Component {
                   );
                 })
               : dataFire.map((x, i) => {
-                  return (
+                  return (x&&
                     <TouchableOpacity
                       onPress={() =>
                         this.props.navigation.navigate('DetailsScreen', x)
@@ -212,7 +212,7 @@ export default class LostScreen extends Component {
                         }}>
                         <View>
                           <Image
-                            source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
+                            source={x!=null?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
                             style={{width: 100, height: 100, borderRadius: 25}}
                           />
                         </View>
