@@ -36,9 +36,8 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
-        let sorted= cup.flat().sort((a, b) => b.time - a.time)
-        this.mounted == true &&
-          this.setState({dataLost: sorted.slice(0, 3)});
+        let sorted = cup.flat().sort((a, b) => b.time - a.time);
+        this.mounted == true && this.setState({dataLost: sorted.slice(0, 3)});
       });
     await firestore()
       .collection('Found')
@@ -49,12 +48,13 @@ export class HomeScreen extends Component {
         let cup = user.map(x => {
           return x.posts;
         });
-        let sorted= cup.flat().sort((a, b) => b.time - a.time)
-        this.mounted == true &&
-          this.setState({dataFound: sorted.slice(0, 3)});
+        let sorted = cup.flat().sort((a, b) => b.time - a.time);
+        this.mounted == true && this.setState({dataFound: sorted.slice(0, 3)});
       });
   }
-  componentWillUnmount(){this.mounted=false}
+  componentWillUnmount() {
+    this.mounted = false;
+  }
   _userLogout = () => {
     auth()
       .signOut()
@@ -173,19 +173,36 @@ export class HomeScreen extends Component {
             />
           }>
           <View style={{marginBottom: 20}}>
-            <Text style={{color: 'grey', marginLeft: 25}}>
-              Recently Lost Items
+            <Text style={{color: 'black', marginLeft: 25}}>
+              BARU-BARU INI DITEMUKAN???
             </Text>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              {dataLost.map((x, i) => {
-                return (x&&
-                  <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
-                    <Image
-                     source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
-                      style={{width: 220, height: 220, borderRadius: 25}}
-                    />
+              {dataFound.map((x, i) => {
+                return (
+                  <TouchableOpacity
+                    key={i}
+                    style={{...styles.menu, backgroundColor: '#ccb494'}}
+                    onPress={() =>
+                      this.props.navigation.navigate('DetailsScreen', x)
+                    }>
+                    <View style={{flexDirection: 'row', flex: 1}}>
+                        <Image
+                          source={
+                            x.photoURL
+                              ? {uri: `${x.photoURL}`}
+                              : require('../../assets/galeryImages.jpeg')
+                          }
+                          style={{width: 172, height: 182, borderRadius: 15}}
+                        />
+                      </View>
+                      <View style={{justifyContent: 'center', flex: 1}}>
+                      <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 5}}>{x.namabarang}</Text>
+                        <Text>Kategori :</Text>
+                        <Text>Jenis Kendaraan :</Text>
+                        <Text>Tahun : </Text>
+                      </View>
                   </TouchableOpacity>
                 );
               })}
@@ -193,18 +210,35 @@ export class HomeScreen extends Component {
           </View>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
-              Recently Found Items
+              BARU-BARU INI HILANG!!!
             </Text>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
-              {dataFound.map((x, i) => {
-                return (x&&
-                  <TouchableOpacity key={i} style={{...styles.menu}} onPress={() => this.props.navigation.navigate('DetailsScreen', x)}>
-                    <Image
-                      source={x.photoURL?{uri: `${x.photoURL}`}:require('../../assets/galeryImages.jpeg')}
-                      style={{width: 220, height: 220, borderRadius: 25}}
-                    />
+              {dataLost.map((x, i) => {
+                return (
+                  <TouchableOpacity
+                    key={i}
+                    style={{...styles.menu, backgroundColor: '#a4d2ac'}}
+                    onPress={() =>
+                      this.props.navigation.navigate('DetailsScreen', x)
+                    }>
+                    <View style={{flexDirection: 'row', flex: 1}}>
+                        <Image
+                          source={
+                            x.photoURL
+                              ? {uri: `${x.photoURL}`}
+                              : require('../../assets/galeryImages.jpeg')
+                          }
+                          style={{width: 172, height: 182, borderRadius: 15}}
+                        />
+                      </View>
+                      <View style={{justifyContent: 'center', flex: 1}}>
+                        <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 5}}>{x.namabarang}</Text>
+                        <Text>Kategori :</Text>
+                        <Text>Jenis Kendaraan :</Text>
+                        <Text>Tahun : </Text>
+                      </View>
                   </TouchableOpacity>
                 );
               })}
@@ -227,9 +261,10 @@ const styles = StyleSheet.create({
   },
   menu: {
     marginHorizontal: 10,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 15,
+    width: 363,
+    height: 182,
+    flexDirection: 'row'
   },
   cardText: {
     fontStyle: 'italic',

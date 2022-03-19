@@ -9,6 +9,7 @@ import ProfileScreen from './profileScreen';
 import FoundScreen from './foundScreen';
 import LostScreen from './LostScreen';
 import DetailsScreen from './detailsScreen';
+import MessageScreen from './messageScreen';
 
 export {
   LoginScreen,
@@ -22,4 +23,5 @@ export {
   LostScreen,
   FoundScreen,
   DetailsScreen,
+  MessageScreen,
 };

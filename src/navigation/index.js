@@ -15,6 +15,7 @@ import {
   LostScreen,
   FoundScreen,
   DetailsScreen,
+  MessageScreen,
 } from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -40,13 +41,13 @@ export class TabNav extends Component {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Chat',
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="chat-processing" color={color} size={26} />
           ),
         }}
-        name="LoginScreen"
-        component={LoginScreen}
+        name="MessageScreen"
+        component={MessageScreen}
       />
       <Tab.Screen
         name="UploadScreen"
@@ -60,13 +61,13 @@ export class TabNav extends Component {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Notifications',
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="bell" color={color} size={26} />
           ),
         }}
-        name="fetail"
-        component={OnboardScreen}
+        name="LoginScreen"
+        component={LoginScreen}
       />
        <Tab.Screen
         options={{
