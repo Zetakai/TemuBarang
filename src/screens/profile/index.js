@@ -112,6 +112,16 @@ export default class Profile extends Component {
         }
       });
   }
+  _deletePost =(x)=> { const {dataLost, dataFound, refreshing} = this.state;
+    let dataHistory = [...dataLost, ...dataFound]
+  console.log(x.uid)
+     firestore().collection(x.kategoripos).doc(x.uid).update({
+       posts: dataHistory.filter(post => post.postID != x.postID)
+     })
+    .catch(function(error) {
+        console.error("Error removing document: ", error);
+    });
+  }
   render() {
     const {
       edit,
@@ -124,7 +134,7 @@ export default class Profile extends Component {
       dataLost,
       dataFound,
     } = this.state;
-    const dataHistory = [...dataLost, ...dataFound].sort(
+    let dataHistory = [...dataLost, ...dataFound].sort(
       (a, b) => b.time - a.time,
     );
 
@@ -285,7 +295,7 @@ export default class Profile extends Component {
                           />
                           {edit == true && (
                             <TouchableOpacity
-                              style={{position: 'absolute', top: 10, right: 10}} onPress={()=>{}}>
+                              style={{position: 'absolute', top: 10, right: 10}} onPress={()=>{this._deletePost(x);console.log(x)}}>
                               <Delete
                                 color={'white'}
                                 name="trash-2"

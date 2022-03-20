@@ -122,13 +122,14 @@ export default class Index extends Component {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
                   ppURL: null,
+                  postID:new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: null,
                   kategori: kategori,
                   lokasi: lokasi,
                   time: new Date(),
-                  uid: uid,
+                  uid: auth().currentUser.uid,
                   keyunik: key,
                 }),
               },
@@ -142,6 +143,7 @@ export default class Index extends Component {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
                   ppURL: null,
+                  postID:new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: null,
@@ -149,7 +151,7 @@ export default class Index extends Component {
                   lokasi: lokasi,
                   time: new Date(),
                   hadiah: hadiah,
-                  uid: uid,
+                  uid: auth().currentUser.uid,
                   keyunik: key,
                 }),
               },
@@ -191,13 +193,14 @@ export default class Index extends Component {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
                   ppURL: null,
+                  postID:new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: url,
                   kategori: kategori,
                   lokasi: lokasi,
                   time: new Date(),
-                  uid: uid,
+                  uid: auth().currentUser.uid,
                   keyunik: key,
                 }),
               },
@@ -211,6 +214,7 @@ export default class Index extends Component {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
                   ppURL: null,
+                  postID:new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: url,
@@ -218,7 +222,7 @@ export default class Index extends Component {
                   lokasi: lokasi,
                   time: new Date(),
                   hadiah: hadiah,
-                  uid: uid,
+                  uid: auth().currentUser.uid,
                   keyunik: key,
                 }),
               },
@@ -243,7 +247,7 @@ export default class Index extends Component {
     });
   };
   componentDidMount() {
-    this.setState({uid: auth().currentUser.uid});
+    
   }
   render() {
     const {
