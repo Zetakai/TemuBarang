@@ -40,7 +40,7 @@ export default class Index extends Component {
     this.mounted = true;
     await firestore()
       .collection('Comments')
-      .doc(`${params.time}`+`${params.namabarang}`)
+      .doc(`${params.uid}`+`${params.postID}`)
       .onSnapshot(x => {
         if (x.data() != null) {
           let cup = x.data().comments;
@@ -59,7 +59,7 @@ export default class Index extends Component {
     const {data, comment} = this.state;
     await firestore()
       .collection('Comments')
-      .doc(`${data.time}`+`${data.namabarang}`)
+      .doc(`${data.uid}`+`${data.postID}`)
       .set(
         {
           comments: firestore.FieldValue.arrayUnion({

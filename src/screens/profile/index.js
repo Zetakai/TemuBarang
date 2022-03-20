@@ -13,6 +13,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Delete from 'react-native-vector-icons/Feather';
+import storage from '@react-native-firebase/storage';
 
 export default class Profile extends Component {
   constructor() {
@@ -91,7 +92,6 @@ export default class Profile extends Component {
         if (x.data() != null) {
           let cup = x.data().posts;
           if (cup) {
-            console.log(cup);
             let sorted = cup.flat();
             this.mounted == true &&
               this.setState({dataLost: sorted, refreshing: !refreshing});
@@ -114,16 +114,16 @@ export default class Profile extends Component {
   }
   _deletePost =(x)=> { const {dataLost, dataFound, refreshing} = this.state;
   
-  console.log(x.kategoripos)
+  
   x.kategoripos=="Found"?
      firestore().collection(x.kategoripos).doc(x.uid).update({
        posts: dataFound.filter(post => post.postID != x.postID)
-     })
+     }).then(firestore().collection("Comments").doc(x.uid+x.postID).delete()).then(x.photoURL&&storage().refFromURL(x.photoURL).delete())
     .catch(function(error) {
         console.error("Error removing document: ", error);
     }): firestore().collection(x.kategoripos).doc(x.uid).update({
       posts: dataLost.filter(post => post.postID != x.postID)
-    })
+    }).then(firestore().collection("Comments").doc(x.uid+x.postID).delete()).then(x.photoURL&&storage().refFromURL(x.photoURL).delete())
    .catch(function(error) {
        console.error("Error removing document: ", error);
    })
@@ -301,7 +301,7 @@ export default class Profile extends Component {
                           />
                           {edit == true && (
                             <TouchableOpacity
-                              style={{position: 'absolute', top: 10, right: 10}} onPress={()=>{this._deletePost(x);console.log(x)}}>
+                              style={{position: 'absolute', top: 10, right: 10}} onPress={()=>{this._deletePost(x)}}>
                               <Delete
                                 color={'white'}
                                 name="trash-2"
