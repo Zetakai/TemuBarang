@@ -24,14 +24,13 @@ export default class Index extends Component {
   constructor() {
     super();
     this.state = {
-      imageCamera: null,
       dataFire: [],
+      imageCamera: null,
       selectedChoice: '',
       namabarang: '',
       photoURL: '',
       kategori: '',
       lokasi: '',
-      comment: [],
       uid: '',
       path: '',
       hadiah: '',
@@ -99,7 +98,7 @@ export default class Index extends Component {
   //       this.setState({dataFire: cup.flat()});
   //     });
   // };
-  _postwoimg=async()=>{
+  _postwoimg = async () => {
     const {
       selectedChoice,
       namabarang,
@@ -112,8 +111,8 @@ export default class Index extends Component {
       hadiah,
       key,
     } = this.state;
-    
-    {
+
+    try {
       selectedChoice == 'Found'
         ? await firestore()
             .collection(this.state.selectedChoice)
@@ -121,7 +120,9 @@ export default class Index extends Component {
             .set(
               {
                 posts: firestore.FieldValue.arrayUnion({
-                  kategoripos:selectedChoice,
+                  displayName: auth().currentUser.displayName,
+                  ppURL: null,
+                  kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: null,
                   kategori: kategori,
@@ -132,14 +133,16 @@ export default class Index extends Component {
                 }),
               },
               {merge: true},
-            )
+            ).then(this._emptyFrom())
         : await firestore()
             .collection(this.state.selectedChoice)
             .doc(auth().currentUser.uid)
             .set(
               {
                 posts: firestore.FieldValue.arrayUnion({
-                  kategoripos:selectedChoice,
+                  displayName: auth().currentUser.displayName,
+                  ppURL: null,
+                  kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: null,
                   kategori: kategori,
@@ -151,8 +154,11 @@ export default class Index extends Component {
                 }),
               },
               {merge: true},
-            );
-    }}
+            ).then(this._emptyFrom())
+    } finally {
+      alert('post berhasil dikirim');
+    }
+  };
   _postimg = async () => {
     const {
       selectedChoice,
@@ -175,7 +181,7 @@ export default class Index extends Component {
       .ref(auth().currentUser.uid + this.state.namabarang)
       .getDownloadURL();
 
-    {
+    try {
       selectedChoice == 'Found'
         ? await firestore()
             .collection(this.state.selectedChoice)
@@ -183,7 +189,9 @@ export default class Index extends Component {
             .set(
               {
                 posts: firestore.FieldValue.arrayUnion({
-                  kategoripos:selectedChoice,
+                  displayName: auth().currentUser.displayName,
+                  ppURL: null,
+                  kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: url,
                   kategori: kategori,
@@ -194,14 +202,16 @@ export default class Index extends Component {
                 }),
               },
               {merge: true},
-            )
+            ).then(this._emptyFrom())
         : await firestore()
             .collection(this.state.selectedChoice)
             .doc(auth().currentUser.uid)
             .set(
               {
                 posts: firestore.FieldValue.arrayUnion({
-                  kategoripos:selectedChoice,
+                  displayName: auth().currentUser.displayName,
+                  ppURL: null,
+                  kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: url,
                   kategori: kategori,
@@ -213,10 +223,25 @@ export default class Index extends Component {
                 }),
               },
               {merge: true},
-            );
+            ).then(this._emptyFrom());
+    } finally {
+      alert('post berhasil dikirim');
     }
   };
-
+  _emptyFrom = () => {
+    this.setState({
+      imageCamera: null,
+      selectedChoice: '',
+      namabarang: '',
+      photoURL: '',
+      kategori: '',
+      lokasi: '',
+      uid: '',
+      path: '',
+      hadiah: '',
+      key: '',
+    });
+  };
   componentDidMount() {
     this.setState({uid: auth().currentUser.uid});
   }
@@ -231,9 +256,9 @@ export default class Index extends Component {
       lokasi,
       hadiah,
       key,
-      path
+      path,
     } = this.state;
-
+    console.log(selectedChoice);
     return (
       <SafeAreaView
         style={
@@ -382,7 +407,12 @@ export default class Index extends Component {
               <CButton
                 title="post"
                 onPress={() => {
-                  !selectedChoice ? alert('pilih kategori post'):path? this._postimg():this._postwoimg() 
+                  !selectedChoice || !namabarang
+                    ? alert('pilih kategori post dan isi nama barang')
+                    : path
+                    ? this._postimg()
+                    : this._postwoimg();
+                  
                 }}
               />
             </View>

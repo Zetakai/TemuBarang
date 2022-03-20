@@ -1,15 +1,15 @@
-import LoginScreen from './loginScreen';
-import RegisterScreen from './registerScreen';
-import ForgotScreen from './forgotScreen';
-import OnboardScreen from './onboardScreen';
-import HomeScreen from './homeScreen';
-import UploadScreen from './uploadScreen';
-import SplashScreen from './splashScreen';
-import ProfileScreen from './profileScreen';
-import FoundScreen from './foundScreen';
-import LostScreen from './LostScreen';
-import DetailsScreen from './detailsScreen';
-import MessageScreen from './messageScreen';
+import LoginScreen from './login';
+import RegisterScreen from './register';
+import ForgotScreen from './forgot';
+import OnboardScreen from './onboard';
+import HomeScreen from './home';
+import UploadScreen from './upload';
+import SplashScreen from './splash';
+import ProfileScreen from './profile';
+import FoundScreen from './found';
+import LostScreen from './lost';
+import DetailsScreen from './details';
+import MessageScreen from './message';
 
 export {
   LoginScreen,
