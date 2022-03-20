@@ -113,14 +113,20 @@ export default class Profile extends Component {
       });
   }
   _deletePost =(x)=> { const {dataLost, dataFound, refreshing} = this.state;
-    let dataHistory = [...dataLost, ...dataFound]
-  console.log(x.uid)
+  
+  console.log(x.kategoripos)
+  x.kategoripos=="Found"?
      firestore().collection(x.kategoripos).doc(x.uid).update({
-       posts: dataHistory.filter(post => post.postID != x.postID)
+       posts: dataFound.filter(post => post.postID != x.postID)
      })
     .catch(function(error) {
         console.error("Error removing document: ", error);
-    });
+    }): firestore().collection(x.kategoripos).doc(x.uid).update({
+      posts: dataLost.filter(post => post.postID != x.postID)
+    })
+   .catch(function(error) {
+       console.error("Error removing document: ", error);
+   })
   }
   render() {
     const {
