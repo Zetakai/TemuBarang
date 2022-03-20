@@ -199,7 +199,7 @@ export class HomeScreen extends Component {
                       </View>
                       <View style={{justifyContent: 'center', flex: 1}}>
                       <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 5}}>{x.namabarang}</Text>
-                        <Text>Kategori :{x.ka}</Text>
+                        <Text>Kategori :{x.kategori}</Text>
                         <Text>Jenis Kendaraan :</Text>
                         <Text>Tahun : </Text>
                       </View>
