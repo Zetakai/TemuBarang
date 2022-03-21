@@ -61,7 +61,7 @@ export class HomeScreen extends Component {
       .then(() => {
         console.log('User signed out!');
         this.props.navigation.replace('OnboardScreen');
-      });
+      }).then(this.props.logout());
   };
   _wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -303,23 +303,18 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    userNow: state.userNow,
+    user: state.user,
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    addProfile: data => {
+    logout: data => {
       dispatch({
-        type: 'ADD-PROFILE',
+        type: 'LOGOUT-USER',
         payload: data,
       });
     },
-    deleteProfile: data => {
-      dispatch({
-        type: 'DELETE-PROFILE',
-        payload: data,
-      });
-    },
+    
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

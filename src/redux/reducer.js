@@ -3,12 +3,12 @@ const initialState = {
   user:[]};
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'ADD-PROFILE':
+    case 'LOGIN-USER':
       return {
         ...state,
-        user: [...state.user, action.payload],
+        user: [action.payload],
       };
-      case 'DELETE-PROFILE':
+      case 'LOGOUT-USER':
       return {
         ...state,
         user: [],

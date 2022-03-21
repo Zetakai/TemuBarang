@@ -16,8 +16,9 @@ import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
 import Upvector from '../../assets/Vector9.svg'
+import { connect } from 'react-redux';
 
-export default class LoginScreen extends Component {
+export class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,6 +43,7 @@ export default class LoginScreen extends Component {
           if (auth().currentUser.emailVerified == true) {
             console.log('User logged-in successfully!');
             Alert.alert(`You're Logged in`);
+            this.props.login(res.user)
             this.props.navigation.reset({
               index: 0,
               routes: [
@@ -169,3 +171,20 @@ const styles = StyleSheet.create({
   button: {width: 300, borderRadius: 15,borderColor:'#AFA69F'
   },
 });
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    login: data => {
+      dispatch({
+        type: 'LOGIN-USER',
+        payload: data,
+      });
+    },
+    
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
