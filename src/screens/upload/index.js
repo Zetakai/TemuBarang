@@ -3,6 +3,7 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  Modal,
   View,
   SafeAreaView,
   TextInput,
@@ -20,6 +21,7 @@ import {Picker} from '@react-native-picker/picker';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
+import Close from 'react-native-vector-icons/AntDesign';
 export default class Index extends Component {
   constructor() {
     super();
@@ -35,9 +37,10 @@ export default class Index extends Component {
       path: '',
       hadiah: '',
       key: '',
+      modalVisible: false,
     };
   }
-  _requestCameraPermission = async () => {
+  _requestCameraPermission = async (x) => {
     try {
       const granted =
         (await PermissionsAndroid.request(
@@ -48,8 +51,7 @@ export default class Index extends Component {
         ));
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can use the camera');
-        this._openCamera();
-      } else {
+        x=='c'?this._openCamera():this._openGallery()
         console.log('Camera permission denied');
       }
     } catch (err) {
@@ -64,7 +66,7 @@ export default class Index extends Component {
       cameraType: 'back',
       saveToPhotos: true,
     };
-
+;
     await launchCamera(options, async res => {
       if (res.didCancel) {
         console.log('user cancel');
@@ -77,27 +79,25 @@ export default class Index extends Component {
       }
     });
   };
-  // _getFire = async () => {
-  //   await firestore()
-  //     .collection('Users')
-  //     .doc('12345zaki')
-  //     .onSnapshot(user => {
-  //       this.setState({dataFire: user.data().posts});
-  //     });
-  // };
-  // _getFire = async () => {
-  //   await firestore()
-  //     .collection('Users')
-  //     .onSnapshot(x => {
-  //       let user = x.docs.map(y => {
-  //         return y.data();
-  //       });
-  //       let cup = user.map(x => {
-  //         return x.posts;
-  //       });
-  //       this.setState({dataFire: cup.flat()});
-  //     });
-  // };
+  _openGallery = async () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 1,
+    };
+
+    await launchImageLibrary(options, async res => {
+      if (res.didCancel) {
+        console.log('user cancel');
+      } else if (res.errorCode) {
+        console.log(res.errorMessage);
+      } else {
+        let data = res.assets;
+
+        this.setState({imageGallery: data, path: data[0].uri});
+      }
+    });
+  };
+ 
   _postwoimg = async () => {
     const {
       selectedChoice,
@@ -122,7 +122,7 @@ export default class Index extends Component {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
                   ppURL: auth().currentUser.photoURL,
-                  postID:new Date().valueOf(),
+                  postID: new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: null,
@@ -134,7 +134,8 @@ export default class Index extends Component {
                 }),
               },
               {merge: true},
-            ).then(this._emptyFrom())
+            )
+            .then(this._emptyFrom())
         : await firestore()
             .collection(this.state.selectedChoice)
             .doc(auth().currentUser.uid)
@@ -143,7 +144,7 @@ export default class Index extends Component {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
                   ppURL: auth().currentUser.photoURL,
-                  postID:new Date().valueOf(),
+                  postID: new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: null,
@@ -156,7 +157,8 @@ export default class Index extends Component {
                 }),
               },
               {merge: true},
-            ).then(this._emptyFrom())
+            )
+            .then(this._emptyFrom());
     } finally {
       alert('post berhasil dikirim');
     }
@@ -174,8 +176,10 @@ export default class Index extends Component {
       hadiah,
       key,
     } = this.state;
-    const photoID= namabarang+new Date().valueOf()
-    const reference = storage().ref(`posts/${auth().currentUser.uid}/${photoID}`)
+    const photoID = namabarang + new Date().valueOf();
+    const reference = storage().ref(
+      `posts/${auth().currentUser.uid}/${photoID}`,
+    );
     const pathToFile = path;
     await reference.putFile(pathToFile);
     const url = await storage()
@@ -192,7 +196,7 @@ export default class Index extends Component {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
                   ppURL: auth().currentUser.photoURL,
-                  postID:new Date().valueOf(),
+                  postID: new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: url,
@@ -204,7 +208,8 @@ export default class Index extends Component {
                 }),
               },
               {merge: true},
-            ).then(this._emptyFrom())
+            )
+            .then(this._emptyFrom())
         : await firestore()
             .collection(this.state.selectedChoice)
             .doc(auth().currentUser.uid)
@@ -213,7 +218,7 @@ export default class Index extends Component {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
                   ppURL: auth().currentUser.photoURL,
-                  postID:new Date().valueOf(),
+                  postID: new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
                   photoURL: url,
@@ -226,10 +231,14 @@ export default class Index extends Component {
                 }),
               },
               {merge: true},
-            ).then(this._emptyFrom());
+            )
+            .then(this._emptyFrom());
     } finally {
       alert('post berhasil dikirim');
     }
+  };
+  _setModalVisible = visible => {
+    this.setState({modalVisible: visible});
   };
   _emptyFrom = () => {
     this.setState({
@@ -245,9 +254,7 @@ export default class Index extends Component {
       key: '',
     });
   };
-  componentDidMount() {
-    
-  }
+  componentDidMount() {}
   render() {
     const {
       imageCamera,
@@ -260,6 +267,7 @@ export default class Index extends Component {
       hadiah,
       key,
       path,
+      modalVisible,
     } = this.state;
     console.log(selectedChoice);
     return (
@@ -285,7 +293,11 @@ export default class Index extends Component {
               backgroundColor: 'white',
             }}>
             <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity onPress={this._requestCameraPermission}>
+              <TouchableOpacity
+                onPress={() => {
+                  // this._requestCameraPermission();
+                  this._setModalVisible(true);
+                }}>
                 <Image
                   source={
                     imageCamera
@@ -415,12 +427,67 @@ export default class Index extends Component {
                     : path
                     ? this._postimg()
                     : this._postwoimg();
-                  
                 }}
               />
             </View>
           </View>
         </ScrollView>
+        <Modal
+          style={{}}
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            this._setModalVisible(!modalVisible);
+          }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                justifyContent: 'space-around',
+                borderColor: 'black',
+                borderWidth: 1,
+                borderRadius: 25,
+                height: 100,
+                width: '70%',
+                backgroundColor: 'white',
+              }}>
+              <View style={{alignItems: 'center'}}>
+                <Text style={{color: 'black'}}>Ambil Foto</Text>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                }}>
+                <TouchableOpacity onPress={()=>this._requestCameraPermission("c")}>
+                  <Text style={{color: 'black'}}>Camera</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>this._requestCameraPermission("g")}>
+                  <Text style={{color: 'black'}}>Galeri</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                style={{position: 'absolute', top: 10, right: 10}}>
+                <View>
+                  <Close
+                    name="closecircleo"
+                    color={'black'}
+                    size={25}
+                    onPress={() => {
+                      this._setModalVisible(!modalVisible);
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     );
   }
