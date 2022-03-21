@@ -41,15 +41,17 @@ export default class Index extends Component {
     await firestore()
       .collection('Comments')
       .doc(`${params.uid}` + `${params.postID}`)
-      .onSnapshot(x => {if(x){
-        if (x.data()!= null) {
-          let cup = x.data().comments;
-          if (cup) {
-            let sorted = cup.flat().sort((a, b) => a.time - b.time);
-            this.mounted == true && this.setState({dataComments: sorted});
+      .onSnapshot(x => {
+        if (x) {
+          if (x.data() != null) {
+            let cup = x.data().comments;
+            if (cup) {
+              let sorted = cup.flat().sort((a, b) => a.time - b.time);
+              this.mounted == true && this.setState({dataComments: sorted});
+            }
           }
         }
-      }});
+      });
   }
   componentWillUnmount() {
     this.setState({modalVisible: false});
@@ -157,7 +159,9 @@ export default class Index extends Component {
               <Image
                 style={styles.avatar}
                 source={{
-                  uri: data.ppURL?data.ppURL:'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                  uri: data.ppURL
+                    ? data.ppURL
+                    : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
                 }}
               />
             </View>

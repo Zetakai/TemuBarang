@@ -128,12 +128,14 @@ export default class Profile extends Component {
         .collection('Lost')
         .doc(auth().currentUser.uid)
         .onSnapshot(x => {
-          if (x != null) {
-            let cup = x.data().posts;
-            if (cup) {
-              let sorted = cup.flat();
-              this.mounted == true &&
-                this.setState({dataLost: sorted, refreshing: !refreshing});
+          if (x) {
+            if (x.data() != null) {
+              let cup = x.data().posts;
+              if (cup) {
+                let sorted = cup.flat();
+                this.mounted == true &&
+                  this.setState({dataLost: sorted, refreshing: !refreshing});
+              }
             }
           }
         }));

@@ -27,7 +27,7 @@ export default class Index extends Component {
     super();
     this.state = {
       dataFire: [],
-      imageCamera: null,
+      insertedImage: null,
       selectedChoice: '',
       namabarang: '',
       photoURL: '',
@@ -75,7 +75,7 @@ export default class Index extends Component {
       } else {
         let data = res.assets;
 
-        this.setState({imageCamera: data, path: data[0].uri});
+        this.setState({insertedImage: data, path: data[0].uri});
       }
     });
   };
@@ -93,7 +93,7 @@ export default class Index extends Component {
       } else {
         let data = res.assets;
 
-        this.setState({imageGallery: data, path: data[0].uri});
+        this.setState({insertedImage: data, path: data[0].uri});
       }
     });
   };
@@ -242,7 +242,7 @@ export default class Index extends Component {
   };
   _emptyFrom = () => {
     this.setState({
-      imageCamera: null,
+      insertedImage: null,
       selectedChoice: '',
       namabarang: '',
       photoURL: '',
@@ -257,7 +257,7 @@ export default class Index extends Component {
   componentDidMount() {}
   render() {
     const {
-      imageCamera,
+      insertedImage,
       dataFire,
       selectedChoice,
       namabarang,
@@ -300,8 +300,8 @@ export default class Index extends Component {
                 }}>
                 <Image
                   source={
-                    imageCamera
-                      ? imageCamera
+                    insertedImage
+                      ? insertedImage
                       : require('../../assets/dummy.png')
                   }
                   style={{
