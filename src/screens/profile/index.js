@@ -43,26 +43,40 @@ export default class Profile extends Component {
       photoURL,
       path,
     } = this.state;
-    const photoID=new Date().valueOf()
-    const reference = storage().ref(`profile-photos/${
-      auth().currentUser.uid}/${photoID}`
-    );
-    const pathToFile = path;
-    await reference.putFile(pathToFile);
-    const url = await storage()
-      .ref(`profile-photos/${
-        auth().currentUser.uid}/${photoID}`)
-      .getDownloadURL();
-    try {
-      const update = {
-        displayName: !displayName
-          ? auth().currentUser.displayName
-          : displayName,
-        photoURL: url != null ? url : auth().currentUser.photoURL,
-      };
-      await auth().currentUser.updateProfile(update);
-    } catch (err) {
-      console.log(err);
+    if (path) {
+      console.log(path);
+      const photoID = new Date().valueOf();
+      const reference = storage().ref(
+        `profile-photos/${auth().currentUser.uid}/${photoID}`,
+      );
+      const pathToFile = path;
+      await reference.putFile(pathToFile);
+      const url = await storage()
+        .ref(`profile-photos/${auth().currentUser.uid}/${photoID}`)
+        .getDownloadURL();
+
+      try {
+        const update = {
+          displayName: !displayName
+            ? auth().currentUser.displayName
+            : displayName,
+          photoURL: url != null ? url : auth().currentUser.photoURL,
+        };
+        await auth().currentUser.updateProfile(update);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        const update = {
+          displayName: !displayName
+            ? auth().currentUser.displayName
+            : displayName,
+        };
+        await auth().currentUser.updateProfile(update);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
   _requestCameraPermission = async () => {
@@ -109,36 +123,40 @@ export default class Profile extends Component {
   async componentDidMount() {
     const {dataLost, dataFound, refreshing} = this.state;
     this.mounted = true;
-    this.mounted == true &&await firestore()
-      .collection('Lost')
-      .doc(auth().currentUser.uid)
-      .onSnapshot(x => {
-        if (x != null) {
-          let cup = x.data().posts;
-          if (cup) {
-            let sorted = cup.flat();
-            this.mounted == true &&
-              this.setState({dataLost: sorted, refreshing: !refreshing});
+    this.mounted == true &&
+      (await firestore()
+        .collection('Lost')
+        .doc(auth().currentUser.uid)
+        .onSnapshot(x => {
+          if (x != null) {
+            let cup = x.data().posts;
+            if (cup) {
+              let sorted = cup.flat();
+              this.mounted == true &&
+                this.setState({dataLost: sorted, refreshing: !refreshing});
+            }
           }
-        }
-      });
-      this.mounted == true &&await firestore()
-      .collection('Found')
-      .doc(auth().currentUser.uid)
-      .onSnapshot(x => {
-        if (x != null) {
-          let cup = x.data().posts;
-          if (cup) {
-            let sorted = cup.flat();
-            this.mounted == true &&
-              this.setState({dataFound: sorted, refreshing: !refreshing});
+        }));
+    this.mounted == true &&
+      (await firestore()
+        .collection('Found')
+        .doc(auth().currentUser.uid)
+        .onSnapshot(x => {
+          if (x != null) {
+            let cup = x.data().posts;
+            if (cup) {
+              let sorted = cup.flat();
+              this.mounted == true &&
+                this.setState({dataFound: sorted, refreshing: !refreshing});
+            }
           }
-        }
-      });
+        }));
   }
   _deletePost = x => {
     const {dataLost, dataFound, refreshing} = this.state;
-    const commentexists =firestore().collection('Comments').doc(x.uid + x.postID)
+    const commentexists = firestore()
+      .collection('Comments')
+      .doc(x.uid + x.postID);
     x.kategoripos == 'Found'
       ? firestore()
           .collection(x.kategoripos)
@@ -146,8 +164,7 @@ export default class Profile extends Component {
           .update({
             posts: dataFound.filter(post => post.postID != x.postID),
           })
-          .then(commentexists&&commentexists.delete(),
-          )
+          .then(commentexists && commentexists.delete())
           .then(x.photoURL && storage().refFromURL(x.photoURL).delete())
           .catch(function (error) {
             console.error('Error removing document: ', error);
