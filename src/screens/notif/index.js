@@ -10,7 +10,7 @@ import {
   import React, {Component} from 'react';
   import AntDesign from 'react-native-vector-icons/AntDesign';
   import messaging from '@react-native-firebase/messaging';
-//   import {convertDateTime} from '../../Componentss/Utils/moment';
+  import {convertDateTime} from '../../components/utils/moment';
   import {connect} from 'react-redux';
   
   class index extends Component {
@@ -59,7 +59,7 @@ import {
           <View style={styles.header}>
             <View>
               <Text style={{fontSize: 25, fontWeight: 'bold', color: 'black'}}>
-                Pesan
+                Notifikasi
               </Text>
             </View>
             <View>
@@ -74,7 +74,7 @@ import {
                 return (
                   <TouchableOpacity
                     key={index}
-                    // onPress={() => navigation.navigate('Detail Message', value)}
+                    onPress={() => navigation.navigate('NotifDetailsScreen', value)}
                     style={styles.inboxCard}>
                     <View>
                       <Text style={styles.inboxTitle}>{value.title}</Text>
@@ -82,7 +82,7 @@ import {
                         {value.body.substr(0,100)}
                       </Text>
                       <Text style={styles.inboxDate}>
-                        {value.sentTime}
+                      {convertDateTime(new Date(value.sentTime))}
                       </Text>
                     </View>
                     <View>
