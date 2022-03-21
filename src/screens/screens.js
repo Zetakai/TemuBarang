@@ -10,6 +10,7 @@ import FoundScreen from './found';
 import LostScreen from './lost';
 import DetailsScreen from './details';
 import MessageScreen from './message';
+import NotifScreen from './notif';
 
 export {
   LoginScreen,
@@ -24,4 +25,5 @@ export {
   FoundScreen,
   DetailsScreen,
   MessageScreen,
+  NotifScreen,
 };

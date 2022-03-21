@@ -16,6 +16,7 @@ import {
   FoundScreen,
   DetailsScreen,
   MessageScreen,
+  NotifScreen
 } from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -66,8 +67,8 @@ export class TabNav extends Component {
             <MaterialCommunityIcons name="bell" color={color} size={26} />
           ),
         }}
-        name="LoginScreen"
-        component={LoginScreen}
+        name="NotifScreen"
+        component={NotifScreen}
       />
        <Tab.Screen
         options={{
