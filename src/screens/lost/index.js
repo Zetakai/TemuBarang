@@ -49,8 +49,8 @@ export default class LostScreen extends Component {
   _barangSearch = () => {
     let {cari} = this;
     const {dataFire, renderData, searchData} = this.state;
-    cari = dataFire.filter(x => {
-      return x.namabarang == searchData;
+    cari = dataFire.filter(x => {if(x)if(x.namabarang){
+      return x.namabarang == searchData;}
     });
     if (cari.length > 0) {
       this.mounted == true && this.setState({renderData: cari});
