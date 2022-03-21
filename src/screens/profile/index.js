@@ -138,7 +138,7 @@ export default class Profile extends Component {
   }
   _deletePost = x => {
     const {dataLost, dataFound, refreshing} = this.state;
-
+    const commentexists =firestore().collection('Comments').doc(x.uid + x.postID)
     x.kategoripos == 'Found'
       ? firestore()
           .collection(x.kategoripos)
@@ -146,11 +146,7 @@ export default class Profile extends Component {
           .update({
             posts: dataFound.filter(post => post.postID != x.postID),
           })
-          .then(
-            firestore()
-              .collection('Comments')
-              .doc(x.uid + x.postID)
-              .delete(),
+          .then(commentexists&&commentexists.delete(),
           )
           .then(x.photoURL && storage().refFromURL(x.photoURL).delete())
           .catch(function (error) {

@@ -41,15 +41,15 @@ export default class Index extends Component {
     await firestore()
       .collection('Comments')
       .doc(`${params.uid}` + `${params.postID}`)
-      .onSnapshot(x => {
-        if (x!= null) {
+      .onSnapshot(x => {if(x){
+        if (x.data()!= null) {
           let cup = x.data().comments;
           if (cup) {
             let sorted = cup.flat().sort((a, b) => a.time - b.time);
             this.mounted == true && this.setState({dataComments: sorted});
           }
         }
-      });
+      }});
   }
   componentWillUnmount() {
     this.setState({modalVisible: false});
