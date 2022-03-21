@@ -29,7 +29,7 @@ export class HomeScreen extends Component {
     //this.props.addProfile(auth().currentUser);
     await firestore()
       .collection('Lost')
-      .onSnapshot(x => {
+      .onSnapshot(x => {if(x!=null){
         let user = x.docs.map(y => {
           return y.data();
         });
@@ -38,10 +38,10 @@ export class HomeScreen extends Component {
         });
         let sorted = cup.flat().sort((a, b) => b.time - a.time);
         this.mounted == true && this.setState({dataLost: sorted.slice(0, 3)});
-      });
+      }})
     await firestore()
       .collection('Found')
-      .onSnapshot(x => {
+      .onSnapshot(x => {if(x!=null){
         let user = x.docs.map(y => {
           return y.data();
         });
@@ -50,7 +50,7 @@ export class HomeScreen extends Component {
         });
         let sorted = cup.flat().sort((a, b) => b.time - a.time);
         this.mounted == true && this.setState({dataFound: sorted.slice(0, 3)});
-      });
+      }})
   }
   componentWillUnmount() {
     this.mounted = false;

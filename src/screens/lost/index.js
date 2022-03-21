@@ -31,14 +31,16 @@ export default class LostScreen extends Component {
     await firestore()
       .collection('Lost')
       .onSnapshot(x => {
-        let user = x.docs.map(y => {
-          return y.data();
-        });
-        let cup = user.map(x => {
-          return x.posts;
-        });
-        let sorted= cup.flat().sort((a, b) => b.time - a.time)
-        this.mounted == true && this.setState({dataFire: sorted});
+        if (x != null) {
+          let user = x.docs.map(y => {
+            return y.data();
+          });
+          let cup = user.map(x => {
+            return x.posts;
+          });
+          let sorted = cup.flat().sort((a, b) => b.time - a.time);
+          this.mounted == true && this.setState({dataFire: sorted});
+        }
       });
   }
   componentWillUnmount() {

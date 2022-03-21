@@ -40,7 +40,7 @@ export default class Index extends Component {
     this.mounted = true;
     await firestore()
       .collection('Comments')
-      .doc(`${params.uid}`+`${params.postID}`)
+      .doc(`${params.uid}` + `${params.postID}`)
       .onSnapshot(x => {
         if (x.data() != null) {
           let cup = x.data().comments;
@@ -59,7 +59,7 @@ export default class Index extends Component {
     const {data, comment} = this.state;
     await firestore()
       .collection('Comments')
-      .doc(`${data.uid}`+`${data.postID}`)
+      .doc(`${data.uid}` + `${data.postID}`)
       .set(
         {
           comments: firestore.FieldValue.arrayUnion({
@@ -121,7 +121,7 @@ export default class Index extends Component {
               </View>
             </Modal>
             <TouchableOpacity
-            activeOpacity={!data.photoURL&&1}
+              activeOpacity={!data.photoURL && 1}
               onPress={() => data.photoURL && this._setModalVisible(true)}>
               <Image
                 source={
@@ -157,7 +157,7 @@ export default class Index extends Component {
               <Image
                 style={styles.avatar}
                 source={{
-                  uri: 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                  uri: data.ppURL?data.ppURL:'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
                 }}
               />
             </View>
@@ -167,7 +167,7 @@ export default class Index extends Component {
             </View>
           </View>
           <TouchableOpacity
-          activeOpacity={0.6}
+            activeOpacity={0.6}
             onPress={() => {
               this._setModalVisibleComment();
             }}
@@ -176,7 +176,7 @@ export default class Index extends Component {
               style={{
                 padding: 5,
                 backgroundColor: 'white',
-                height:'100%'
+                height: '100%',
               }}>
               <CText>Comments</CText>
               <View
@@ -221,129 +221,129 @@ export default class Index extends Component {
               </View>
             </View>
           </TouchableOpacity>
-          <View style={{}}>
-            <Modal
-              style={{position: 'absolute', bottom: 0}}
-              animationType="slide"
-              transparent={true}
-              visible={modalVisibleComment}
-              onRequestClose={() => {
-                this._setModalVisibleComment(!modalVisibleComment);
+          <Modal
+            style={{position: 'absolute', bottom: 0}}
+            animationType="slide"
+            transparent={true}
+            visible={modalVisibleComment}
+            onRequestClose={() => {
+              this._setModalVisibleComment(!modalVisibleComment);
+            }}>
+            <View
+              style={{
+                height: '74%',
+                marginTop: 'auto',
+                borderTopRightRadius: 25,
+                borderTopLeftRadius: 25,
+
+                borderWidth: 1,
+                borderColor: 'black',
+                backgroundColor: 'white',
               }}>
               <View
                 style={{
                   borderTopRightRadius: 25,
                   borderTopLeftRadius: 25,
-                  height: '100%',
-                  borderWidth: 1,
-                  borderColor: 'black',
-                  backgroundColor: 'white',
+                  backgroundColor: 'dimgrey',
+                  borderBottomColor: 'black',
+                  borderBottomWidth: 1,
+                  height: 65,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}>
-                <View
+                <Text
                   style={{
-                    borderTopRightRadius: 25,
-                    borderTopLeftRadius: 25,
-                    backgroundColor: 'dimgrey',
-                    borderBottomColor: 'black',
-                    borderBottomWidth: 1,
-                    height: 65,
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    ...styles.textcolor,
+                    fontWeight: 'bold',
+                    fontSize: 20,
                   }}>
-                  <Text
-                    style={{
-                      ...styles.textcolor,
-                      fontWeight: 'bold',
-                      fontSize: 20,
-                    }}>
-                    Comments
-                  </Text>
+                  Comments
+                </Text>
+              </View>
+              <ScrollView>
+                <View style={{marginTop: 10}}>
+                  {dataComments &&
+                    dataComments.map((x, i) => {
+                      return (
+                        <View
+                          key={i}
+                          style={
+                            x.uid != auth().currentUser.uid
+                              ? {
+                                  marginBottom: 5,
+                                  padding: 5,
+                                  width: '50%',
+                                  borderWidth: 1,
+                                  borderColor: 'black',
+                                  position: 'relative',
+                                  left: 0,
+                                  borderBottomEndRadius: 25,
+                                  borderBottomStartRadius: 25,
+                                  borderTopEndRadius: 25,
+                                }
+                              : {
+                                  marginBottom: 5,
+                                  padding: 5,
+                                  width: '50%',
+                                  borderWidth: 1,
+                                  borderColor: 'black',
+                                  position: 'relative',
+                                  left: '50%',
+                                  borderBottomEndRadius: 25,
+                                  borderBottomStartRadius: 25,
+                                  borderTopStartRadius: 25,
+                                }
+                          }>
+                          <Text
+                            style={{...styles.textcolor, fontWeight: 'bold'}}>
+                            {x.displayName}
+                          </Text>
+                          <Text style={styles.textcolor}>{x.comment}</Text>
+                        </View>
+                      );
+                    })}
                 </View>
-                <ScrollView>
-                  <View style={{marginTop: 10}}>
-                    {dataComments &&
-                      dataComments.map((x, i) => {
-                        return (
-                          <View
-                            key={i}
-                            style={
-                              x.uid != auth().currentUser.uid
-                                ? {
-                                    marginBottom: 5,
-                                    padding: 5,
-                                    width: '50%',
-                                    borderWidth: 1,
-                                    borderColor: 'black',
-                                    position: 'relative',
-                                    left: 0,
-                                    borderBottomEndRadius: 25,
-                                    borderBottomStartRadius: 25,
-                                    borderTopEndRadius: 25,
-                                  }
-                                : {
-                                    marginBottom: 5,
-                                    padding: 5,
-                                    width: '50%',
-                                    borderWidth: 1,
-                                    borderColor: 'black',
-                                    position: 'relative',
-                                    left: '50%',
-                                    borderBottomEndRadius: 25,
-                                    borderBottomStartRadius: 25,
-                                    borderTopStartRadius: 25,
-                                  }
-                            }>
-                            <Text
-                              style={{...styles.textcolor, fontWeight: 'bold'}}>
-                              {x.displayName}
-                            </Text>
-                            <Text style={styles.textcolor}>{x.comment}</Text>
-                          </View>
-                        );
-                      })}
-                  </View>
-                </ScrollView>
-                <TouchableOpacity
-                  style={{position: 'absolute', top: 15, right: 15}}>
-                  <View>
-                    <Close
-                      name="closecircleo"
-                      color={'black'}
-                      size={40}
-                      onPress={() => {
-                        this._setModalVisibleComment(!modalVisibleComment);
-                      }}
-                    />
-                  </View>
-                </TouchableOpacity>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginTop: 15,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <TextInput
-                    placeholder="comment..."
-                    placeholderTextColor={'grey'}
-                    value={comment}
+              </ScrollView>
+              <TouchableOpacity
+                style={{position: 'absolute', top: 15, right: 15}}>
+                <View>
+                  <Close
+                    name="closecircleo"
                     color={'black'}
-                    onChangeText={value => this.setState({comment: value})}
-                    style={{
-                      borderBottomWidth: 1,
-                      borderColor: 'black',
-                      alignItems: 'center',
-                      width: '60%',
+                    size={40}
+                    onPress={() => {
+                      this._setModalVisibleComment(!modalVisibleComment);
                     }}
                   />
-                  <Button
-                    title="comment"
-                    onPress={() => comment && this._postcomment()}
-                  />
                 </View>
+              </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 15,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <TextInput
+                  placeholder="comment..."
+                  placeholderTextColor={'grey'}
+                  value={comment}
+                  color={'black'}
+                  onChangeText={value => this.setState({comment: value})}
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: 'black',
+                    alignItems: 'center',
+                    width: '60%',
+                  }}
+                />
+                <Button
+                  title="comment"
+                  onPress={() => comment && this._postcomment()}
+                />
               </View>
-            </Modal>
-          </View>
+            </View>
+          </Modal>
         </View>
       </View>
     );

@@ -6,8 +6,8 @@ import reducer from './../../src/redux/reducer';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: [],
-  blacklist: [],
+  whitelist: ['user'],
+  blacklist: [''],
   timeout: null,
 };
 const persistedReducer = persistReducer(persistConfig, reducer);

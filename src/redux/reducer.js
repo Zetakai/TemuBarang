@@ -1,17 +1,17 @@
 import {connect} from 'react-redux';
 const initialState = {
-  userNow:[]};
+  user:[]};
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD-PROFILE':
       return {
         ...state,
-        userNow: [...state.userNow, action.payload],
+        user: [...state.user, action.payload],
       };
       case 'DELETE-PROFILE':
       return {
         ...state,
-        userNow: [],
+        user: [],
       };
     default:
       return state;

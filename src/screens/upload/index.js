@@ -121,7 +121,7 @@ export default class Index extends Component {
               {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
-                  ppURL: null,
+                  ppURL: auth().currentUser.photoURL,
                   postID:new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
@@ -142,7 +142,7 @@ export default class Index extends Component {
               {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
-                  ppURL: null,
+                  ppURL: auth().currentUser.photoURL,
                   postID:new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
@@ -174,13 +174,12 @@ export default class Index extends Component {
       hadiah,
       key,
     } = this.state;
-    const reference = storage().ref(
-      auth().currentUser.uid + this.state.namabarang,
-    );
+    const photoID= namabarang+new Date().valueOf()
+    const reference = storage().ref(`posts/${auth().currentUser.uid}/${photoID}`)
     const pathToFile = path;
     await reference.putFile(pathToFile);
     const url = await storage()
-      .ref(auth().currentUser.uid + this.state.namabarang)
+      .ref(`posts/${auth().currentUser.uid}/${photoID}`)
       .getDownloadURL();
 
     try {
@@ -192,7 +191,7 @@ export default class Index extends Component {
               {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
-                  ppURL: null,
+                  ppURL: auth().currentUser.photoURL,
                   postID:new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,
@@ -213,7 +212,7 @@ export default class Index extends Component {
               {
                 posts: firestore.FieldValue.arrayUnion({
                   displayName: auth().currentUser.displayName,
-                  ppURL: null,
+                  ppURL: auth().currentUser.photoURL,
                   postID:new Date().valueOf(),
                   kategoripos: selectedChoice,
                   namabarang: namabarang,

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  PermissionsAndroid,
 } from 'react-native';
 import CText from '../../components/atoms/CText';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -14,6 +15,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Delete from 'react-native-vector-icons/Feather';
 import storage from '@react-native-firebase/storage';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 export default class Profile extends Component {
   constructor() {
@@ -21,23 +23,47 @@ export default class Profile extends Component {
     this.state = {
       edit: false,
       editing: false,
-      imageCamera: null,
+      imageGallery: null,
       displayName: '',
       photoURL: '',
       phoneNumber: '',
       dataLost: [],
       dataFound: [],
       refreshing: false,
+      path: '',
     };
   }
   _saveprofile = async () => {
-    const {edit, editing, imageCamera, displayName, phoneNumber, photoURL} =
-      this.state;
-    const update = {
-      displayName: !displayName ? auth().currentUser.displayName : displayName,
-      photoURL: photoURL != null ? photoURL : auth().currentUser.photoURL,
-    };
-    await auth().currentUser.updateProfile(update);
+    const {
+      edit,
+      editing,
+      imageGallery,
+      displayName,
+      phoneNumber,
+      photoURL,
+      path,
+    } = this.state;
+    const photoID=new Date().valueOf()
+    const reference = storage().ref(`profile-photos/${
+      auth().currentUser.uid}/${photoID}`
+    );
+    const pathToFile = path;
+    await reference.putFile(pathToFile);
+    const url = await storage()
+      .ref(`profile-photos/${
+        auth().currentUser.uid}/${photoID}`)
+      .getDownloadURL();
+    try {
+      const update = {
+        displayName: !displayName
+          ? auth().currentUser.displayName
+          : displayName,
+        photoURL: url != null ? url : auth().currentUser.photoURL,
+      };
+      await auth().currentUser.updateProfile(update);
+    } catch (err) {
+      console.log(err);
+    }
   };
   _requestCameraPermission = async () => {
     try {
@@ -49,25 +75,23 @@ export default class Profile extends Component {
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
         ));
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the camera');
-        this._openCamera();
+        console.log('You can open image library');
+        this._openGallery();
       } else {
-        console.log('Camera permission denied');
+        console.log('Image library permission denied');
       }
     } catch (err) {
       console.warn(err);
     }
   };
 
-  _openCamera = async () => {
+  _openGallery = async () => {
     const options = {
       mediaType: 'photo',
       quality: 1,
-      cameraType: 'back',
-      saveToPhotos: true,
     };
 
-    await launchCamera(options, async res => {
+    await launchImageLibrary(options, async res => {
       if (res.didCancel) {
         console.log('user cancel');
       } else if (res.errorCode) {
@@ -75,7 +99,7 @@ export default class Profile extends Component {
       } else {
         let data = res.assets;
 
-        this.setState({imageCamera: data});
+        this.setState({imageGallery: data, path: data[0].uri});
       }
     });
   };
@@ -85,11 +109,11 @@ export default class Profile extends Component {
   async componentDidMount() {
     const {dataLost, dataFound, refreshing} = this.state;
     this.mounted = true;
-    await firestore()
+    this.mounted == true &&await firestore()
       .collection('Lost')
       .doc(auth().currentUser.uid)
       .onSnapshot(x => {
-        if (x.data() != null) {
+        if (x != null) {
           let cup = x.data().posts;
           if (cup) {
             let sorted = cup.flat();
@@ -98,11 +122,11 @@ export default class Profile extends Component {
           }
         }
       });
-    await firestore()
+      this.mounted == true &&await firestore()
       .collection('Found')
       .doc(auth().currentUser.uid)
       .onSnapshot(x => {
-        if (x.data() != null) {
+        if (x != null) {
           let cup = x.data().posts;
           if (cup) {
             let sorted = cup.flat();
@@ -112,31 +136,53 @@ export default class Profile extends Component {
         }
       });
   }
-  _deletePost =(x)=> { const {dataLost, dataFound, refreshing} = this.state;
-  
-  
-  x.kategoripos=="Found"?
-     firestore().collection(x.kategoripos).doc(x.uid).update({
-       posts: dataFound.filter(post => post.postID != x.postID)
-     }).then(firestore().collection("Comments").doc(x.uid+x.postID).delete()).then(x.photoURL&&storage().refFromURL(x.photoURL).delete())
-    .catch(function(error) {
-        console.error("Error removing document: ", error);
-    }): firestore().collection(x.kategoripos).doc(x.uid).update({
-      posts: dataLost.filter(post => post.postID != x.postID)
-    }).then(firestore().collection("Comments").doc(x.uid+x.postID).delete()).then(x.photoURL&&storage().refFromURL(x.photoURL).delete())
-   .catch(function(error) {
-       console.error("Error removing document: ", error);
-   })
-  }
+  _deletePost = x => {
+    const {dataLost, dataFound, refreshing} = this.state;
+
+    x.kategoripos == 'Found'
+      ? firestore()
+          .collection(x.kategoripos)
+          .doc(x.uid)
+          .update({
+            posts: dataFound.filter(post => post.postID != x.postID),
+          })
+          .then(
+            firestore()
+              .collection('Comments')
+              .doc(x.uid + x.postID)
+              .delete(),
+          )
+          .then(x.photoURL && storage().refFromURL(x.photoURL).delete())
+          .catch(function (error) {
+            console.error('Error removing document: ', error);
+          })
+      : firestore()
+          .collection(x.kategoripos)
+          .doc(x.uid)
+          .update({
+            posts: dataLost.filter(post => post.postID != x.postID),
+          })
+          .then(
+            firestore()
+              .collection('Comments')
+              .doc(x.uid + x.postID)
+              .delete(),
+          )
+          .then(x.photoURL && storage().refFromURL(x.photoURL).delete())
+          .catch(function (error) {
+            console.error('Error removing document: ', error);
+          });
+  };
   render() {
     const {
       edit,
       editing,
-      imageCamera,
+      imageGallery,
       displayName,
       phoneNumber,
       photoURL,
       refreshing,
+      path,
       dataLost,
       dataFound,
     } = this.state;
@@ -187,16 +233,25 @@ export default class Profile extends Component {
           </View>
         )}
         <View style={styles.header}>
-          <Image
-            style={styles.avatar}
-            source={
-              edit == false
-                ? {
-                    uri: `${auth().currentUser.photoURL}`,
-                  }
-                : require('../../assets/dummy.png')
-            }
-          />
+          <TouchableOpacity
+            activeOpacity={edit == false ? 1 : 0}
+            style={{justifyContent: 'center'}}
+            onPress={() => {
+              edit == true && this._requestCameraPermission();
+            }}>
+            <Image
+              style={styles.avatar}
+              source={
+                edit == false
+                  ? {
+                      uri: `${auth().currentUser.photoURL}`,
+                    }
+                  : imageGallery
+                  ? imageGallery
+                  : require('../../assets/dummy.png')
+              }
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
@@ -301,7 +356,10 @@ export default class Profile extends Component {
                           />
                           {edit == true && (
                             <TouchableOpacity
-                              style={{position: 'absolute', top: 10, right: 10}} onPress={()=>{this._deletePost(x)}}>
+                              style={{position: 'absolute', top: 10, right: 10}}
+                              onPress={() => {
+                                this._deletePost(x);
+                              }}>
                               <Delete
                                 color={'white'}
                                 name="trash-2"
