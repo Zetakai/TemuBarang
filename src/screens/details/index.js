@@ -42,7 +42,7 @@ export default class Index extends Component {
       .collection('Comments')
       .doc(`${params.uid}` + `${params.postID}`)
       .onSnapshot(x => {
-        if (x.data() != null) {
+        if (x!= null) {
           let cup = x.data().comments;
           if (cup) {
             let sorted = cup.flat().sort((a, b) => a.time - b.time);
