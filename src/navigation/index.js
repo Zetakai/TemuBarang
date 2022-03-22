@@ -17,7 +17,9 @@ import {
   DetailsScreen,
   MessageScreen,
   NotifScreen,
+  ListMesaages,
   NotifDetailsScreen,
+
 } from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -43,13 +45,13 @@ export class TabNav extends Component {
       />
       <Tab.Screen
         options={{
-          tabBarLabel: 'Chat',
+          tabBarLabel: 'Pesan',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="chat-processing" color={color} size={26} />
           ),
         }}
-        name="MessageScreen"
-        component={MessageScreen}
+        name="Pesan"
+        component={ListMesaages}
       />
       <Tab.Screen
         name="UploadScreen"
@@ -154,6 +156,11 @@ export default class App extends Component {
           <Stack.Screen
             name="NotifDetailsScreen"
             component={NotifDetailsScreen}
+            options={{headerShown: false}}
+          />
+           <Stack.Screen
+            name="Messaging"
+            component={MessageScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
