@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import {colors, fonts} from '../../Utility';
-import {getHour} from '../../Utility/util/date';
+import {getHour} from '../../Utility/util/date'
 
 export default class CBubbleText extends Component {
   render() {
@@ -16,7 +16,7 @@ export default class CBubbleText extends Component {
           },
         ]}>
         <Text style={styles.text}> {text} </Text>
-        <Text style={styles.time}>{getHour(time)}</Text>
+       
       </View>
     );
   }

@@ -21,6 +21,13 @@ export const convertDate = date => {
   let _tahun = date.getFullYear();
   return `${_hari}, ${tanggal} ${_bulan} ${_tahun}`;
 };
+function addZero(i) {
+  if (i < 10) {
+    i = '0' + i;
+  }
+  return i;
+}
+
 
 export const convertTime = date => {
   let tanggal = date.getDate();

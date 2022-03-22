@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   container: (height, width, backgroundColor) => ({
     width: width ? width : responsiveWidth(60),
     height: height ? height : responsiveWidth(60),
-    borderRadius: 50,
+    borderRadius: 90,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',

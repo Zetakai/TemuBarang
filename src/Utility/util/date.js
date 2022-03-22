@@ -18,16 +18,25 @@ export const convertDate = date => {
   let tanggal = date.getDate();
   let _hari = hari[date.getDay()];
   let _bulan = bulan[date.getMonth()];
-  let _tahun = date.getFullYear();
-  return `${_hari}, ${tanggal} ${_bulan} ${_tahun}`;
+  let _tahun = date.getYear();
+  let tahun = _tahun < 1000 ? _tahun + 1900 : _tahun;
+  return `${_hari}, ${tanggal} ${_bulan} ${tahun}`;
 };
+
+function addZero(i) {
+  if (i < 10) {
+    i = '0' + i;
+  }
+  return i;
+}
 
 export const convertTime = date => {
   let tanggal = date.getDate();
   let _hari = hari[date.getDay()];
   let _bulan = bulan[date.getMonth()];
-  let _tahun = date.getFullYear();
-  return `${_hari}, ${tanggal} ${_bulan} ${_tahun} / ${getHour(date)}`;
+  let _tahun = date.getYear();
+  let tahun = _tahun < 1000 ? _tahun + 1900 : _tahun;
+  return `${_hari}, ${tanggal} ${_bulan} ${tahun} / ${getHour(date)}`;
 };
 
 export const getHour = date => {
@@ -48,8 +57,6 @@ export const convertTimestamp = date => {
   let tanggal = date.getDate();
   let bulan = date.getMonth();
   let _tahun = date.getYear();
-  const hour = date.getHours();
-  const minute = date.getMinutes();
   let tahun = _tahun < 1000 ? _tahun + 1900 : _tahun;
   var myDate = `${tanggal}-${bulan}-${tahun}`;
   myDate = myDate.split('-');
