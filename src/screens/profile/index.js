@@ -144,15 +144,16 @@ export default class Profile extends Component {
         .collection('Found')
         .doc(auth().currentUser.uid)
         .onSnapshot(x => {
-          if (x != null) {
-            let cup = x.data().posts;
-            if (cup) {
+          if (x) {
+            if (x.data() != null) {
+              let cup = x.data().posts;
+              if (cup) {
               let sorted = cup.flat();
               this.mounted == true &&
                 this.setState({dataFound: sorted, refreshing: !refreshing});
             }
           }
-        }));
+        }}));
   }
   _deletePost = x => {
     const {dataLost, dataFound, refreshing} = this.state;
