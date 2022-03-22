@@ -11,6 +11,7 @@ import LostScreen from './lost';
 import DetailsScreen from './details';
 import MessageScreen from './message';
 import NotifScreen from './notif';
+import NotifDetailsScreen from './notifDetails';
 
 export {
   LoginScreen,
@@ -26,4 +27,5 @@ export {
   DetailsScreen,
   MessageScreen,
   NotifScreen,
+  NotifDetailsScreen,
 };
