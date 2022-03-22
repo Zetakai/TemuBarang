@@ -24,9 +24,8 @@ import CText from '../../components/atoms/CText';
       .collection('Lost')
       .doc(`${user.uid}`)
       .collection('chatWith')
-      // .doc()
       .onSnapshot(res => {if(res){if(res.docs){
-        const data = res.docs.map(item => { console.log('ffdfsf'.data);
+        const data = res.docs.map(item => {console.log(item); ;
           return {messages: item.data().messages, ...item.data().lastChat};
         });
         this.setState({dataChat: data});}}
@@ -35,9 +34,9 @@ import CText from '../../components/atoms/CText';
 
   render() {
     const {navigation,user} = this.props;
-    console.log('ininafigasi'.navigation)
+    
     const {dataChat} = this.state;
-    console.log('ini'.dataChat)
+    console.log(dataChat)
     return (
       <View style={styles.pages}>
         <Text style={styles.text}>Messages</Text>

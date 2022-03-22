@@ -15,9 +15,9 @@ import firestore from '@react-native-firebase/firestore';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import { IconBack } from '../../assets/iconback';
+import { connect } from 'react-redux';
 
-
-export default class extends Component {
+export class Message extends Component {
   constructor(props) {
     super(props);
 
@@ -95,9 +95,10 @@ export default class extends Component {
   };
 
   render() {
-    const {navigation, dataUse,route,data,uid} = this.props;
+    const {navigation, dataUse,route,data,uid,user} = this.props;
+    const {params} = this.props.route;
     // const {data,uid}=navigation.route.params
-    console.log(route.params)
+    console.log(params)
     // const {image, name} = this.state.target;
     const {inputText, messages} = this.state;
     return (
@@ -112,7 +113,7 @@ export default class extends Component {
           </TouchableOpacity>
 
          
-          <Text style={styles.name}> {uid}</Text>
+          <Text style={styles.name}> {params.displayName}</Text>
           
         </View>
         <ScrollView style={{flex: 1}}>
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   },
   name: {
     marginLeft: 15,
-    
+    color:'black',
     fontSize: 17,
   },
   leftChat: {
@@ -187,3 +188,10 @@ const styles = StyleSheet.create({
     
   },
 });
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(mapStateToProps)(Message);

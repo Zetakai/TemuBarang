@@ -180,7 +180,7 @@ export default class Index extends Component {
             <CButton
             style={{marginBottom: 10,backgroundColor:'#AFA69F'}}
             title={'HUBUNGI'}
-            onPress={()=>navigation.navigate('Messaging', {data:data.displayName,uid:data.uid})}
+            onPress={()=>navigation.navigate('Messaging', {displayName:data.displayName,uid:data.uid,ppURL:data.ppURL})}
           
           />
             </View>
