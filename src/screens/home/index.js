@@ -25,6 +25,7 @@ export class HomeScreen extends Component {
     let mounted;
   }
   async componentDidMount() {
+    console.log(auth().currentUser)
     this.mounted = true;
     //this.props.addProfile(auth().currentUser);
     await firestore()
@@ -78,6 +79,7 @@ export class HomeScreen extends Component {
     });
   };
   render() {
+    const {user}=this.props
     const {dataLost, dataFound, expandProfile, refreshing} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
@@ -108,7 +110,7 @@ export class HomeScreen extends Component {
                 <View>
                   <Image
                     style={styles.circleImage}
-                    source={{uri: `${auth().currentUser.photoURL}`}}
+                    source={{uri: `${user.photoURL}`}}
                   />
                 </View>
               </TouchableOpacity>
@@ -120,11 +122,11 @@ export class HomeScreen extends Component {
             <Image
               style={styles.avatar}
               source={{
-                uri: 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                uri: `${user.photoURL}`
               }}
             />
             <Text style={{alignSelf: 'center', paddingLeft: 10}}>
-              {auth().currentUser.displayName}
+              {user.displayName}
             </Text>
           </View>
         ) : null}
