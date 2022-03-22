@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
+import { connect } from 'react-redux';
 
 
 
 import firestore from '@react-native-firebase/firestore';
 import CText from '../../components/atoms/CText';
 
- export default class Index extends Component {
+ export class Index extends Component {
   constructor(props) {
     super(props);
 
@@ -16,23 +17,24 @@ import CText from '../../components/atoms/CText';
   }
 
   componentDidMount() {
-    const {data} = this.props;
+    const {data,user} = this.props;
     console.log('dataaaasfdsdsfdfg'.data)
 
     firestore()
       .collection('Lost')
-      .doc()
+      .doc(`${user.uid}`)
       .collection('chatWith')
-      .onSnapshot(res => {
+      // .doc()
+      .onSnapshot(res => {if(res){if(res.docs){
         const data = res.docs.map(item => { console.log('ffdfsf'.data);
           return {messages: item.data().messages, ...item.data().lastChat};
         });
-        this.setState({dataChat: data});
+        this.setState({dataChat: data});}}
       });
   }
 
   render() {
-    const {navigation} = this.props;
+    const {navigation,user} = this.props;
     console.log('ininafigasi'.navigation)
     const {dataChat} = this.state;
     console.log('ini'.dataChat)
@@ -95,3 +97,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(mapStateToProps)(Index);

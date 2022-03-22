@@ -65,6 +65,7 @@ export class Profile extends Component {
       photoURL,
       path,
     } = this.state;
+    const {user}=this.props
     if (path) {
       console.log(path);
       const photoID = new Date().valueOf();
@@ -84,7 +85,7 @@ export class Profile extends Component {
             : displayName,
           photoURL: url != null ? url : auth().currentUser.photoURL,
         };
-        await auth().currentUser.updateProfile(update).then(()=>this.props.update());
+        await auth().currentUser.updateProfile(update).then(()=>user.photoURL && storage().refFromURL(user.photoURL).delete()).then(()=>this.props.update());
       } catch (err) {
         console.log(err);
       }
@@ -95,7 +96,7 @@ export class Profile extends Component {
             ? auth().currentUser.displayName
             : displayName,
         };
-        await auth().currentUser.updateProfile(update).then(()=>this.props.update());
+        await auth().currentUser.updateProfile(update).then(()=>user.photoURL && storage().refFromURL(user.photoURL).delete()).then(()=>this.props.update());
       } catch (err) {
         console.log(err);
       }
