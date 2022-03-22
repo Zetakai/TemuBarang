@@ -15,6 +15,8 @@ import CText from '../../components/atoms/CText';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Close from 'react-native-vector-icons/AntDesign';
+import { NavigationContainer } from '@react-navigation/native';
+import CButton from '../../components/atoms/CButton';
 
 export default class Index extends Component {
   constructor(props) {
@@ -77,7 +79,8 @@ export default class Index extends Component {
       .then(this.setState({comment: ''}));
   };
   render() {
-    const {data, comment, dataComments, modalVisible, modalVisibleComment} =
+    const {navigation}=this.props
+    const {data,comment, dataComments, modalVisible, modalVisibleComment} =
       this.state;
 
     return (
@@ -146,7 +149,10 @@ export default class Index extends Component {
             <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
             <Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>
             <Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>
+            
             <Text style={styles.textcolor}>{data.uid}</Text>
+           
+            
           </View>
           <View
             style={{
@@ -156,6 +162,7 @@ export default class Index extends Component {
               marginBottom: 3,
             }}>
             <View style={{marginRight: 10}}>
+    
               <Image
                 style={styles.avatar}
                 source={{
@@ -168,6 +175,14 @@ export default class Index extends Component {
             <View style={{justifyContent: 'center'}}>
               <Text style={styles.textcolor}>Posted by</Text>
               <Text style={{color: 'darkgreen'}}>{data.displayName}</Text>
+            </View>
+            <View>        
+            <CButton
+            style={{marginBottom: 10,backgroundColor:'#AFA69F'}}
+            title={'HUBUNGI'}
+            onPress={()=>navigation.navigate('Messaging', {data:data.displayName,uid:data.uid})}
+          
+          />
             </View>
           </View>
           <TouchableOpacity
