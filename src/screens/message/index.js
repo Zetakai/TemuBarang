@@ -16,6 +16,7 @@ import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import { IconBack } from '../../assets/iconback';
 import { connect } from 'react-redux';
+import { convertDateTime } from '../../components/utils/moment';
 
 export class Message extends Component {
   constructor(props) {
@@ -119,9 +120,18 @@ export class Message extends Component {
           
         </View>
         <ScrollView style={{flex: 1}}>
-          <Text>{uid}</Text>
-          <Text></Text>
-        
+        {messages && (
+          messages.map((value, index) => {console.log(value);
+            return (
+              <TouchableOpacity  key={index}style={{borderColor:'black',borderWidth:1}}>
+                <Text style={{color:'black'}}>{value.sendBy}</Text>
+                <Text style={{color:'black'}}>{value.text}</Text>
+                <Text style={{color:'black'}}>{new Date(value.time.seconds*1000).toLocaleString()}</Text>
+              
+              </TouchableOpacity>
+            );
+          })
+        )}
           {/* <View style={styles.leftChat}>
             <Text>
               Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem Lorem

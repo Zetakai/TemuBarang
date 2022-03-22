@@ -44,10 +44,10 @@ import CText from '../../components/atoms/CText';
           dataChat.map((value, index) => {
             return (
               <TouchableOpacity  onPress={() => {
-                navigation.navigate('Messaging', {displayName:value.name,uid:value.uid,ppURL:value.image});
+                navigation.navigate('Messaging', {displayName:value.displayName,uid:value.uid,ppURL:value.ppURL});
               }} key={index}style={{borderColor:'black',borderWidth:1}}>
-                <Text style={styles.text}>{value.name}</Text>
-                <Text style={styles.text}>{value.image}</Text>
+                <Text style={styles.text}>{value.displayName}</Text>
+                <Text style={styles.text}>{value.ppURL}</Text>
                 <Text style={styles.text}>{value.messages[value.messages.length - 1].text}</Text>
               
               </TouchableOpacity>
