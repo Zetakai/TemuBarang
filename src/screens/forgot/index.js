@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Alert,
   ImageBackground,
-  Image,
+  Image,ToastAndroid,
 } from 'react-native';
 import React, {Component} from 'react';
 import CTextInput from '../../components/atoms/CTextInput';
@@ -30,23 +30,23 @@ export default class ForgotScreen extends Component {
     passEmail&&this.setState({email:passEmail})}
   _userForgot = async () => {
     if (this.state.email === '') {
-      Alert.alert('Enter your email');
+      ToastAndroid.show('Enter your email', ToastAndroid.SHORT);
       this.setState({emailBox: '1'});
     } else {
      await auth()
         .sendPasswordResetEmail(this.state.email)
         .then(() => {
-          Alert.alert('Please check your email...');
+          ToastAndroid.show('Please check your email...', ToastAndroid.SHORT);
           this.props.navigation.navigate('OnboardScreen');
         })
         .catch(error => {
           console.log(error);
           if (error.code == 'auth/invalid-email') {
-            Alert.alert('Enter a correct email address!');
+            ToastAndroid.show('Enter a correct email address!', ToastAndroid.SHORT);
             this.setState({emailBox: '1'});
           }
           if (error.code == 'auth/user-not-found') {
-            Alert.alert('You are not registered yet.');
+            ToastAndroid.show('You are not registered yet.', ToastAndroid.SHORT);
             this.setState({emailBox: '1'});
           }
         });

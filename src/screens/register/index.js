@@ -1,6 +1,6 @@
 import {
   Linking,
-  View,
+  View,ToastAndroid,
   Text,
   TextInput,
   StyleSheet,
@@ -29,7 +29,7 @@ export default class RegisterScreen extends Component {
   }
   _userSignup = async () => {
     if (this.state.email === '' || this.state.password === '') {
-      Alert.alert('Enter your email and password to sign up');
+     ToastAndroid.show('Enter your email and password to sign up', ToastAndroid.SHORT);
       this.setState({emailBox: '1', passwordBox: '1'});
     } else {
      await auth()
@@ -37,23 +37,23 @@ export default class RegisterScreen extends Component {
         .then((result)=>{
           result.user.sendEmailVerification()})
         .then(() => {
-          Alert.alert('Your account is created and check your email for verification!');
+         ToastAndroid.show('Your account is created and check your email for verification!', ToastAndroid.SHORT);
           this.props.navigation.navigate('LoginScreen');
         })
         .catch(error => {
           console.log(error);
           if (error.code === 'auth/email-already-in-use') {
-            Alert.alert('That email address is already in use!');
+           ToastAndroid.show('That email address is already in use!', ToastAndroid.SHORT);
             this.setState({emailBox: '1'});
             this.setState({passwordBox: '0'});
           }
           if (error.code === 'auth/invalid-email') {
-            Alert.alert('That email address is invalid!');
+           ToastAndroid.show('That email address is invalid!', ToastAndroid.SHORT);
             this.setState({emailBox: '1'});
             this.setState({passwordBox: '0'});
           }
           if (error.code === 'auth/weak-password') {
-            Alert.alert('Password should be at least 6 characters.');
+           ToastAndroid.show('Password should be at least 6 characters.', ToastAndroid.SHORT);
             this.setState({passwordBox: '1'});
             this.setState({emailBox: '0'});
           }

@@ -1,7 +1,7 @@
 import {
   Linking,
   View,
-  Text,
+  Text,ToastAndroid,
   TextInput,
   StyleSheet,
   ScrollView,
@@ -58,24 +58,24 @@ export class LoginScreen extends Component {
         .catch(error => {
           console.log(error);
           if (error.code == 'auth/invalid-email') {
-            Alert.alert('Enter a correct email address!');
+            ToastAndroid.show('Enter a correct email address!', ToastAndroid.SHORT);
             this.setState({emailBox: '1'});
             this.setState({passwordBox: '0'});
           }
           if (error.code == 'auth/user-not-found') {
-            Alert.alert('You are not registered yet.');
+            ToastAndroid.show('You are not registered yet.', ToastAndroid.SHORT);
             this.setState({showRegister: '1'});
             this.setState({emailBox: '1'});
             this.setState({passwordBox: '0'});
           }
           if (error.code == 'auth/wrong-password') {
-            Alert.alert('You have entered an invalid username or password.');
+            ToastAndroid.show('You have entered an invalid username or password.', ToastAndroid.SHORT);
             this.setState({showForgot: '1'});
             this.setState({passwordBox: '1'});
             this.setState({emailBox: '0'});
           }
           if (error.code == 'auth/too-many-requests') {
-            Alert.alert('Too many failed login attempts. Try again later!');
+            ToastAndroid.show('Too many failed login attempts. Try again later!', ToastAndroid.SHORT);
           }
         });
     }
