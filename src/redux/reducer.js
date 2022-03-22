@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
+import auth from '@react-native-firebase/auth'
 const initialState = {
-  user:[],
+  user:{},
   notif:[],
 };
 const reducer = (state = initialState, action) => {
@@ -8,12 +9,17 @@ const reducer = (state = initialState, action) => {
     case 'LOGIN-USER':
       return {
         ...state,
-        user: [action.payload],
+        user: action.payload,
       };
       case 'LOGOUT-USER':
       return {
         ...state,
-        user: [],
+        user: {},
+      };
+      case 'UPDATE-USER':
+      return {
+        ...state,
+        user: auth().currentUser,
       };
       case 'ADD-NOTIF':
         return {

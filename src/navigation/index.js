@@ -18,6 +18,8 @@ import {
   MessageScreen,
   NotifScreen,
   ListMesaages,
+  NotifDetailsScreen,
+
 } from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -148,6 +150,12 @@ export default class App extends Component {
           <Stack.Screen
             name="DetailsScreen"
             component={DetailsScreen}
+            optio
+            ns={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="NotifDetailsScreen"
+            component={NotifDetailsScreen}
             options={{headerShown: false}}
           />
            <Stack.Screen
