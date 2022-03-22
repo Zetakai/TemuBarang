@@ -53,13 +53,13 @@ export class Message extends Component {
       .set(
         {
           messages: firestore.FieldValue.arrayUnion({
-            text: inputText,
+            text: 'inputText',
             sendBy: user.uid,
             time: new Date(),
           }),
           lastChat: {
             uid: params.uid,
-            text: inputText,
+            text: 'inputText',
             ppURL: params.ppURL ? params.ppURL : '',
             time: new Date(),
             displayName: params.displayName,
@@ -88,7 +88,7 @@ export class Message extends Component {
             text: 'inputText',
             ppURL: user.photoURL ? user.photoURL : '',
             time: new Date(),
-            displayName: user.name,
+            displayName: user.displayName,
           },
         },
         {merge: true},
