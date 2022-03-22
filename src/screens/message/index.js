@@ -38,7 +38,7 @@ export class Message extends Component {
       .doc(user.uid)
       .collection('chatWith')
       .doc(params.uid)
-      .onSnapshot(res => {
+      .onSnapshot(res => {if(res)if(res.data())
         this.setState({messages: res.data()?.messages});
       });
   }
@@ -126,7 +126,7 @@ export class Message extends Component {
               <TouchableOpacity  key={index}style={{borderColor:'black',borderWidth:1}}>
                 <Text style={{color:'black'}}>{value.sendBy}</Text>
                 <Text style={{color:'black'}}>{value.text}</Text>
-                <Text style={{color:'black'}}>{new Date(value.time.seconds*1000).toLocaleString()}</Text>
+                <Text style={{color:'black'}}>{convertDateTime(new Date(value.time.seconds*1000))}</Text>
               
               </TouchableOpacity>
             );

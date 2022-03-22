@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View,TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, View,TouchableOpacity,Image} from 'react-native';
 import { connect } from 'react-redux';
 
 
@@ -23,13 +23,13 @@ import CText from '../../components/atoms/CText';
     .collection(`Message`)
     .doc(`${user.uid}`)
     .collection('chatWith')
-    .onSnapshot(res => {
-      const data = res.docs.map(item => { ;
-        return {messages: item.data().messages, ...item.data().lastChat};
+    .onSnapshot(res => {if(res){if(res.docs){
+      const data = res.docs.map(item => { if(item.data()){
+        return {messages: item.data().messages, ...item.data().lastChat};}
       });
       this.setState({dataChat: data})
       
-      });
+      }}});
   }
 
   render() {
@@ -47,7 +47,7 @@ import CText from '../../components/atoms/CText';
                 navigation.navigate('Messaging', {displayName:value.displayName,uid:value.uid,ppURL:value.ppURL});
               }} key={index}style={{borderColor:'black',borderWidth:1}}>
                 <Text style={styles.text}>{value.displayName}</Text>
-                <Text style={styles.text}>{value.ppURL}</Text>
+                <Image style={{width:100,height:100}} source={{uri:`${value.ppURL}`}} />
                 <Text style={styles.text}>{value.messages[value.messages.length - 1].text}</Text>
               
               </TouchableOpacity>
