@@ -29,10 +29,6 @@ export {
   DetailsScreen,
   MessageScreen,
   NotifScreen,
-<<<<<<< src/screens/screens.js
   ListMesaages,
-
-=======
   NotifDetailsScreen,
->>>>>>> src/screens/screens.js
 };
