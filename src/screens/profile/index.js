@@ -16,8 +16,9 @@ import firestore from '@react-native-firebase/firestore';
 import Delete from 'react-native-vector-icons/Feather';
 import storage from '@react-native-firebase/storage';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {connect} from 'react-redux';
 
-export default class Profile extends Component {
+export class Profile extends Component {
   constructor() {
     super();
     this.state = {
@@ -31,8 +32,29 @@ export default class Profile extends Component {
       dataFound: [],
       refreshing: false,
       path: '',
+      confirm: null,code:''
     };
   }
+  _verifyPhoneNumber = async () => {
+    const confirmation = await auth().verifyPhoneNumber(phoneNumber);
+    this.setState({confirm: confirmation});
+  };
+  _confirmCode = async () => {
+    try {
+      const credential = auth.PhoneAuthProvider.credential(
+        confirm.verificationId,
+        code,
+      );
+      let userData = await auth().currentUser.linkWithCredential(credential);
+      setUser(userData.user);
+    } catch (error) {
+      if (error.code == 'auth/invalid-verification-code') {
+        console.log('Invalid code.');
+      } else {
+        console.log('Account linking error');
+      }
+    }
+  };
   _saveprofile = async () => {
     const {
       edit,
@@ -62,7 +84,7 @@ export default class Profile extends Component {
             : displayName,
           photoURL: url != null ? url : auth().currentUser.photoURL,
         };
-        await auth().currentUser.updateProfile(update);
+        await auth().currentUser.updateProfile(update).then(()=>this.props.update());
       } catch (err) {
         console.log(err);
       }
@@ -73,7 +95,7 @@ export default class Profile extends Component {
             ? auth().currentUser.displayName
             : displayName,
         };
-        await auth().currentUser.updateProfile(update);
+        await auth().currentUser.updateProfile(update).then(()=>this.props.update());
       } catch (err) {
         console.log(err);
       }
@@ -148,12 +170,13 @@ export default class Profile extends Component {
             if (x.data() != null) {
               let cup = x.data().posts;
               if (cup) {
-              let sorted = cup.flat();
-              this.mounted == true &&
-                this.setState({dataFound: sorted, refreshing: !refreshing});
+                let sorted = cup.flat();
+                this.mounted == true &&
+                  this.setState({dataFound: sorted, refreshing: !refreshing});
+              }
             }
           }
-        }}));
+        }));
   }
   _deletePost = x => {
     const {dataLost, dataFound, refreshing} = this.state;
@@ -190,6 +213,7 @@ export default class Profile extends Component {
           });
   };
   render() {
+    const {user}=this.props
     const {
       edit,
       editing,
@@ -260,7 +284,7 @@ export default class Profile extends Component {
               source={
                 edit == false
                   ? {
-                      uri: `${auth().currentUser.photoURL}`,
+                      uri: `${user.photoURL}`,
                     }
                   : imageGallery
                   ? imageGallery
@@ -271,7 +295,7 @@ export default class Profile extends Component {
         </View>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-            <CText style={styles.textcolor}>Name</CText>
+            <CText style={styles.textcolor} >Name</CText>
             <View
               style={{
                 justifyContent: 'space-between',
@@ -290,7 +314,7 @@ export default class Profile extends Component {
                 />
               ) : (
                 <Text style={{color: 'dimgrey'}}>
-                  {auth().currentUser.displayName}
+                  {user.displayName}
                 </Text>
               )}
               {edit == true ? (
@@ -443,3 +467,25 @@ const styles = StyleSheet.create({
   },
   textcolor: {color: 'black'},
 });
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: data => {
+      dispatch({
+        type: 'LOGOUT-USER',
+        payload: data,
+      });
+    },
+    update: data => {
+      dispatch({
+        type: 'UPDATE-USER',
+        payload: data,
+      });
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
