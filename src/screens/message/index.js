@@ -29,16 +29,17 @@ export class Message extends Component {
   }
 
   componentDidMount() {
-    // const {user} = this.props;
-    // const {target, messages} = this.state;
-    // firestore()
-    //   .collection('messages')
-    //   .doc(user.uid)
-    //   .collection('chatWith')
-    //   .doc(target.uid)
-    //   .onSnapshot(res => {
-    //     this.setState({messages: res.data()?.messages});
-    //   });
+    const {user} = this.props;
+     const {params} = this.props.route;
+    const {target, messages} = this.state;
+    firestore()
+      .collection('Message')
+      .doc(user.uid)
+      .collection('chatWith')
+      .doc(params.uid)
+      .onSnapshot(res => {
+        this.setState({messages: res.data()?.messages});
+      });
   }
 
   _send = () => {
@@ -46,7 +47,7 @@ export class Message extends Component {
     const {params} = this.props.route;
     const {target, inputText} = this.state;
     firestore()
-      .collection('messages')
+      .collection('Message')
       .doc(user.uid)
       .collection('chatWith')
       .doc(params.uid)
@@ -72,7 +73,7 @@ export class Message extends Component {
       });
 
     firestore()
-      .collection('messages')
+      .collection('Message')
       .doc(params.uid)
       .collection('chatWith')
       .doc(user.uid)
