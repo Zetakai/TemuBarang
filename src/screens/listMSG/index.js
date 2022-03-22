@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View,TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 
 
@@ -18,24 +18,24 @@ import CText from '../../components/atoms/CText';
 
   componentDidMount() {
     const {data,user} = this.props;
-    console.log('dataaaasfdsdsfdfg'.data)
-
+    
     firestore()
-      .collection('Lost')
-      .doc(`${user.uid}`)
-      .collection('chatWith')
-      .onSnapshot(res => {if(res){if(res.docs){
-        const data = res.docs.map(item => {console.log(item); ;
-          return {messages: item.data().messages, ...item.data().lastChat};
-        });
-        this.setState({dataChat: data});}}
+    .collection(`Message`)
+    .doc(`${user.uid}`)
+    .collection('chatWith')
+    .onSnapshot(res => {
+      const data = res.docs.map(item => { ;
+        return {messages: item.data().messages, ...item.data().lastChat};
+      });
+      this.setState({dataChat: data})
+      
       });
   }
 
   render() {
     const {navigation,user} = this.props;
-    
     const {dataChat} = this.state;
+    
     console.log(dataChat)
     return (
       <View style={styles.pages}>
@@ -43,16 +43,14 @@ import CText from '../../components/atoms/CText';
         {dataChat ? (
           dataChat.map((value, index) => {
             return (
-              <View key={index}>
-                <CText
-                  name={value.name}
-                  image={value.image}
-                  message={value.messages[value.messages.length - 1].text}
-                  onPress={() => {
-                    navigation.navigate('Messaging', value);
-                  }}
-                />
-              </View>
+              <TouchableOpacity  onPress={() => {
+                navigation.navigate('Messaging', {displayName:value.name,uid:value.uid,ppURL:value.image});
+              }} key={index}style={{borderColor:'black',borderWidth:1}}>
+                <Text style={styles.text}>{value.name}</Text>
+                <Text style={styles.text}>{value.image}</Text>
+                <Text style={styles.text}>{value.messages[value.messages.length - 1].text}</Text>
+              
+              </TouchableOpacity>
             );
           })
         ) : (
@@ -88,10 +86,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 17,
     paddingTop: 30,
-    backgroundColor:'red'
+    backgroundColor:'white'
   },
   text: {
-   
+   color:'black',
     fontSize: 20,
     marginBottom: 20,
   },

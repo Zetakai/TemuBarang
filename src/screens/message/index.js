@@ -29,11 +29,11 @@ export class Message extends Component {
   }
 
   componentDidMount() {
-    // const {dataUser} = this.props;
+    // const {user} = this.props;
     // const {target, messages} = this.state;
     // firestore()
     //   .collection('messages')
-    //   .doc(dataUser.uid)
+    //   .doc(user.uid)
     //   .collection('chatWith')
     //   .doc(target.uid)
     //   .onSnapshot(res => {
@@ -42,26 +42,27 @@ export class Message extends Component {
   }
 
   _send = () => {
-    const {dataUser} = this.props;
+    const {user} = this.props;
+    const {params} = this.props.route;
     const {target, inputText} = this.state;
     firestore()
       .collection('messages')
-      .doc(dataUser.uid)
+      .doc(user.uid)
       .collection('chatWith')
-      .doc(target.uid)
+      .doc(params.uid)
       .set(
         {
           messages: firestore.FieldValue.arrayUnion({
             text: inputText,
-            sendBy: dataUser.uid,
-            date: new Date(),
+            sendBy: user.uid,
+            time: new Date(),
           }),
           lastChat: {
-            uid: target.uid,
+            uid: params.uid,
             text: inputText,
-            image: target.image ? target.image : '',
-            date: new Date(),
-            name: target.name,
+            ppURL: params.ppURL ? params.ppURL : '',
+            time: new Date(),
+            displayName: params.displayName,
           },
         },
         {merge: true},
@@ -72,22 +73,22 @@ export class Message extends Component {
 
     firestore()
       .collection('messages')
-      .doc(target.uid)
+      .doc(params.uid)
       .collection('chatWith')
-      .doc(dataUser.uid)
+      .doc(user.uid)
       .set(
         {
           messages: firestore.FieldValue.arrayUnion({
-            text: inputText,
-            sendBy: dataUser.uid,
-            date: new Date(),
+            text: 'inputText',
+            sendBy: user.uid,
+            time: new Date(),
           }),
           lastChat: {
-            uid: dataUser.uid,
-            text: inputText,
-            image: dataUser.image ? dataUser.image : '',
-            date: new Date(),
-            name: dataUser.name,
+            uid: user.uid,
+            text: 'inputText',
+            ppURL: user.photoURL ? user.photoURL : '',
+            time: new Date(),
+            displayName: user.name,
           },
         },
         {merge: true},
@@ -99,7 +100,7 @@ export class Message extends Component {
     const {params} = this.props.route;
     // const {data,uid}=navigation.route.params
     console.log(params)
-    // const {image, name} = this.state.target;
+    // const {image, name} = this.state.params;
     const {inputText, messages} = this.state;
     return (
       <View style={styles.page}>
@@ -143,8 +144,8 @@ export class Message extends Component {
            <CTextInput
            
            />
-           <CButton />
-          <TouchableOpacity onPress={() => this._send()}>
+           <CButton onPress={() => this._send()}/>
+          <TouchableOpacity >
           
           </TouchableOpacity>
         </View>
