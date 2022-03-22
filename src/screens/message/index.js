@@ -96,6 +96,8 @@ export class Message extends Component {
         {merge: true},
       );
   };
+  componentWillUnmount() {
+    this.mounted = false;}
 
   render() {
     const {navigation, dataUse,route,data,uid,user} = this.props;
@@ -124,7 +126,7 @@ export class Message extends Component {
           messages.map((value, index) => {console.log(value);
             return (
               <TouchableOpacity  key={index}style={{borderColor:'black',borderWidth:1}}>
-                <Text style={{color:'black'}}>{value.sendBy}</Text>
+                <Text style={{color:'black'}}>{value.sendBy==user.uid}</Text>
                 <Text style={{color:'black'}}>{value.text}</Text>
                 <Text style={{color:'black'}}>{convertDateTime(new Date(value.time.seconds*1000))}</Text>
               
@@ -152,9 +154,13 @@ export class Message extends Component {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-           <CTextInput
-           
-           />
+          <CTextInput
+            
+            value={inputText}
+            onChangeText={inputText => {
+              this.setState({inputText});
+            }}
+          />
            <CButton onPress={() => this._send()}/>
           <TouchableOpacity >
           
