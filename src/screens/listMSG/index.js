@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import firestore from '@react-native-firebase/firestore';
 import CText from '../../components/atoms/CText';
+import CCardChat from '../../components/CCardChat';
 
  export class Index extends Component {
   constructor(props) {
@@ -43,14 +44,26 @@ import CText from '../../components/atoms/CText';
         {dataChat ? (
           dataChat.map((value, index) => {
             return (
-              <TouchableOpacity  onPress={() => {
-                navigation.navigate('Messaging', {displayName:value.displayName,uid:value.uid,ppURL:value.ppURL});
-              }} key={index}style={{borderColor:'black',borderWidth:1}}>
-                <Text style={styles.text}>{value.displayName}</Text>
-                <Image style={{width:100,height:100}} source={{uri:`${value.ppURL}`}} />
-                <Text style={styles.text}>{value.messages[value.messages.length - 1].text}</Text>
+              // <TouchableOpacity  onPress={() => {
+              //   navigation.navigate('Messaging', {displayName:value.displayName,uid:value.uid,ppURL:value.ppURL});
+              // }} key={index}style={{borderColor:'black',borderWidth:1}}>
+              //   <View style={{flexDirection:'row'}}>
+              //   <Text style={styles.text}>{value.displayName}</Text>
+              //   <Image style={{width:100,height:100}} source={{uri:`${value.ppURL}`}} />
+              //   <Text style={styles.text}>{value.messages[value.messages.length - 1].text}</Text>
+              //   </View>
               
-              </TouchableOpacity>
+              // </TouchableOpacity>
+              <View key={index}>
+                <CCardChat
+                  name={value.name}
+                  image={value.ppURL}
+                  message={value.messages[value.messages.length - 1].text}
+                  onPress={() => {
+                    navigation.navigate('Messaging', value);
+                  }}
+                />
+              </View>
             );
           })
         ) : (
