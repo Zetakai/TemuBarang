@@ -201,42 +201,67 @@ export default class Index extends Component {
                 padding: 5,
                 backgroundColor: 'white',
                 height: '100%',
-              }}><View style={{flexDirection:'row'}}>
-              <CText>Komentar</CText><CText>  {dataComments.length}</CText></View>
-              <View
-                style={{}}>
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <CText>Komentar</CText>
+                <CText> {dataComments.length}</CText>
+              </View>
+              <View style={{}}>
                 {dataComments &&
-                  dataComments.map((x, i) => {
-                    return (
-                      <View
-                        key={i}
-                        style={{marginLeft:10,marginTop:10}
-                        //   x.uid != auth().currentUser.uid ? 
-                        // {} : {}
-                      }
-                        >
-                        <View style={{flexDirection: 'row',alignItems:'center'}}>
-                          <Image
-                            style={{width: 30,
-                              height: 30,
-                              borderRadius: 150 / 2,
-                              borderWidth: 1,
-                              borderColor: 'black',marginRight:10}}
-                            source={{
-                              uri:x.photoURL
-                                ?x.photoURL
-                                : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-                            }}
-                          />
-                          <Text
-                            style={{...styles.textcolor, fontWeight: 'bold'}}>
-                            {x.displayName}
+                  dataComments
+                    .map((x, i) => {
+                      return (
+                        <View
+                          key={i}
+                          style={
+                            {marginLeft: 10, marginTop: 10}
+                            //   x.uid != auth().currentUser.uid ?
+                            // {} : {}
+                          }>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}>
+                            <Image
+                              style={{
+                                width: 30,
+                                height: 30,
+                                borderRadius: 150 / 2,
+                                borderWidth: 1,
+                                borderColor: 'black',
+                                marginRight: 10,
+                              }}
+                              source={{
+                                uri: x.photoURL
+                                  ? x.photoURL
+                                  : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                              }}
+                            />
+                            <View
+                              style={
+                                data.uid == x.uid && {
+                                  borderRadius: 5,
+                                  paddingHorizontal: 8,
+                                  backgroundColor: 'lightgreen',
+                                }
+                              }>
+                              <Text
+                                style={{
+                                  ...styles.textcolor,
+                                  fontWeight: 'bold',
+                                }}>
+                                {x.displayName}
+                              </Text>
+                            </View>
+                          </View>
+                          <Text style={{...styles.textcolor, marginLeft: 40}}>
+                            {x.comment}
                           </Text>
                         </View>
-                        <Text style={{...styles.textcolor,marginLeft:40}}>{x.comment}</Text>
-                      </View>
-                    );
-                  }).slice(0,1)}
+                      );
+                    })
+                    .slice(0, 1)}
               </View>
             </View>
           </TouchableOpacity>
@@ -246,11 +271,13 @@ export default class Index extends Component {
             visible={modalVisibleComment}
             onRequestClose={() => {
               this._setModalVisibleComment(!modalVisibleComment);
-            }}><TouchableOpacity 
-            style={{backgroundColor:'transparent',height:'26%'}} 
-            activeOpacity={1} 
-            onPressOut={() => {this._setModalVisibleComment(false)}}
-          ></TouchableOpacity>
+            }}>
+            <TouchableOpacity
+              style={{backgroundColor: 'transparent', height: '26%'}}
+              activeOpacity={1}
+              onPressOut={() => {
+                this._setModalVisibleComment(false);
+              }}></TouchableOpacity>
             <View
               style={{
                 height: '74%',
@@ -274,47 +301,66 @@ export default class Index extends Component {
                   justifyContent: 'center',
                 }}>
                 <Text
-                  style={{color:'white',
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                  }}>
+                  style={{color: 'white', fontWeight: 'bold', fontSize: 20}}>
                   Komentar
                 </Text>
               </View>
               <ScrollView>
                 <View style={{marginTop: 10}}>
-                {dataComments &&
-                  dataComments.map((x, i) => {
-                    return (
-                      <View
-                        key={i}
-                        style={{marginLeft:10,marginTop:10}
-                        //   x.uid != auth().currentUser.uid ? 
-                        // {} : {}
-                      }
-                        >
-                        <View style={{flexDirection: 'row',alignItems:'center'}}>
-                          <Image
-                            style={{width: 30,
-                              height: 30,
-                              borderRadius: 150 / 2,
-                              borderWidth: 1,
-                              borderColor: 'black',marginRight:10}}
-                            source={{
-                              uri:x.photoURL
-                                ?x.photoURL
-                                : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-                            }}
-                          />
-                          <Text
-                            style={{...styles.textcolor, fontWeight: 'bold'}}>
-                            {x.displayName}
+                  {dataComments &&
+                    dataComments.map((x, i) => {
+                      return (
+                        <View
+                          key={i}
+                          style={
+                            {marginLeft: 10, marginTop: 10}
+                            //   x.uid != auth().currentUser.uid ?
+                            // {} : {}
+                          }>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}>
+                            <Image
+                              style={{
+                                width: 30,
+                                height: 30,
+                                borderRadius: 150 / 2,
+                                borderWidth: 1,
+                                borderColor: 'black',
+                                marginRight: 10,
+                              }}
+                              source={{
+                                uri: x.photoURL
+                                  ? x.photoURL
+                                  : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                              }}
+                            />
+                            <View
+                              style={
+                                data.uid == x.uid && {
+                                 
+                                  borderRadius: 5,
+                                  paddingHorizontal: 8,
+                                  backgroundColor: 'lightgreen',
+                                }
+                              }>
+                              <Text
+                                style={{
+                                  ...styles.textcolor,
+                                  fontWeight: 'bold',
+                                }}>
+                                {x.displayName}
+                              </Text>
+                            </View>
+                          </View>
+                          <Text style={{...styles.textcolor, marginLeft: 40}}>
+                            {x.comment}
                           </Text>
                         </View>
-                        <Text style={{...styles.textcolor,marginLeft:40}}>{x.comment}</Text>
-                      </View>
-                    );
-                  })}
+                      );
+                    })}
                 </View>
               </ScrollView>
               <TouchableOpacity
