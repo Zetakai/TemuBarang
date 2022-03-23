@@ -13,7 +13,7 @@ import {
   import {convertDateTime} from '../../components/utils/moment';
   import {connect} from 'react-redux';
   
-  class index extends Component {
+  class NotifScreen extends Component {
     constructor() {
       super();
       this.state = {
@@ -124,7 +124,7 @@ import {
     };
   };
   
-  export default connect(mapStateToProps, mapDispatchToProps)(index);
+  export default connect(mapStateToProps, mapDispatchToProps)(NotifScreen);
   
   const styles = StyleSheet.create({
     header: {

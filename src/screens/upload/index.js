@@ -22,7 +22,7 @@ import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import Close from 'react-native-vector-icons/AntDesign';
-export default class Index extends Component {
+export default class UploadScreen extends Component {
   constructor() {
     super();
     this.state = {

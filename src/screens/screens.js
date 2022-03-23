@@ -11,7 +11,7 @@ import LostScreen from './lost';
 import DetailsScreen from './details';
 import MessageScreen from './message';
 import NotifScreen from './notif';
-import ListMesaages from './listMSG'
+import ListMessage from './listMSG'
 import NotifDetailsScreen from './notifDetails';
 import ReplyScreen from './reply'
 
@@ -30,7 +30,7 @@ export {
   DetailsScreen,
   MessageScreen,
   NotifScreen,
-  ListMesaages,
+  ListMessage,
   NotifDetailsScreen,
   ReplyScreen
 };

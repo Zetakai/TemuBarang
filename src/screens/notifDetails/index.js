@@ -2,7 +2,7 @@ import {Text, StyleSheet, View, Image} from 'react-native';
 import React, {Component} from 'react';
 import { convertDateTime } from '../../components/utils/moment';
 
-export default class Index extends Component {
+export default class NotifDetailsScreen extends Component {
   constructor() {
     super();
     this.state = {

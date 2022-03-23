@@ -17,7 +17,7 @@ import {
   DetailsScreen,
   MessageScreen,
   NotifScreen,
-  ListMesaages,
+  ListMessage,
   NotifDetailsScreen,
   ReplyScreen
 
@@ -52,7 +52,7 @@ export class TabNav extends Component {
           ),
         }}
         name="Pesan"
-        component={ListMesaages}
+        component={ListMessage}
       />
       <Tab.Screen
         name="UploadScreen"

@@ -8,7 +8,7 @@ import firestore from '@react-native-firebase/firestore';
 import CText from '../../components/atoms/CText';
 import CCardChat from '../../components/CCardChat';
 
- export class Index extends Component {
+ export class ListMSG extends Component {
   constructor(props) {
     super(props);
 
@@ -113,4 +113,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Index);
+export default connect(mapStateToProps)(ListMSG);
