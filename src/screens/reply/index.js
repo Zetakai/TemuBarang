@@ -19,7 +19,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 
-export class Index extends Component {
+export class ReplyScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +29,7 @@ export class Index extends Component {
       modalVisible: false,
       modalVisibleComment: false,
       dataCommentsChild: [],
-    };
+    };let mounted
   }
   async componentDidMount() {
     const {params} = this.props.route;
@@ -75,6 +75,7 @@ export class Index extends Component {
       )
       .then(this.setState({comment: ''}));
   };
+  componentWillUnmount(){this.mounted=false}
   render() {
     const {params} = this.props.route;
     const {
@@ -85,7 +86,7 @@ export class Index extends Component {
       modalVisible,
       modalVisibleComment,
     } = this.state;
-   
+    const {user} = this.props;
     return (
       <View>
         <View
@@ -116,7 +117,7 @@ export class Index extends Component {
             />
             <View
               style={
-                data.uid == params.uid && {
+                data.uid == params.postUID && {
                   borderRadius: 5,
                   paddingHorizontal: 8,
                   backgroundColor: 'lightgreen',
@@ -178,7 +179,7 @@ export class Index extends Component {
                       />
                       <View
                         style={
-                          data.uid == x.uid && {
+                          user.uid == params.postUID && {
                             borderRadius: 5,
                             paddingHorizontal: 8,
                             backgroundColor: 'lightgreen',
@@ -252,4 +253,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Index);
+export default connect(mapStateToProps)(ReplyScreen);

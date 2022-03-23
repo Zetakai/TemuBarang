@@ -19,7 +19,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 
-export class Index extends Component {
+export class DetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +30,8 @@ export class Index extends Component {
       modalVisibleComment: false,
       dataCommentsChild: [],
       commentIDs: [],
-    };let mounted
+    };
+    let mounted;
   }
   _setModalVisible = visible => {
     this.setState({modalVisible: visible});
@@ -87,6 +88,7 @@ export class Index extends Component {
       .set(
         {
           comments: firestore.FieldValue.arrayUnion({
+            postUID:data.uid,
             commentID: data.postID + user.uid + new Date().valueOf(),
             displayName: user.displayName,
             photoURL: user.photoURL,
@@ -111,8 +113,7 @@ export class Index extends Component {
       modalVisibleComment,
       commentIDs,
     } = this.state;
-console.log(modalVisibleComment)
-    
+
     return (
       <View style={styles.container}>
         <View style={{}}>
@@ -206,19 +207,21 @@ console.log(modalVisibleComment)
                 <Text style={{color: 'darkgreen'}}>{data.displayName}</Text>
               </View>
             </View>
-            <View>
-              <CButton
-                style={{marginBottom: 10, backgroundColor: '#AFA69F'}}
-                title={'HUBUNGI'}
-                onPress={() =>
-                  navigation.navigate('Messaging', {
-                    displayName: data.displayName,
-                    uid: data.uid,
-                    ppURL: data.ppURL,
-                  })
-                }
-              />
-            </View>
+            {data.uid != user.uid && (
+              <View>
+                <CButton
+                  style={{marginBottom: 10, backgroundColor: '#AFA69F'}}
+                  title={'HUBUNGI'}
+                  onPress={() =>
+                    navigation.navigate('Messaging', {
+                      displayName: data.displayName,
+                      uid: data.uid,
+                      ppURL: data.ppURL,
+                    })
+                  }
+                />
+              </View>
+            )}
           </View>
           <TouchableOpacity
             activeOpacity={0.6}
@@ -302,12 +305,12 @@ console.log(modalVisibleComment)
             onRequestClose={() => {
               this._setModalVisibleComment(false);
             }}>
-            {/* <TouchableOpacity
+            <TouchableOpacity
               style={{backgroundColor: 'transparent', height: '26%'}}
               activeOpacity={1}
               onPressOut={() => {
                 this._setModalVisibleComment(false);
-              }}></TouchableOpacity> */}
+              }}></TouchableOpacity>
             <View
               style={{
                 height: '74%',
@@ -341,7 +344,8 @@ console.log(modalVisibleComment)
                     dataComments.map((x, i) => {
                       return (
                         <TouchableOpacity
-                          onPress={() => {this._setModalVisibleComment(false);
+                          onPress={() => {
+                            this._setModalVisibleComment(false);
                             navigation.navigate('ReplyScreen', {
                               ...x,
                               postID: data.uid + data.postID,
@@ -404,66 +408,67 @@ console.log(modalVisibleComment)
                                 // console.log(check);
                               }
                               if (check == true) {
-                              return (
-                                <View
-                                  key={i}
-                                  style={
-                                    {
-                                      marginLeft: 10,
-                                      marginTop: 10,
-                                      borderLeftWidth: 1,
-                                      borderColor: 'silver',
-                                    }
-                                    //   params.uid != user.uid ?
-                                    // {} : {}
-                                  }>
+                                return (
                                   <View
-                                    style={{
-                                      marginLeft: 10,
-                                      flexDirection: 'row',
-                                      alignItems: 'center',
-                                    }}>
-                                    <Image
-                                      style={{
-                                        width: 30,
-                                        height: 30,
-                                        borderRadius: 150 / 2,
-                                        borderWidth: 1,
-                                        borderColor: 'black',
-                                        marginRight: 10,
-                                      }}
-                                      source={{
-                                        uri: y.photoURL
-                                          ? y.photoURL
-                                          : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-                                      }}
-                                    />
+                                    key={i}
+                                    style={
+                                      {
+                                        marginLeft: 10,
+                                        marginTop: 10,
+                                        borderLeftWidth: 1,
+                                        borderColor: 'silver',
+                                      }
+                                      //   params.uid != user.uid ?
+                                      // {} : {}
+                                    }>
                                     <View
-                                      style={
-                                        data.uid == y.uid && {
-                                          borderRadius: 5,
-                                          paddingHorizontal: 8,
-                                          backgroundColor: 'lightgreen',
-                                        }
-                                      }>
-                                      <Text
+                                      style={{
+                                        marginLeft: 10,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                      }}>
+                                      <Image
                                         style={{
-                                          ...styles.textcolor,
-                                          fontWeight: 'bold',
-                                        }}>
-                                        {y.displayName}
-                                      </Text>
+                                          width: 30,
+                                          height: 30,
+                                          borderRadius: 150 / 2,
+                                          borderWidth: 1,
+                                          borderColor: 'black',
+                                          marginRight: 10,
+                                        }}
+                                        source={{
+                                          uri: y.photoURL
+                                            ? y.photoURL
+                                            : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                                        }}
+                                      />
+                                      <View
+                                        style={
+                                          data.uid == y.uid && {
+                                            borderRadius: 5,
+                                            paddingHorizontal: 8,
+                                            backgroundColor: 'lightgreen',
+                                          }
+                                        }>
+                                        <Text
+                                          style={{
+                                            ...styles.textcolor,
+                                            fontWeight: 'bold',
+                                          }}>
+                                          {y.displayName}
+                                        </Text>
+                                      </View>
                                     </View>
+                                    <Text
+                                      style={{
+                                        ...styles.textcolor,
+                                        marginLeft: 50,
+                                      }}>
+                                      {y.comment}
+                                    </Text>
                                   </View>
-                                  <Text
-                                    style={{
-                                      ...styles.textcolor,
-                                      marginLeft: 50,
-                                    }}>
-                                    {y.comment}
-                                  </Text>
-                                </View>
-                              );}
+                                );
+                              }
                             })}
                         </TouchableOpacity>
                       );
@@ -537,4 +542,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Index);
+export default connect(mapStateToProps)(DetailsScreen);
