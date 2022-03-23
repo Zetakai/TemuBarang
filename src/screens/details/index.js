@@ -17,7 +17,7 @@ import firestore from '@react-native-firebase/firestore';
 import Close from 'react-native-vector-icons/AntDesign';
 import {NavigationContainer} from '@react-navigation/native';
 import CButton from '../../components/atoms/CButton';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
 export class Index extends Component {
   constructor(props) {
@@ -27,8 +27,10 @@ export class Index extends Component {
       comment: '',
       dataComments: [],
       modalVisible: false,
-      modalVisibleComment: false,dataCommentsChild:[],commentIDs:[]
-    };
+      modalVisibleComment: false,
+      dataCommentsChild: [],
+      commentIDs: [],
+    };let mounted
   }
   _setModalVisible = visible => {
     this.setState({modalVisible: visible});
@@ -55,7 +57,7 @@ export class Index extends Component {
           }
         }
       });
-      await firestore()
+    await firestore()
       .collection('CommentsChild')
       .doc(`${params.uid}` + `${params.postID}`)
       .onSnapshot(x => {
@@ -64,7 +66,8 @@ export class Index extends Component {
             let cup = x.data().comments;
             if (cup) {
               let sorted = cup.flat().sort((a, b) => a.time - b.time);
-              this.mounted == true && this.setState({dataCommentsChild: sorted});
+              this.mounted == true &&
+                this.setState({dataCommentsChild: sorted});
             }
           }
         }
@@ -77,14 +80,14 @@ export class Index extends Component {
 
   _postcomment = async () => {
     const {data, comment} = this.state;
-    const {user} =this.props
+    const {user} = this.props;
     await firestore()
       .collection('Comments')
       .doc(`${data.uid}` + `${data.postID}`)
       .set(
         {
           comments: firestore.FieldValue.arrayUnion({
-            commentID:data.postID+user.uid+new Date().valueOf() ,
+            commentID: data.postID + user.uid + new Date().valueOf(),
             displayName: user.displayName,
             photoURL: user.photoURL,
             comment: comment,
@@ -97,12 +100,19 @@ export class Index extends Component {
       .then(this.setState({comment: ''}));
   };
   render() {
-    const {navigation,user} = this.props;
+    const {navigation, user} = this.props;
     const {params} = this.props.route;
-    const {data, comment, dataComments,dataCommentsChild, modalVisible, modalVisibleComment,commentIDs} =
-      this.state;
-      
-console.log(commentIDs)
+    const {
+      data,
+      comment,
+      dataComments,
+      dataCommentsChild,
+      modalVisible,
+      modalVisibleComment,
+      commentIDs,
+    } = this.state;
+console.log(modalVisibleComment)
+    
     return (
       <View style={styles.container}>
         <View style={{}}>
@@ -213,7 +223,7 @@ console.log(commentIDs)
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => {
-              this._setModalVisibleComment();
+              this._setModalVisibleComment(true);
             }}
             style={{backgroundColor: 'white'}}>
             <View
@@ -224,7 +234,7 @@ console.log(commentIDs)
               }}>
               <View style={{flexDirection: 'row'}}>
                 <CText>Komentar</CText>
-                <CText> {dataComments.length+dataCommentsChild.length}</CText>
+                <CText> {dataComments.length + dataCommentsChild.length}</CText>
               </View>
               <View style={{}}>
                 {dataComments &&
@@ -290,14 +300,14 @@ console.log(commentIDs)
             transparent={true}
             visible={modalVisibleComment}
             onRequestClose={() => {
-              this._setModalVisibleComment(!modalVisibleComment);
+              this._setModalVisibleComment(false);
             }}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{backgroundColor: 'transparent', height: '26%'}}
               activeOpacity={1}
               onPressOut={() => {
                 this._setModalVisibleComment(false);
-              }}></TouchableOpacity>
+              }}></TouchableOpacity> */}
             <View
               style={{
                 height: '74%',
@@ -331,7 +341,12 @@ console.log(commentIDs)
                     dataComments.map((x, i) => {
                       return (
                         <TouchableOpacity
-                        onPress={()=>{navigation.navigate('ReplyScreen',{...x,postID:data.uid+data.postID})}}
+                          onPress={() => {this._setModalVisibleComment(false);
+                            navigation.navigate('ReplyScreen', {
+                              ...x,
+                              postID: data.uid + data.postID,
+                            });
+                          }}
                           key={i}
                           style={
                             {marginLeft: 10, marginTop: 10}
@@ -361,7 +376,6 @@ console.log(commentIDs)
                             <View
                               style={
                                 data.uid == x.uid && {
-                                 
                                   borderRadius: 5,
                                   paddingHorizontal: 8,
                                   backgroundColor: 'lightgreen',
@@ -380,58 +394,77 @@ console.log(commentIDs)
                             {x.comment}
                           </Text>
                           {dataCommentsChild &&
-            dataCommentsChild.map((y, i) => {console.log(y.commentID,x.commentID)
-              return (
-                <View
-                  key={i}
-                  style={
-                    {marginLeft: 10, marginTop: 10,borderLeftWidth:1,borderColor:'silver',}
-                    //   params.uid != user.uid ?
-                    // {} : {}
-                  }>
-                  <View
-                    style={{marginLeft:10,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <Image
-                      style={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: 150 / 2,
-                        borderWidth: 1,
-                        borderColor: 'black',
-                        marginRight: 10,
-                      }}
-                      source={{
-                        uri: y.photoURL
-                          ? y.photoURL
-                          : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-                      }}
-                    />
-                    <View
-                      style={
-                        data.uid == y.uid && {
-                          borderRadius: 5,
-                          paddingHorizontal: 8,
-                          backgroundColor: 'lightgreen',
-                        }
-                      }>
-                      <Text
-                        style={{
-                          ...styles.textcolor,
-                          fontWeight: 'bold',
-                        }}>
-                        {y.displayName}
-                      </Text>
-                    </View>
-                  </View>
-                  <Text style={{...styles.textcolor, marginLeft: 50}}>
-                    {y.comment}
-                  </Text>
-                </View>
-              );
-            })}
+                            dataCommentsChild.map((y, i) => {
+                              let check;
+                              if (
+                                x.commentID == y.commentID &&
+                                y.commentID == x.commentID
+                              ) {
+                                check = true;
+                                // console.log(check);
+                              }
+                              if (check == true) {
+                              return (
+                                <View
+                                  key={i}
+                                  style={
+                                    {
+                                      marginLeft: 10,
+                                      marginTop: 10,
+                                      borderLeftWidth: 1,
+                                      borderColor: 'silver',
+                                    }
+                                    //   params.uid != user.uid ?
+                                    // {} : {}
+                                  }>
+                                  <View
+                                    style={{
+                                      marginLeft: 10,
+                                      flexDirection: 'row',
+                                      alignItems: 'center',
+                                    }}>
+                                    <Image
+                                      style={{
+                                        width: 30,
+                                        height: 30,
+                                        borderRadius: 150 / 2,
+                                        borderWidth: 1,
+                                        borderColor: 'black',
+                                        marginRight: 10,
+                                      }}
+                                      source={{
+                                        uri: y.photoURL
+                                          ? y.photoURL
+                                          : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                                      }}
+                                    />
+                                    <View
+                                      style={
+                                        data.uid == y.uid && {
+                                          borderRadius: 5,
+                                          paddingHorizontal: 8,
+                                          backgroundColor: 'lightgreen',
+                                        }
+                                      }>
+                                      <Text
+                                        style={{
+                                          ...styles.textcolor,
+                                          fontWeight: 'bold',
+                                        }}>
+                                        {y.displayName}
+                                      </Text>
+                                    </View>
+                                  </View>
+                                  <Text
+                                    style={{
+                                      ...styles.textcolor,
+                                      marginLeft: 50,
+                                    }}>
+                                    {y.comment}
+                                  </Text>
+                                </View>
+                              );}
+                            })}
                         </TouchableOpacity>
                       );
                     })}
@@ -445,7 +478,7 @@ console.log(commentIDs)
                     color={'white'}
                     size={40}
                     onPress={() => {
-                      this._setModalVisibleComment(!modalVisibleComment);
+                      this._setModalVisibleComment(false);
                     }}
                   />
                 </View>

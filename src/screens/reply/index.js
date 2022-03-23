@@ -85,7 +85,7 @@ export class Index extends Component {
       modalVisible,
       modalVisibleComment,
     } = this.state;
-    console.log(params);
+   
     return (
       <View>
         <View
@@ -136,62 +136,69 @@ export class Index extends Component {
           </Text>
           {dataCommentsChild &&
             dataCommentsChild.map((x, i) => {
-              return (
-                <View
-                  key={i}
-                  style={
-                    {
-                      marginLeft: 10,
-                      marginTop: 10,
-                      borderLeftWidth: 1,
-                      borderColor: 'silver',
-                    }
-                    //   x.uid != user.uid ?
-                    // {} : {}
-                  }>
+              let check;
+              if (x.commentID == params.commentID && params.commentID == x.commentID) {
+                check = true;
+                // console.log(check);
+              }
+              if (check == true) {
+                return (
                   <View
-                    style={{
-                      marginLeft: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <Image
-                      style={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: 150 / 2,
-                        borderWidth: 1,
-                        borderColor: 'black',
-                        marginRight: 10,
-                      }}
-                      source={{
-                        uri: x.photoURL
-                          ? x.photoURL
-                          : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-                      }}
-                    />
+                    key={i}
+                    style={
+                      {
+                        marginLeft: 10,
+                        marginTop: 10,
+                        borderLeftWidth: 1,
+                        borderColor: 'silver',
+                      }
+                      //   x.uid != user.uid ?
+                      // {} : {}
+                    }>
                     <View
-                      style={
-                        data.uid == x.uid && {
-                          borderRadius: 5,
-                          paddingHorizontal: 8,
-                          backgroundColor: 'lightgreen',
-                        }
-                      }>
-                      <Text
+                      style={{
+                        marginLeft: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
+                      <Image
                         style={{
-                          ...styles.textcolor,
-                          fontWeight: 'bold',
-                        }}>
-                        {x.displayName}
-                      </Text>
+                          width: 30,
+                          height: 30,
+                          borderRadius: 150 / 2,
+                          borderWidth: 1,
+                          borderColor: 'black',
+                          marginRight: 10,
+                        }}
+                        source={{
+                          uri: x.photoURL
+                            ? x.photoURL
+                            : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                        }}
+                      />
+                      <View
+                        style={
+                          data.uid == x.uid && {
+                            borderRadius: 5,
+                            paddingHorizontal: 8,
+                            backgroundColor: 'lightgreen',
+                          }
+                        }>
+                        <Text
+                          style={{
+                            ...styles.textcolor,
+                            fontWeight: 'bold',
+                          }}>
+                          {x.displayName}
+                        </Text>
+                      </View>
                     </View>
+                    <Text style={{...styles.textcolor, marginLeft: 50}}>
+                      {x.comment}
+                    </Text>
                   </View>
-                  <Text style={{...styles.textcolor, marginLeft: 50}}>
-                    {x.comment}
-                  </Text>
-                </View>
-              );
+                );
+              }
             })}
         </View>
         <View
