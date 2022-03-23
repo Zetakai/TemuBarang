@@ -17,8 +17,9 @@ import firestore from '@react-native-firebase/firestore';
 import Close from 'react-native-vector-icons/AntDesign';
 import {NavigationContainer} from '@react-navigation/native';
 import CButton from '../../components/atoms/CButton';
+import {connect} from 'react-redux'
 
-export default class Index extends Component {
+export class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +27,7 @@ export default class Index extends Component {
       comment: '',
       dataComments: [],
       modalVisible: false,
-      modalVisibleComment: false,
+      modalVisibleComment: false,dataCommentsChild:[],commentIDs:[]
     };
   }
   _setModalVisible = visible => {
@@ -54,24 +55,41 @@ export default class Index extends Component {
           }
         }
       });
+      await firestore()
+      .collection('CommentsChild')
+      .doc(`${params.uid}` + `${params.postID}`)
+      .onSnapshot(x => {
+        if (x) {
+          if (x.data() != null) {
+            let cup = x.data().comments;
+            if (cup) {
+              let sorted = cup.flat().sort((a, b) => a.time - b.time);
+              this.mounted == true && this.setState({dataCommentsChild: sorted});
+            }
+          }
+        }
+      });
   }
   componentWillUnmount() {
     this.setState({modalVisible: false});
     this.mounted = false;
   }
+
   _postcomment = async () => {
     const {data, comment} = this.state;
+    const {user} =this.props
     await firestore()
       .collection('Comments')
       .doc(`${data.uid}` + `${data.postID}`)
       .set(
         {
           comments: firestore.FieldValue.arrayUnion({
-            displayName: auth().currentUser.displayName,
-            photoURL: auth().currentUser.photoURL,
+            commentID:data.postID+user.uid+new Date().valueOf() ,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
             comment: comment,
             time: new Date(),
-            uid: auth().currentUser.uid,
+            uid: user.uid,
           }),
         },
         {merge: true},
@@ -79,10 +97,12 @@ export default class Index extends Component {
       .then(this.setState({comment: ''}));
   };
   render() {
-    const {navigation} = this.props;
-    const {data, comment, dataComments, modalVisible, modalVisibleComment} =
+    const {navigation,user} = this.props;
+    const {params} = this.props.route;
+    const {data, comment, dataComments,dataCommentsChild, modalVisible, modalVisibleComment,commentIDs} =
       this.state;
-
+      
+console.log(commentIDs)
     return (
       <View style={styles.container}>
         <View style={{}}>
@@ -204,7 +224,7 @@ export default class Index extends Component {
               }}>
               <View style={{flexDirection: 'row'}}>
                 <CText>Komentar</CText>
-                <CText> {dataComments.length}</CText>
+                <CText> {dataComments.length+dataCommentsChild.length}</CText>
               </View>
               <View style={{}}>
                 {dataComments &&
@@ -215,7 +235,7 @@ export default class Index extends Component {
                           key={i}
                           style={
                             {marginLeft: 10, marginTop: 10}
-                            //   x.uid != auth().currentUser.uid ?
+                            //   x.uid != user.uid ?
                             // {} : {}
                           }>
                           <View
@@ -310,11 +330,12 @@ export default class Index extends Component {
                   {dataComments &&
                     dataComments.map((x, i) => {
                       return (
-                        <View
+                        <TouchableOpacity
+                        onPress={()=>{navigation.navigate('ReplyScreen',{...x,postID:data.uid+data.postID})}}
                           key={i}
                           style={
                             {marginLeft: 10, marginTop: 10}
-                            //   x.uid != auth().currentUser.uid ?
+                            //   x.uid != user.uid ?
                             // {} : {}
                           }>
                           <View
@@ -358,7 +379,60 @@ export default class Index extends Component {
                           <Text style={{...styles.textcolor, marginLeft: 40}}>
                             {x.comment}
                           </Text>
-                        </View>
+                          {dataCommentsChild &&
+            dataCommentsChild.map((y, i) => {console.log(y.commentID,x.commentID)
+              return (
+                <View
+                  key={i}
+                  style={
+                    {marginLeft: 10, marginTop: 10,borderLeftWidth:1,borderColor:'silver',}
+                    //   params.uid != user.uid ?
+                    // {} : {}
+                  }>
+                  <View
+                    style={{marginLeft:10,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      style={{
+                        width: 30,
+                        height: 30,
+                        borderRadius: 150 / 2,
+                        borderWidth: 1,
+                        borderColor: 'black',
+                        marginRight: 10,
+                      }}
+                      source={{
+                        uri: y.photoURL
+                          ? y.photoURL
+                          : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                      }}
+                    />
+                    <View
+                      style={
+                        data.uid == y.uid && {
+                          borderRadius: 5,
+                          paddingHorizontal: 8,
+                          backgroundColor: 'lightgreen',
+                        }
+                      }>
+                      <Text
+                        style={{
+                          ...styles.textcolor,
+                          fontWeight: 'bold',
+                        }}>
+                        {y.displayName}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text style={{...styles.textcolor, marginLeft: 50}}>
+                    {y.comment}
+                  </Text>
+                </View>
+              );
+            })}
+                        </TouchableOpacity>
                       );
                     })}
                 </View>
@@ -424,3 +498,10 @@ const styles = StyleSheet.create({
   },
   textcolor: {color: 'black'},
 });
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(mapStateToProps)(Index);

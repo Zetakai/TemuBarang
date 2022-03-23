@@ -13,6 +13,7 @@ import MessageScreen from './message';
 import NotifScreen from './notif';
 import ListMesaages from './listMSG'
 import NotifDetailsScreen from './notifDetails';
+import ReplyScreen from './reply'
 
 
 export {
@@ -31,4 +32,5 @@ export {
   NotifScreen,
   ListMesaages,
   NotifDetailsScreen,
+  ReplyScreen
 };
