@@ -15,7 +15,7 @@ import CText from '../../components/atoms/CText';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Close from 'react-native-vector-icons/AntDesign';
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import CButton from '../../components/atoms/CButton';
 
 export default class Index extends Component {
@@ -79,8 +79,8 @@ export default class Index extends Component {
       .then(this.setState({comment: ''}));
   };
   render() {
-    const {navigation}=this.props
-    const {data,comment, dataComments, modalVisible, modalVisibleComment} =
+    const {navigation} = this.props;
+    const {data, comment, dataComments, modalVisible, modalVisibleComment} =
       this.state;
 
     return (
@@ -149,10 +149,8 @@ export default class Index extends Component {
             <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
             <Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>
             <Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>
-            
+
             <Text style={styles.textcolor}>{data.uid}</Text>
-           
-            
           </View>
           <View
             style={{
@@ -160,29 +158,36 @@ export default class Index extends Component {
               flexDirection: 'row',
               backgroundColor: 'white',
               marginBottom: 3,
+              justifyContent: 'space-between',
             }}>
-            <View style={{marginRight: 10}}>
-    
-              <Image
-                style={styles.avatar}
-                source={{
-                  uri: data.ppURL
-                    ? data.ppURL
-                    : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
-                }}
+            <View style={{flexDirection: 'row'}}>
+              <View style={{marginRight: 10}}>
+                <Image
+                  style={styles.avatar}
+                  source={{
+                    uri: data.ppURL
+                      ? data.ppURL
+                      : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                  }}
+                />
+              </View>
+              <View style={{justifyContent: 'center'}}>
+                <Text style={styles.textcolor}>Diposting oleh</Text>
+                <Text style={{color: 'darkgreen'}}>{data.displayName}</Text>
+              </View>
+            </View>
+            <View>
+              <CButton
+                style={{marginBottom: 10, backgroundColor: '#AFA69F'}}
+                title={'HUBUNGI'}
+                onPress={() =>
+                  navigation.navigate('Messaging', {
+                    displayName: data.displayName,
+                    uid: data.uid,
+                    ppURL: data.ppURL,
+                  })
+                }
               />
-            </View>
-            <View style={{justifyContent: 'center'}}>
-              <Text style={styles.textcolor}>Posted by</Text>
-              <Text style={{color: 'darkgreen'}}>{data.displayName}</Text>
-            </View>
-            <View>        
-            <CButton
-            style={{marginBottom: 10,backgroundColor:'#AFA69F'}}
-            title={'HUBUNGI'}
-            onPress={()=>navigation.navigate('Messaging', {displayName:data.displayName,uid:data.uid,ppURL:data.ppURL})}
-          
-          />
             </View>
           </View>
           <TouchableOpacity
@@ -196,58 +201,56 @@ export default class Index extends Component {
                 padding: 5,
                 backgroundColor: 'white',
                 height: '100%',
-              }}>
-              <CText>Comments</CText>
+              }}><View style={{flexDirection:'row'}}>
+              <CText>Komentar</CText><CText>  {dataComments.length}</CText></View>
               <View
-                style={{borderWidth: 1, borderColor: 'black', borderRadius: 1}}>
+                style={{}}>
                 {dataComments &&
                   dataComments.map((x, i) => {
                     return (
                       <View
                         key={i}
-                        style={
-                          x.uid != auth().currentUser.uid
-                            ? {
-                                padding: 5,
-                                width: '50%',
-                                borderWidth: 1,
-                                borderColor: 'black',
-                                position: 'relative',
-                                left: 0,
-                                borderBottomEndRadius: 25,
-                                borderBottomStartRadius: 25,
-                                borderTopEndRadius: 25,
-                              }
-                            : {
-                                padding: 5,
-                                width: '50%',
-                                borderWidth: 1,
-                                borderColor: 'black',
-                                position: 'relative',
-                                left: '50%',
-                                borderBottomEndRadius: 25,
-                                borderBottomStartRadius: 25,
-                                borderTopStartRadius: 25,
-                              }
-                        }>
-                        <Text style={{...styles.textcolor, fontWeight: 'bold'}}>
-                          {x.displayName}
-                        </Text>
-                        <Text style={styles.textcolor}>{x.comment}</Text>
+                        style={{marginLeft:10,marginTop:10}
+                        //   x.uid != auth().currentUser.uid ? 
+                        // {} : {}
+                      }
+                        >
+                        <View style={{flexDirection: 'row',alignItems:'center'}}>
+                          <Image
+                            style={{width: 30,
+                              height: 30,
+                              borderRadius: 150 / 2,
+                              borderWidth: 1,
+                              borderColor: 'black',marginRight:10}}
+                            source={{
+                              uri:x.photoURL
+                                ?x.photoURL
+                                : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                            }}
+                          />
+                          <Text
+                            style={{...styles.textcolor, fontWeight: 'bold'}}>
+                            {x.displayName}
+                          </Text>
+                        </View>
+                        <Text style={{...styles.textcolor,marginLeft:40}}>{x.comment}</Text>
                       </View>
                     );
-                  })}
+                  }).slice(0,1)}
               </View>
             </View>
           </TouchableOpacity>
           <Modal
-            style={{position: 'absolute', bottom: 0}}
             animationType="slide"
             transparent={true}
             visible={modalVisibleComment}
             onRequestClose={() => {
               this._setModalVisibleComment(!modalVisibleComment);
-            }}>
+            }}><TouchableOpacity 
+            style={{backgroundColor:'transparent',height:'26%'}} 
+            activeOpacity={1} 
+            onPressOut={() => {this._setModalVisibleComment(false)}}
+          ></TouchableOpacity>
             <View
               style={{
                 height: '74%',
@@ -263,7 +266,7 @@ export default class Index extends Component {
                 style={{
                   borderTopRightRadius: 25,
                   borderTopLeftRadius: 25,
-                  backgroundColor: 'dimgrey',
+                  backgroundColor: 'black',
                   borderBottomColor: 'black',
                   borderBottomWidth: 1,
                   height: 65,
@@ -271,56 +274,47 @@ export default class Index extends Component {
                   justifyContent: 'center',
                 }}>
                 <Text
-                  style={{
-                    ...styles.textcolor,
+                  style={{color:'white',
                     fontWeight: 'bold',
                     fontSize: 20,
                   }}>
-                  Comments
+                  Komentar
                 </Text>
               </View>
               <ScrollView>
                 <View style={{marginTop: 10}}>
-                  {dataComments &&
-                    dataComments.map((x, i) => {
-                      return (
-                        <View
-                          key={i}
-                          style={
-                            x.uid != auth().currentUser.uid
-                              ? {
-                                  marginBottom: 5,
-                                  padding: 5,
-                                  width: '50%',
-                                  borderWidth: 1,
-                                  borderColor: 'black',
-                                  position: 'relative',
-                                  left: 0,
-                                  borderBottomEndRadius: 25,
-                                  borderBottomStartRadius: 25,
-                                  borderTopEndRadius: 25,
-                                }
-                              : {
-                                  marginBottom: 5,
-                                  padding: 5,
-                                  width: '50%',
-                                  borderWidth: 1,
-                                  borderColor: 'black',
-                                  position: 'relative',
-                                  left: '50%',
-                                  borderBottomEndRadius: 25,
-                                  borderBottomStartRadius: 25,
-                                  borderTopStartRadius: 25,
-                                }
-                          }>
+                {dataComments &&
+                  dataComments.map((x, i) => {
+                    return (
+                      <View
+                        key={i}
+                        style={{marginLeft:10,marginTop:10}
+                        //   x.uid != auth().currentUser.uid ? 
+                        // {} : {}
+                      }
+                        >
+                        <View style={{flexDirection: 'row',alignItems:'center'}}>
+                          <Image
+                            style={{width: 30,
+                              height: 30,
+                              borderRadius: 150 / 2,
+                              borderWidth: 1,
+                              borderColor: 'black',marginRight:10}}
+                            source={{
+                              uri:x.photoURL
+                                ?x.photoURL
+                                : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
+                            }}
+                          />
                           <Text
                             style={{...styles.textcolor, fontWeight: 'bold'}}>
                             {x.displayName}
                           </Text>
-                          <Text style={styles.textcolor}>{x.comment}</Text>
                         </View>
-                      );
-                    })}
+                        <Text style={{...styles.textcolor,marginLeft:40}}>{x.comment}</Text>
+                      </View>
+                    );
+                  })}
                 </View>
               </ScrollView>
               <TouchableOpacity
@@ -328,7 +322,7 @@ export default class Index extends Component {
                 <View>
                   <Close
                     name="closecircleo"
-                    color={'black'}
+                    color={'white'}
                     size={40}
                     onPress={() => {
                       this._setModalVisibleComment(!modalVisibleComment);
