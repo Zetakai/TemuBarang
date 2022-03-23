@@ -19,6 +19,7 @@ import {
   NotifScreen,
   ListMesaages,
   NotifDetailsScreen,
+  ReplyScreen
 
 } from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -163,6 +164,10 @@ export default class App extends Component {
             component={MessageScreen}
             options={{headerShown: false}}
           />
+           <Stack.Screen
+            name="ReplyScreen"
+            component={ReplyScreen}
+            />
         </Stack.Navigator>
       </NavigationContainer>
     );
