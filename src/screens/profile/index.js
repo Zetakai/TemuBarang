@@ -32,7 +32,8 @@ export class Profile extends Component {
       dataFound: [],
       refreshing: false,
       path: '',
-      confirm: null,code:''
+      confirm: null,
+      code: '',
     };
   }
   _verifyPhoneNumber = async () => {
@@ -65,7 +66,7 @@ export class Profile extends Component {
       photoURL,
       path,
     } = this.state;
-    const {user}=this.props
+    const {user} = this.props;
     if (path) {
       console.log(path);
       const photoID = new Date().valueOf();
@@ -85,7 +86,13 @@ export class Profile extends Component {
             : displayName,
           photoURL: url != null ? url : auth().currentUser.photoURL,
         };
-        await auth().currentUser.updateProfile(update).then(()=>user.photoURL && storage().refFromURL(user.photoURL).delete()).then(()=>this.props.update());
+        await auth()
+          .currentUser.updateProfile(update)
+          .then(
+            () => user.photoURL && storage().refFromURL(user.photoURL).delete(),
+          )
+          .then(() => this.props.update())
+          // .then(() => this._updatePostProfile());
       } catch (err) {
         console.log(err);
       }
@@ -96,12 +103,49 @@ export class Profile extends Component {
             ? auth().currentUser.displayName
             : displayName,
         };
-        await auth().currentUser.updateProfile(update).then(()=>user.photoURL && storage().refFromURL(user.photoURL).delete()).then(()=>this.props.update());
+        await auth()
+          .currentUser.updateProfile(update)
+          .then(
+            () => user.photoURL && storage().refFromURL(user.photoURL).delete(),
+          )
+          .then(() => this.props.update())
+          // .then(() => this._updatePostProfile());
       } catch (err) {
         console.log(err);
       }
     }
   };
+  // _updatePostProfile = async () => {
+  //   const {user} = this.props;
+  //   let Found = await firestore().collection('Found').doc(user.uid).get();
+  //   let Lost = await firestore().collection('Lost').doc(user.uid).get();
+  //   Found.posts &&
+  //     (await firestore()
+  //       .collection(`Found`)
+  //       .doc(user.uid)
+  //       .update({
+  //         posts: Found.map(x => {
+  //           return {
+  //             ...x,
+  //             ppURL: null,
+  //             displayName: user.displayName,
+  //           };
+  //         }),
+  //       }));
+  //   Lost.posts &&
+  //     (await firestore()
+  //       .collection(`Lost`)
+  //       .doc(user.uid)
+  //       .update({
+  //         posts: Lost.map(x => {
+  //           return {
+  //             ...x,
+  //             ppURL: null,
+  //             displayName: user.displayName,
+  //           };
+  //         }),
+  //       }));
+  // };
   _requestCameraPermission = async () => {
     try {
       const granted =
@@ -145,6 +189,7 @@ export class Profile extends Component {
   }
   async componentDidMount() {
     const {dataLost, dataFound, refreshing} = this.state;
+    const {user} = this.props;
     this.mounted = true;
     this.mounted == true &&
       (await firestore()
@@ -214,7 +259,7 @@ export class Profile extends Component {
           });
   };
   render() {
-    const {user}=this.props
+    const {user} = this.props;
     const {
       edit,
       editing,
@@ -296,7 +341,7 @@ export class Profile extends Component {
         </View>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-            <CText style={styles.textcolor} >Name</CText>
+            <CText style={styles.textcolor}>Name</CText>
             <View
               style={{
                 justifyContent: 'space-between',
@@ -314,9 +359,7 @@ export class Profile extends Component {
                   onChangeText={value => this.setState({displayName: value})}
                 />
               ) : (
-                <Text style={{color: 'dimgrey'}}>
-                  {user.displayName}
-                </Text>
+                <Text style={{color: 'dimgrey'}}>{user.displayName}</Text>
               )}
               {edit == true ? (
                 <TouchableOpacity

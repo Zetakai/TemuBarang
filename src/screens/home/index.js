@@ -52,6 +52,7 @@ export class HomeScreen extends Component {
         let sorted = cup.flat().sort((a, b) => b.time - a.time);
         this.mounted == true && this.setState({dataFound: sorted.slice(0, 3)});
       }})
+      this.props.update()
   }
   componentWillUnmount() {
     this.mounted = false;
@@ -316,7 +317,12 @@ const mapDispatchToProps = dispatch => {
         payload: data,
       });
     },
-    
+    update: data => {
+      dispatch({
+        type: 'UPDATE-USER',
+        payload: data,
+      });
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
