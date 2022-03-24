@@ -204,13 +204,15 @@ export class DetailsScreen extends Component {
               </View>
               <View style={{justifyContent: 'center'}}>
                 <Text style={styles.textcolor}>Diposting oleh</Text>
-                <Text style={{color: 'darkgreen'}}>{data.displayName}</Text>
+                <Text style={{fontWeight:'bold',color: 'black',borderRadius: 5,
+                                  paddingHorizontal: 8,
+                                  backgroundColor: 'lightgreen',}}>{data.displayName}</Text>
               </View>
             </View>
             {data.uid != user.uid && (
-              <View>
+              <View style={{justifyContent:'center'}}>
                 <CButton
-                  style={{marginBottom: 10, backgroundColor: '#AFA69F'}}
+                  style={{backgroundColor: '#AFA69F'}}
                   title={'HUBUNGI'}
                   onPress={() =>
                     navigation.navigate('Messaging', {

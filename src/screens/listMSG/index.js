@@ -37,7 +37,6 @@ import CCardChat from '../../components/CCardChat';
     const {navigation,user} = this.props;
     const {dataChat} = this.state;
     
-    console.log(dataChat)
     return (
       <View style={styles.pages}>
         <Text style={styles.text}>Messages</Text>
