@@ -84,11 +84,11 @@ export class HomeScreen extends Component {
     const {dataLost, dataFound, expandProfile, refreshing} = this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
-        <TouchableOpacity
+        <View
           onPress={() => this.setState({expandProfile: !expandProfile})}>
           <View style={styles.header}>
             <View>
-              <Text style={{fontSize: 25, fontWeight: 'bold', color: 'green'}}>
+              <Text style={{fontSize: 25, fontWeight: 'bold', color: '#43bdb5'}}>
                 TemuBarang
               </Text>
             </View>
@@ -101,7 +101,7 @@ export class HomeScreen extends Component {
                 style={{
                   fontSize: 10,
                   fontWeight: 'bold',
-                  color: 'green',
+                  color: '#43bdb5',
                   marginRight: 5,
                 }}>
                 Log out
@@ -117,20 +117,47 @@ export class HomeScreen extends Component {
               </TouchableOpacity>
             </View>
           </View>
-        </TouchableOpacity>
-        {expandProfile == true ? (
+        </View>
+        
           <View style={styles.expProfile}>
-            <Image
+            {/* <Image
               style={styles.avatar}
               source={{
                 uri: `${user.photoURL}`
               }}
-            />
-            <Text style={{alignSelf: 'center', paddingLeft: 10}}>
+            /> */}
+              <Text style={{marginLeft:15,fontSize:25,color:'white'}}>
+              Hello,
+            </Text>
+            <Text style={{marginLeft:15,fontSize:18,color:'white'}}>
               {user.displayName}
             </Text>
+            <View style={{flexDirection:'row',justifyContent:'center',marginVertical:10}}>
+              <TouchableOpacity style={{width: '45%', height: 150,backgroundColor:'white',borderRadius:5,justifyContent:'center',alignItems:'center'}} onPress={() => {
+              this.props.navigation.navigate('LostScreen')}}><View><View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-evenly'}}><Image
+              style={{width: 50,
+                height: 50,
+                borderRadius: 150 / 2,
+                borderWidth: 1,
+                borderColor: 'black',}}
+              source={{
+                uri: `https://cdn-icons-png.flaticon.com/512/1201/1201867.png?w=740&t=st=1648131697~exp=1648132297~hmac=d6bfe1e0bc84ce6f6d951f667c23e8bad006e6603955034d481ec6eedcb5f1e4`
+              }}
+            /><Text style={{color:'black'}}>Lost Items</Text></View><Text style={{color:'silver'}}>Umumkan barangmu yang hilang disini</Text></View></TouchableOpacity>
+              <TouchableOpacity style={{marginLeft:10,width: '45%', height: 150,backgroundColor:'white',borderRadius:5,justifyContent:'center',alignItems:'center'}} onPress={() => {
+              this.props.navigation.navigate('FoundScreen')}}><View><View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-evenly'}}><Image
+              style={{width: 50,
+                height: 50,
+                borderRadius: 150 / 2,
+                borderWidth: 1,
+                borderColor: 'black',}}
+              source={{
+                uri: `https://cdn4.iconfinder.com/data/icons/search-blue-line/64/168_search-magnifier-find-item-cargo-1024.png`
+              }}
+            /><Text style={{color:'black'}}>Found Items</Text></View><Text style={{color:'silver'}}>Temukan barangmu yang hilang disini</Text></View></TouchableOpacity>
+            </View>
           </View>
-        ) : null}
+        
 
         <View
           style={{
@@ -138,13 +165,9 @@ export class HomeScreen extends Component {
             marginTop: 15,
             justifyContent: 'space-evenly',
           }}>
-          <CTextInput
-            placeholder="cari barang"
-            style={{borderColor: 'silver', alignItems: 'center', width: '80%'}}
-          />
-          <CButton style={{borderColor: 'silver', width: 60}} />
+         
         </View>
-        <View
+        {/* <View
           style={{
             marginTop: 25,
             flexDirection: 'row',
@@ -166,9 +189,9 @@ export class HomeScreen extends Component {
           </TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
-        </View>
+        </View> */}
         <ScrollView
-          style={{marginTop: 25}}
+          style={{marginTop: 0}}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -275,8 +298,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   expProfile: {
-    backgroundColor: 'green',
-    flexDirection: 'row',
+    backgroundColor: '#43BDB5',
+    
   },
   avatar: {
     width: 100,
