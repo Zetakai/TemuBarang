@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
-import {colors, fonts} from '../../Utility';
-import {getHour} from '../../Utility/util/date'
+import {colors, fonts} from '../utils/Utility';
+import {getHour} from '../utils/Utility/util/date'
 
 export default class CBubbleText extends Component {
   render() {

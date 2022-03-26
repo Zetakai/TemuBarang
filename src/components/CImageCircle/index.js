@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {responsiveWidth} from '../../Utility';
+import {responsiveWidth} from '../utils/Utility';
 
 const CImageCircle = ({image, height, width, backgroundColor}) => {
   return (

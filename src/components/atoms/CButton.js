@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
 export default class CButton extends Component {
   render() {
@@ -11,6 +12,7 @@ export default class CButton extends Component {
           <Text style={styles.text}>
             {title}
           </Text>
+          <ActivityIndicator  />
           </TouchableOpacity>
       </View>
     );
@@ -27,6 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 150,
     height: 60,
+    flexDirection:'row'
   },
   text:{
     color:'#077B82'

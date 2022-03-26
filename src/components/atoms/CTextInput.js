@@ -24,7 +24,7 @@
 // });
 import React from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {colors, fonts} from '../../Utility';
+import {colors, fonts} from '../utils/Utility';
 
 const CTextInput = ({
   textarea,
