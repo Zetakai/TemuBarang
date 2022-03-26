@@ -159,6 +159,11 @@ export default class App extends Component {
             component={NotifDetailsScreen}
             options={{headerShown: false}}
           />
+          <Stack.Screen
+            name="ListMessage"
+            component={ListMessage}
+            options={{headerShown: false}}
+          />
            <Stack.Screen
             name="Messaging"
             component={MessageScreen}
