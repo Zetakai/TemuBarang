@@ -18,6 +18,7 @@ import {convertDateTime} from '../../components/utils/moment';
 import CGap from '../../components/CGap';
 import {convertDate} from '../../components/utils/Utility/util/date';
 import CBubbleText from '../../components/CBubbleText';
+import Delete from 'react-native-vector-icons/Feather';
 import {
   getHour,
   convertDayMonthOnly,
@@ -103,79 +104,27 @@ export class Message extends Component {
         {merge: true},
       );
   };
+  _deleteMessage = () => {
+    const {user,navigation} = this.props;
+    const {params} = this.props.route;
+    firestore()
+      .collection('Message')
+      .doc(user.uid)
+      .collection('chatWith')
+      .doc(params.uid)
+      .delete().then(()=>navigation.replace('TabNav'))
+  };
   componentWillUnmount() {
-    this.mounted = true;
+    this.mounted = false;
   }
 
   render() {
     const {navigation, dataUse, route, data, uid, user} = this.props;
     const {params} = this.props.route;
     // const {data,uid}=navigation.route.params
-    
+
     // const {image, name} = this.state.params;
     const {inputText, messages} = this.state;
-    // return (
-    //   <View style={styles.page}>
-    //     <View style={styles.topBar}>
-    //       <TouchableOpacity
-    //         style={{marginRight: 40}}
-    //         onPress={() => {
-    //           navigation.goBack();
-    //         }}>
-    //        <IconBack/>
-    //       </TouchableOpacity>
-
-    //       <Text style={styles.name}> {params.displayName}</Text>
-
-    //     </View>
-    //     <ScrollView style={{flex: 1}}>
-    //     {messages && (
-    //       messages.map((value, index) => {console.log(value);
-    //         return (
-    //           <TouchableOpacity  key={index}style={{borderColor:'black',borderWidth:1}}>
-    //             <Text style={{color:'black'}}>{value.sendBy==user.uid}</Text>
-    //             <Text style={{color:'black'}}>{value.text}</Text>
-    //             <Text style={{color:'black'}}>{convertDateTime(new Date(value.time.seconds*1000))}</Text>
-
-    //           </TouchableOpacity>
-    //         );
-    //       })
-    //     )}
-    //       {/* <View style={styles.leftChat}>
-    //         <Text>
-    //           Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem Lorem
-    //           ipsum dolor sit amet Lorem ipsum dolor Lor...
-    //         </Text>
-    //         <Text>14 November 2020</Text>
-    //       </View>
-    //       <View style={styles.rightChat}>
-    //         <Text>
-    //           Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem Lorem
-    //           ipsum dolor sit amet Lorem ipsum dolor Lor...
-    //         </Text>
-    //       </View> */}
-    //     </ScrollView>
-    //     <View
-    //       style={{
-    //         flexDirection: 'row',
-    //         justifyContent: 'space-between',
-    //         alignItems: 'center',
-    //       }}>
-    //       <CTextInput
-
-    //         value={inputText}
-    //         onChangeText={inputText => {
-    //           this.setState({inputText});
-    //         }}
-    //       />
-    //        <CButton onPress={() => this._send()}/>
-    //       <TouchableOpacity >
-
-    //       </TouchableOpacity>
-    //     </View>
-
-    //   </View>
-    // );
 
     return (
       <View style={styles.page}>
@@ -193,7 +142,14 @@ export class Message extends Component {
             width={responsiveWidth(40)}
           />
           <Text style={styles.name}>{params.displayName}</Text>
-        </View >
+          <TouchableOpacity
+            style={{position: 'absolute', top: 0, right: 0}}
+            onPress={() => {
+              this._deleteMessage();
+            }}>
+            <Delete color={'black'} name="trash-2" size={30} />
+          </TouchableOpacity>
+        </View>
         <ScrollView style={{flex: 1}}>
           {messages ? (
             messages.map((value, index, array) => {
@@ -205,16 +161,18 @@ export class Message extends Component {
                     isMe={value.sendBy == user.uid}
                     text={value.text}
                   />
-                  <Text style={{marginBottom: 20,color: 'silver',alignSelf:value.sendBy == user.uid ? 'flex-end' : 'flex-start'}}>
-                    {
-                      (timenow - value.time.seconds < 86400
-                        ? getHour(new Date(value.time.seconds * 1000))
-                        : timenow - value.time.seconds < 31536000
-                        ? convertDayMonthOnly(
-                            new Date(value.time.seconds * 1000),
-                          )
-                        : convertDateOnly(new Date(value.time.seconds * 1000)))
-                    }
+                  <Text
+                    style={{
+                      marginBottom: 20,
+                      color: 'silver',
+                      alignSelf:
+                        value.sendBy == user.uid ? 'flex-end' : 'flex-start',
+                    }}>
+                    {timenow - value.time.seconds < 86400
+                      ? getHour(new Date(value.time.seconds * 1000))
+                      : timenow - value.time.seconds < 31536000
+                      ? convertDayMonthOnly(new Date(value.time.seconds * 1000))
+                      : convertDateOnly(new Date(value.time.seconds * 1000))}
                   </Text>
                 </View>
               );
@@ -280,7 +238,8 @@ const styles = StyleSheet.create({
     borderBottomColor:colors.redmuda,
     padding:10
   },
-  name: {color:'black',
+  name: {
+    color: 'black',
     marginLeft: 15,
     fontFamily: fonts.primary.medium,
     fontSize: 17,

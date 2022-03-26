@@ -12,7 +12,7 @@ export default class CButton extends Component {
           <Text style={styles.text}>
             {title}
           </Text>
-          <ActivityIndicator  />
+          
           </TouchableOpacity>
       </View>
     );

@@ -19,6 +19,7 @@ import CCardChat from '../../components/CCardChat';
 
   componentDidMount() {
     const {data,user} = this.props;
+    this.mounted=true
     
     firestore()
     .collection(`Message`)
@@ -32,7 +33,7 @@ import CCardChat from '../../components/CCardChat';
       
       }}});
   }
-
+componentWillUnmount(){this.mounted=false}
   render() {
     const {navigation,user} = this.props;
     const {dataChat} = this.state;
