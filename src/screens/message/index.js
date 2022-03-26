@@ -13,10 +13,10 @@ import CButton from '../../components/atoms/CButton';
 import {IconBack} from '../../assets/iconback';
 import {connect} from 'react-redux';
 import CImageCircle from '../../components/CImageCircle';
-import {colors, fonts, responsiveWidth} from '../../Utility';
+import {colors, fonts, responsiveWidth} from '../../components/utils/Utility';
 import {convertDateTime} from '../../components/utils/moment';
 import CGap from '../../components/CGap';
-import {convertDate} from '../../Utility/util/date';
+import {convertDate} from '../../components/utils/Utility/util/date';
 import CBubbleText from '../../components/CBubbleText';
 import {
   getHour,

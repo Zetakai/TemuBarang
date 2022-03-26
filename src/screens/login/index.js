@@ -12,7 +12,7 @@ import {
   Image,
 } from 'react-native';
 import React, {Component} from 'react';
-import CTextInput from '../../components/atoms/CTextInput';
+import CInput from '../../components/atoms/Cinput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
 import Upvector from '../../assets/Vector9.svg'
@@ -96,7 +96,7 @@ export class LoginScreen extends Component {
         <View style={{flex:6/10, alignItems: 'center',justifyContent:'flex-start'}}>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'black'}}>Your Email</Text>
-            <CTextInput
+            <CInput
               style={{
                 ...styles.button,
                 borderColor: emailBox == '0' ? 'black' : 'red',
@@ -108,7 +108,7 @@ export class LoginScreen extends Component {
           </View>
           <View style={{marginBottom: 40}}>
             <Text style={{color: 'black'}}>Your Password</Text>
-            <CTextInput
+            <CInput
               style={{
                 ...styles.button,
                 borderColor: passwordBox == '0' ? 'black' : 'red',

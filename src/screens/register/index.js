@@ -12,7 +12,7 @@ import {
   Image,
 } from 'react-native';
 import React, {Component} from 'react';
-import CTextInput from '../../components/atoms/CTextInput';
+import CInput from '../../components/atoms/Cinput';
 import CButton from '../../components/atoms/CButton';
 import auth from '@react-native-firebase/auth';
 import Upvector from '../../assets/Vector9.svg'
@@ -74,7 +74,7 @@ export default class RegisterScreen extends Component {
         <View style={{flex:6/10, alignItems: 'center'}}>
           <View style={{marginBottom: 25}}>
             <Text style={{color: 'black'}}>Your Email</Text>
-            <CTextInput
+            <CInput
               style={{
                 borderColor: emailBox == '0' ? 'black' : 'red',
               }}
@@ -85,7 +85,7 @@ export default class RegisterScreen extends Component {
           </View>
           <View style={{marginBottom: 45}}>
             <Text style={{color: 'black'}}>Your Password</Text>
-            <CTextInput
+            <CInput
               style={{
                 borderColor: passwordBox == '0' ? 'black' : 'red',
               }}

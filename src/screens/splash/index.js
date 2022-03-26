@@ -4,6 +4,8 @@ import auth from '@react-native-firebase/auth';
 import Upvector from '../../../src/assets/Vector7.svg';
 import Upvector10 from '../../../src/assets/Vector8.svg';
 import Upvector11 from '../../../src/assets/test-00-01.svg';
+import {colors, fonts, responsiveWidth} from '../../components/utils/Utility';
+import { ActivityIndicator } from 'react-native-paper';
 export default class SplashScreen extends Component {
   componentDidMount() {
     if (auth().currentUser !== null) {
@@ -22,15 +24,18 @@ export default class SplashScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: 'white' }}>
-        <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', height: 200, width: 600 }} >
-          <Upvector />
+        <View style={{ flex: 1/2.3, justifyContent: 'center', alignContent: 'center', height: 200, width: 600 }} >
+          <Upvector
+           width={responsiveWidth(460)}
+           height={responsiveWidth(360)} />
         </View>
 
 
         <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center' }}>
-          <Upvector11 style={{ width: 150, height: 150, alignSelf: 'center', justifyContent: 'center' }} />
+          <Upvector11 style={{ width: 150, height: 150, alignSelf: 'center', justifyContent: 'center',alignContent:'center'}} />
           <View>
             <Text style={styles.logo} >Temu Barang</Text>
+            <ActivityIndicator size="large" color="#00ff00" />
           </View>
 
         </View>

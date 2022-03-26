@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CImageCircle from '../CImageCircle';
-import {colors, fonts} from '../../../src/Utility';
+import {colors, fonts} from '../utils/Utility';
 
 const CCardChat = ({onPress, name, message, image}) => {
   return (
