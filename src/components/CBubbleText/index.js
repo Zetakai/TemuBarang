@@ -12,7 +12,7 @@ export default class CBubbleText extends Component {
           styles.container,
           {
             alignSelf: isMe ? 'flex-end' : 'flex-start',
-            backgroundColor: isMe ? colors.lightBlue : colors.lightYellow,
+            backgroundColor: isMe ? colors.whites : colors.redmuda,
           },
         ]}>
         <Text style={styles.text}> {text} </Text>
@@ -25,9 +25,9 @@ export default class CBubbleText extends Component {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    elevation: 4,
-    
-    borderRadius: 10,
+    elevation: 3,
+    borderRadius:50,
+
     maxWidth: '80%',
   },
   text: {color:'black',
@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 10,
-    fontFamily: fonts.primary.light,
+    fontFamily: fonts.primary.Entypo,
   },
 });
