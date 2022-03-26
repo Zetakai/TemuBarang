@@ -10,4 +10,5 @@ export const colors = {
   lightYellow: '#FFF6E3',
   lightGreen: '#E6F2EA',
   orange: '#FBBB00',
+  redmuda:'#EC0567'
 };

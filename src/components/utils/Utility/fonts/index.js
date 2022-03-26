@@ -5,5 +5,6 @@ export const fonts = {
     medium: 'Poppins-Medium',
     regular: 'Poppins-Regular',
     semiBold: 'Poppins-SemiBold',
+    Entypo:'Entypo',
   },
 };

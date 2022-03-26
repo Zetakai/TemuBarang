@@ -193,13 +193,13 @@ export class Message extends Component {
             width={responsiveWidth(40)}
           />
           <Text style={styles.name}>{params.displayName}</Text>
-        </View>
+        </View >
         <ScrollView style={{flex: 1}}>
           {messages ? (
             messages.map((value, index, array) => {
               let timenow = Math.round(new Date().valueOf() / 1000);
               
-              return (
+              return ( 
                 <View key={index}>
                   <CBubbleText
                     isMe={value.sendBy == user.uid}
@@ -274,7 +274,11 @@ const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
     marginBottom: 15,
+    marginTop:1,
     alignItems: 'center',
+    borderBottomWidth:8,
+    borderBottomColor:colors.redmuda,
+    padding:10
   },
   name: {color:'black',
     marginLeft: 15,
