@@ -241,7 +241,7 @@ export default class UploadScreen extends Component {
     this.setState({modalVisible: visible});
   };
   _emptyFrom = () => {
-    this.setState({
+    this.mounted==true&&this.setState({
       insertedImage: null,
       selectedChoice: '',
       namabarang: '',
@@ -254,7 +254,8 @@ export default class UploadScreen extends Component {
       key: '',
     });
   };
-  componentDidMount() {}
+  componentDidMount() {this.mounted=true}
+  componentWillUnmount(){this.mounted=false}
   render() {
     const {
       insertedImage,

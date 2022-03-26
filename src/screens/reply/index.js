@@ -73,7 +73,7 @@ export class ReplyScreen extends Component {
         },
         {merge: true},
       )
-      .then(this.setState({comment: ''}));
+      .then(this.mounted==true&&this.setState({comment: ''}));
   };
   componentWillUnmount(){this.mounted=false}
   render() {

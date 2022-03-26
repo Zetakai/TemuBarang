@@ -99,7 +99,7 @@ export class DetailsScreen extends Component {
         },
         {merge: true},
       )
-      .then(this.setState({comment: ''}));
+      .then(this.mounted==true&&this.setState({comment: ''}));
   };
   render() {
     const {navigation, user} = this.props;

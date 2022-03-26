@@ -29,7 +29,7 @@ import CCardChat from '../../components/CCardChat';
       const data = res.docs.map(item => { if(item.data()){
         return {messages: item.data().messages, ...item.data().lastChat};}
       });
-      this.setState({dataChat: data})
+      this.mounted==true&&this.setState({dataChat: data})
       
       }}});
   }
