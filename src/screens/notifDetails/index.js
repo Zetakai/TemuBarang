@@ -45,10 +45,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   inboxTitle: {
+    color: 'black',
     fontSize: 20,
     fontWeight: 'bold',
   },
   inboxBody: {
+    color: 'black',
     fontSize: 15,
     paddingTop: 10,
   },

@@ -9,7 +9,7 @@ import {
   TextInput,
   Pressable,
   Image,
-  PermissionsAndroid,
+  PermissionsAndroid,ToastAndroid
 } from 'react-native';
 import React, {Component} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -160,7 +160,7 @@ export default class UploadScreen extends Component {
             )
             .then(this._emptyFrom());
     } finally {
-      alert('post berhasil dikirim');
+      ToastAndroid.show('post berhasil dikirim', ToastAndroid.SHORT);
     }
   };
   _postimg = async () => {
@@ -234,7 +234,7 @@ export default class UploadScreen extends Component {
             )
             .then(this._emptyFrom());
     } finally {
-      alert('post berhasil dikirim');
+      ToastAndroid.show('post berhasil dikirim', ToastAndroid.SHORT);
     }
   };
   _setModalVisible = visible => {
@@ -349,8 +349,7 @@ export default class UploadScreen extends Component {
                     value={namabarang}
                     onChangeText={value => this.setState({namabarang: value})}
                   />
-                  <AntDesign color={'black'} name="edit" size={24} />
-                </View>
+                  </View>
                 <CText style={styles.textcolor}>Kategori Barang</CText>
                 <View style={styles.profInput}>
                   <TextInput
@@ -360,8 +359,7 @@ export default class UploadScreen extends Component {
                     value={kategori}
                     onChangeText={value => this.setState({kategori: value})}
                   />
-                  <AntDesign color={'black'} name="edit" size={24} />
-                </View>
+                  </View>
                 <CText style={styles.textcolor}>
                   {selectedChoice == 'Found'
                     ? 'Lokasi ditemukan'
@@ -375,8 +373,7 @@ export default class UploadScreen extends Component {
                     value={lokasi}
                     onChangeText={value => this.setState({lokasi: value})}
                   />
-                  <AntDesign color={'black'} name="edit" size={24} />
-                </View>
+                  </View>
                 <CText style={styles.textcolor}>Kunci Pembeda</CText>
                 <View style={styles.profInput}>
                   <TextInput
@@ -386,8 +383,7 @@ export default class UploadScreen extends Component {
                     value={key}
                     onChangeText={value => this.setState({key: value})}
                   />
-                  <AntDesign color={'black'} name="edit" size={24} />
-                </View>
+                  </View>
                 {selectedChoice == 'Lost' ? (
                   <View>
                     <CText style={styles.textcolor}>
@@ -405,8 +401,7 @@ export default class UploadScreen extends Component {
                         value={hadiah}
                         onChangeText={value => this.setState({hadiah: value})}
                       />
-                      <AntDesign color={'black'} name="edit" size={24} />
-                    </View>
+                      </View>
                   </View>
                 ) : (
                   <View></View>
@@ -423,7 +418,7 @@ export default class UploadScreen extends Component {
                 title="post"
                 onPress={() => {
                   !selectedChoice || !namabarang
-                    ? alert('pilih kategori post dan isi nama barang')
+                    ? ToastAndroid.show('pilih kategori post dan isi nama barang', ToastAndroid.SHORT)
                     : path
                     ? this._postimg()
                     : this._postwoimg();

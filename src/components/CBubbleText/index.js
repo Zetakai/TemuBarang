@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     elevation: 4,
-    marginBottom: 20,
+    
     borderRadius: 10,
     maxWidth: '80%',
   },
-  text: {
+  text: {color:'black',
     fontFamily: fonts.primary.regular,
     fontSize: 15,
   },

@@ -32,7 +32,7 @@ export class LoginScreen extends Component {
   }
   _userLogin = async () => {
     if (this.state.email === '' || this.state.password === '') {
-      Alert.alert('Enter your email and password to log in');
+      ToastAndroid.show('Enter your email and password to log in', ToastAndroid.SHORT);
       this.setState({emailBox: '1', passwordBox: '1'});
     } else {
       await auth()
@@ -42,7 +42,7 @@ export class LoginScreen extends Component {
           console.log(res);
           if (auth().currentUser.emailVerified == true) {
             console.log('User logged-in successfully!');
-            Alert.alert(`You're Logged in`);
+            ToastAndroid.show(`You're Logged in`, ToastAndroid.SHORT);
             this.props.login(res.user)
             this.props.navigation.reset({
               index: 0,
@@ -50,8 +50,8 @@ export class LoginScreen extends Component {
                 { name: 'TabNav' }]})
           }
           if (auth().currentUser.emailVerified == false) {
-            Alert.alert(
-              'Your email has not been verified. Please check your email!',
+            ToastAndroid.show(
+              'Your email has not been verified. Please check your email!', ToastAndroid.SHORT
             );
           }
         })

@@ -1,5 +1,3 @@
-
-
 import React, {Component} from 'react';
 import {
   Text,
@@ -9,19 +7,22 @@ import {
   ScrollView,
 } from 'react-native';
 
-
-
 import firestore from '@react-native-firebase/firestore';
 import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
-import { IconBack } from '../../assets/iconback';
-import { connect } from 'react-redux';
+import {IconBack} from '../../assets/iconback';
+import {connect} from 'react-redux';
 import CImageCircle from '../../components/CImageCircle';
-import { colors,fonts,responsiveWidth } from '../../Utility';
-import { convertDateTime } from '../../components/utils/moment';
-import CGap from '../../components/CGap'
-import { convertDate} from '../../Utility/util/date';
+import {colors, fonts, responsiveWidth} from '../../Utility';
+import {convertDateTime} from '../../components/utils/moment';
+import CGap from '../../components/CGap';
+import {convertDate} from '../../Utility/util/date';
 import CBubbleText from '../../components/CBubbleText';
+import {
+  getHour,
+  convertDayMonthOnly,
+  convertDateOnly,
+} from '../../components/utils/moment';
 
 export class Message extends Component {
   constructor(props) {
@@ -36,15 +37,16 @@ export class Message extends Component {
 
   componentDidMount() {
     const {user} = this.props;
-     const {params} = this.props.route;
+    const {params} = this.props.route;
     const {target, messages} = this.state;
     firestore()
       .collection('Message')
       .doc(user.uid)
       .collection('chatWith')
       .doc(params.uid)
-      .onSnapshot(res => {if(res)if(res.data())
-        this.setState({messages: res.data()?.messages});
+      .onSnapshot(res => {
+        if (res)
+          if (res.data()) this.setState({messages: res.data()?.messages});
       });
   }
 
@@ -102,13 +104,14 @@ export class Message extends Component {
       );
   };
   componentWillUnmount() {
-    this.mounted = true;}
+    this.mounted = true;
+  }
 
   render() {
-    const {navigation, dataUse,route,data,uid,user} = this.props;
+    const {navigation, dataUse, route, data, uid, user} = this.props;
     const {params} = this.props.route;
     // const {data,uid}=navigation.route.params
-    console.log(params)
+    
     // const {image, name} = this.state.params;
     const {inputText, messages} = this.state;
     // return (
@@ -119,12 +122,11 @@ export class Message extends Component {
     //         onPress={() => {
     //           navigation.goBack();
     //         }}>
-    //        <IconBack/> 
+    //        <IconBack/>
     //       </TouchableOpacity>
 
-         
     //       <Text style={styles.name}> {params.displayName}</Text>
-          
+
     //     </View>
     //     <ScrollView style={{flex: 1}}>
     //     {messages && (
@@ -134,7 +136,7 @@ export class Message extends Component {
     //             <Text style={{color:'black'}}>{value.sendBy==user.uid}</Text>
     //             <Text style={{color:'black'}}>{value.text}</Text>
     //             <Text style={{color:'black'}}>{convertDateTime(new Date(value.time.seconds*1000))}</Text>
-              
+
     //           </TouchableOpacity>
     //         );
     //       })
@@ -160,7 +162,7 @@ export class Message extends Component {
     //         alignItems: 'center',
     //       }}>
     //       <CTextInput
-            
+
     //         value={inputText}
     //         onChangeText={inputText => {
     //           this.setState({inputText});
@@ -168,10 +170,10 @@ export class Message extends Component {
     //       />
     //        <CButton onPress={() => this._send()}/>
     //       <TouchableOpacity >
-          
+
     //       </TouchableOpacity>
     //     </View>
-        
+
     //   </View>
     // );
 
@@ -195,16 +197,25 @@ export class Message extends Component {
         <ScrollView style={{flex: 1}}>
           {messages ? (
             messages.map((value, index, array) => {
+              let timenow = Math.round(new Date().valueOf() / 1000);
               
               return (
                 <View key={index}>
-                  
-                  
                   <CBubbleText
                     isMe={value.sendBy == user.uid}
                     text={value.text}
-                    
                   />
+                  <Text style={{marginBottom: 20,color: 'silver',alignSelf:value.sendBy == user.uid ? 'flex-end' : 'flex-start'}}>
+                    {
+                      (timenow - value.time.seconds < 86400
+                        ? getHour(new Date(value.time.seconds * 1000))
+                        : timenow - value.time.seconds < 31536000
+                        ? convertDayMonthOnly(
+                            new Date(value.time.seconds * 1000),
+                          )
+                        : convertDateOnly(new Date(value.time.seconds * 1000)))
+                    }
+                  </Text>
                 </View>
               );
             })
@@ -251,11 +262,8 @@ export class Message extends Component {
         <CGap height={15} />
       </View>
     );
-
-
   }
 }
-
 
 const styles = StyleSheet.create({
   page: {
@@ -268,7 +276,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     alignItems: 'center',
   },
-  name: {
+  name: {color:'black',
     marginLeft: 15,
     fontFamily: fonts.primary.medium,
     fontSize: 17,

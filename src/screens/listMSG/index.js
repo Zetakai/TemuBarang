@@ -55,7 +55,7 @@ import CCardChat from '../../components/CCardChat';
               // </TouchableOpacity>
               <View key={index}>
                 <CCardChat
-                  name={value.name}
+                  name={value.displayName}
                   image={value.ppURL}
                   message={value.messages[value.messages.length - 1].text}
                   onPress={() => {

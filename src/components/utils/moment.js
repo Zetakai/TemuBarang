@@ -50,6 +50,13 @@ export const convertDateOnly = date => {
   let tahun = _tahun < 1000 ? _tahun + 1900 : _tahun;
   return `${tanggal} ${_bulan} ${tahun}`;
 };
+export const convertDayMonthOnly = date => {
+  let tanggal = date.getDate();
+  let _bulan = bulan[date.getMonth()];
+  let _tahun = date.getYear();
+  let tahun = _tahun < 1000 ? _tahun + 1900 : _tahun;
+  return `${tanggal} ${_bulan}`;
+};
 
 export const convertTimestamp = date => {
   let tanggal = date.getDate();

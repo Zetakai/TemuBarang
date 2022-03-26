@@ -12,15 +12,15 @@ const CCardChat = ({onPress, name, message, image}) => {
             image={
               image
                 ? {uri: image}
-                : require('../../assets/dummy.png')
+                : require('../../assets/userdummy.png')
             }
           />
         </View>
         <View style={styles.desc}>
           <View style={styles.nameDate}>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={[styles.name,{color:'black'}]}>{name}</Text>
           </View>
-          <Text style={styles.dateMessage}>{message}</Text>
+          <Text style={[styles.dateMessage,{color:'black'}]}>{message}</Text>
         </View>
       </TouchableOpacity>
     </View>
