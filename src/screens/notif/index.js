@@ -6,24 +6,48 @@ import {
   Image,
   ScrollView,
   Alert,
+  RefreshControl
 } from 'react-native';
 import React, {Component} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import messaging from '@react-native-firebase/messaging';
-import {convertDateTime} from '../../components/utils/moment';
+import {convertDateTime, timeSince} from '../../components/utils/moment';
 import {connect} from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
-class NotifScreen extends Component {
+export default class NotifScreen extends Component {
   constructor() {
     super();
     this.state = {
       data: [],
+      dataFire: [],
+      refreshing: false,
     };
   }
 
   componentDidMount() {
-    //   this._checkToken();
+    // this._checkToken();
+    this._retrieveData();
   }
+ 
+  _retrieveData = () => {
+  this.mounted = true;
+    firestore()
+      .collection('Notifications')
+      .doc(auth().currentUser.uid)
+      .onSnapshot(x => {
+        if (x) {
+          if (x.data() != null) {
+            let cup = x.data().notifs;
+            if (cup) {
+              let sorted = cup.flat();
+              this.mounted == true && this.setState({dataFire: sorted});
+            }
+          }
+        }
+      });
+    }
 
   _checkToken = async () => {
     const fcmToken = await messaging().getToken();
@@ -35,7 +59,7 @@ class NotifScreen extends Component {
   _deleteInbox = () => {
     Alert.alert(
       'Hapus semua?',
-      'Setelah Anda menghapus semua pesan, Anda tidak dapat membatalkannya.',
+      'Setelah Anda menghapus semua notifikasi, Anda tidak dapat membatalkannya.',
       [
         {
           text: 'HAPUS',
@@ -47,13 +71,34 @@ class NotifScreen extends Component {
   };
 
   _delete = () => {
-    this.props.delete();
+    const {refreshing} = this.state;
+    firestore()
+      .collection('Notifications')
+      .doc(auth().currentUser.uid)
+      .delete()
+      .then(() => {
+        console.log('Deleted!');
+      });
+      // this.setState({refreshing: !refreshing})
+  };
+
+  _onRefresh = () => {
+    // this.mounted == true && this.setState({refreshing: true});
+    // this._wait(10).then(() => {
+    //   this.mounted == true &&
+    //     this._retrieveData();
+    // });
+    this._retrieveData()
+  };
+
+  _wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
   };
 
   render() {
-    // const {inbox} = this.state;
-    const {navigation, notif} = this.props;
-    console.log(notif);
+    const {dataFire, refreshing} = this.state;
+    const {navigation} = this.props;
+    console.log(dataFire);
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
@@ -68,9 +113,15 @@ class NotifScreen extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView>
-          {notif.length > 0 ? (
-            notif.map((value, index) => {
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }>
+          {dataFire.length > 0 ? (
+            dataFire.map((value, index) => {
               return (
                 <TouchableOpacity
                   key={index}
@@ -84,7 +135,7 @@ class NotifScreen extends Component {
                       {value.body.substr(0, 100)}
                     </Text>
                     <Text style={styles.inboxDate}>
-                      {convertDateTime(new Date(value.sentTime))}
+                      {timeSince(value.sentTime)}yang lalu
                     </Text>
                   </View>
                   <View>
@@ -109,24 +160,6 @@ class NotifScreen extends Component {
     );
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    notif: state.notif,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    delete: () => {
-      dispatch({
-        type: 'DELETE-NOTIF',
-      });
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(NotifScreen);
 
 const styles = StyleSheet.create({
   header: {
