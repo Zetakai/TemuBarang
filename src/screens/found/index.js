@@ -71,7 +71,7 @@ export default class FoundScreen extends Component {
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
-      this.setState({renderData: newData, searchData: ""});
+      this.setState({renderData: newData});
       
     } else {
       this.setState({renderData: null});
@@ -155,7 +155,7 @@ export default class FoundScreen extends Component {
               color: 'black',
             }}
             value={searchData}
-            onChangeText={value => this.setState({searchData: value})}
+            onChangeText={value => {this._barangSearch(value);this.setState({searchData: value})}}
           />
           <CButton
             style={{borderColor: 'silver', width: 60}}

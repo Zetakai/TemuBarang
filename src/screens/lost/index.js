@@ -1,12 +1,14 @@
 import {
   Image,
   Text,
+  Modal,
   StyleSheet,
   View,
   RefreshControl,
   TouchableOpacity,
   ScrollView,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import React, {Component} from 'react';
 import auth from '@react-native-firebase/auth';
@@ -22,10 +24,14 @@ export default class LostScreen extends Component {
       dataFire: [],
       renderData: [],
       refreshing: false,
+      modalVisible: false,
     };
     let cari;
     let mounted;
   }
+  _setModalVisible = visible => {
+    this.setState({modalVisible: visible});
+  };
   async componentDidMount() {
     this.mounted = true;
 
@@ -57,8 +63,22 @@ export default class LostScreen extends Component {
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
-      this.setState({renderData: newData, searchData: ""});
-      
+      this.setState({renderData: newData});
+    } else {
+      this.setState({renderData: null});
+    }
+  };
+  _barangSearchkategori = text => {
+    const {dataFire} = this.state;
+    if (text) {
+      const newData = dataFire.filter(item => {
+        const itemData = item.kategori
+          ? item.kategori.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({renderData: newData});
     } else {
       this.setState({renderData: null});
     }
@@ -86,7 +106,8 @@ export default class LostScreen extends Component {
     });
   };
   render() {
-    const {dataFire, renderData, searchData, refreshing} = this.state;
+    const {dataFire, renderData, searchData, refreshing, modalVisible} =
+      this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
@@ -138,12 +159,16 @@ export default class LostScreen extends Component {
               color: 'black',
             }}
             value={searchData}
-            onChangeText={value => this.setState({searchData: value})}
+            onChangeText={value => {
+              this._barangSearch(value);
+              this.setState({searchData: value});
+              }}
+              
           />
           <CButton
             style={{borderColor: 'silver', width: 60}}
             onPress={() => {
-              this._barangSearch(searchData);
+              this._setModalVisible(!modalVisible);
             }}
           />
         </View>
@@ -265,6 +290,59 @@ export default class LostScreen extends Component {
                 })}
           </View>
         </ScrollView>
+        {/* <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            this._setModalVisible(!modalVisible);
+          }}>
+          <View
+            style={{
+              flex:1,flexDirection:'row',
+              backgroundColor: 'transparent',
+              
+            }}>
+              <TouchableOpacity
+          style={{backgroundColor: 'transparent',flex:1/2}}
+          activeOpacity={1}
+          onPressOut={() => {
+            this._setModalVisible(false);
+          }}></TouchableOpacity>      
+            <View style={{borderColor: 'black',
+              borderWidth: 1,flex:1/2}}>
+              {dataFire.map((value, index) => {if(value.kategori){
+                return (
+                  <View key={index}>
+                    <Text
+                      onPress={() => {
+                        this._barangSearchkategori(value.kategori);this._setModalVisible(false)
+                      }}
+                      style={{color: 'black'}}>
+                      {value.kategori}
+                    </Text>
+                  </View>
+                );}
+              })}
+            </View>
+          </View>
+        </Modal> */}
+        {modalVisible&&<View style={{backgroundColor:'white',position:'absolute',top:150,right:10,borderWidth:1,borderColor:'black'}}>
+
+        {dataFire.map((value, index) => {if(value.kategori){
+                return (
+                  <View key={index}>
+                    <Text
+                      onPress={() => {
+                        this._barangSearchkategori(value.kategori);this._setModalVisible(false)
+                      }}
+                      style={{color: 'silver'}}>
+                      {value.kategori}
+                    </Text>
+                  </View>
+                );}
+              })}
+              </View>}
       </View>
     );
   }
