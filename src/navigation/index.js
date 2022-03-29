@@ -23,6 +23,7 @@ import {
 
 } from '../screens/screens';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Upload from 'react-native-vector-icons/FontAwesome';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -58,9 +59,9 @@ export class TabNav extends Component {
         name="UploadScreen"
         component={UploadScreen}
         options={{
-          tabBarLabel: 'Upload',
+          tabBarLabel: false,
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="camera-enhance" color={color} size={26} />
+            <Upload name="plus" color={color} size={26} />
           )
         }}
       />
