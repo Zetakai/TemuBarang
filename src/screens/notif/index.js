@@ -12,6 +12,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import messaging from '@react-native-firebase/messaging';
 import {convertDateTime} from '../../components/utils/moment';
 import {connect} from 'react-redux';
+import firestore from'@react-native-firebase/firestore';
 
 class NotifScreen extends Component {
   constructor() {
@@ -21,10 +22,25 @@ class NotifScreen extends Component {
     };
   }
 
-  componentDidMount() {
-    //   this._checkToken();
-  }
-
+  async componentDidMount() {
+    const {user}=this.props
+    this.mounted=true
+    await firestore()
+        .collection('Notifications')
+        .doc(user.uid)
+        .onSnapshot(x => {
+          if (x) {
+            if (x.data() != null) {
+              let cup = x.data().notifs;
+              if (cup) {
+                let sorted = cup.flat().sort((a, b) => b.sentTime - a.sentTime);
+                this.mounted == true &&
+                  this.setState({data: sorted});console.log(cup)
+              }
+            }
+          }
+        })}
+componentWillUnmount(){this.mounted=false}
   _checkToken = async () => {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
@@ -51,9 +67,9 @@ class NotifScreen extends Component {
   };
 
   render() {
-    // const {inbox} = this.state;
+    const {data} = this.state;
     const {navigation, notif} = this.props;
-    console.log(notif);
+    console.log(data);
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
@@ -69,8 +85,8 @@ class NotifScreen extends Component {
           </View>
         </View>
         <ScrollView>
-          {notif.length > 0 ? (
-            notif.map((value, index) => {
+          {data.length > 0 ? (
+            data.map((value, index) => {
               return (
                 <TouchableOpacity
                   key={index}
@@ -112,7 +128,7 @@ class NotifScreen extends Component {
 
 const mapStateToProps = state => {
   return {
-    notif: state.notif,
+    notif: state.notif,user: state.user,
   };
 };
 
