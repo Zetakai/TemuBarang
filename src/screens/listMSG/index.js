@@ -15,6 +15,7 @@ import CCardChat from '../../components/CCardChat';
     this.state = {
       dataChat: [],
     };
+    let mounted;
   }
 
   componentDidMount() {

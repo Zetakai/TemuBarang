@@ -33,13 +33,14 @@ export class Message extends Component {
       target: this.props.route.params,
       messages: [],
       inputText: '',
-    };
+    };let mounted
   }
 
   componentDidMount() {
     const {user} = this.props;
     const {params} = this.props.route;
     const {target, messages} = this.state;
+    this.mounted=true
     firestore()
       .collection('Message')
       .doc(user.uid)
@@ -47,7 +48,7 @@ export class Message extends Component {
       .doc(params.uid)
       .onSnapshot(res => {
         if (res)
-          if (res.data()) this.setState({messages: res.data()?.messages});
+          if (res.data()) this.mounted==true&&this.setState({messages: res.data()?.messages});
       });
   }
 
@@ -143,7 +144,7 @@ export class Message extends Component {
           />
           <Text style={styles.name}>{params.displayName}</Text>
           <TouchableOpacity
-            style={{position: 'absolute', top: 0, right: 0}}
+            style={{position: 'absolute', top: 15, right: 0}}
             onPress={() => {
               this._deleteMessage();
             }}>
