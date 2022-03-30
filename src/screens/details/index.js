@@ -18,7 +18,7 @@ import Close from 'react-native-vector-icons/AntDesign';
 import {NavigationContainer} from '@react-navigation/native';
 import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
 export class DetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -210,18 +210,17 @@ export class DetailsScreen extends Component {
               </View>
             </View>
             {data.uid != user.uid && (
-              <View style={{justifyContent:'center'}}>
-                <CButton
-                  style={{backgroundColor: '#AFA69F'}}
-                  title={'HUBUNGI'}
-                  onPress={() =>
+              <View style={{justifyContent:'center', marginRight: 25}}>
+                <TouchableOpacity onPress={() =>
                     navigation.navigate('Messaging', {
                       displayName: data.displayName,
                       uid: data.uid,
                       ppURL: data.ppURL,
                     })
-                  }
-                />
+                  }>
+                <Ionicons name='md-chatbox-ellipses-outline' size={40} color='black'/>
+                {/* <Text style={{color: 'black'}}>Chat</Text> */}
+                </TouchableOpacity>
               </View>
             )}
           </View>
@@ -532,7 +531,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 63,
-    borderWidth: 3,
+    borderWidth: 1,
     borderColor: 'black',
     margin: 10,
   },
