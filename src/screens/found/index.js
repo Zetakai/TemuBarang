@@ -15,6 +15,7 @@ import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 export default class FoundScreen extends Component {
   constructor() {
     super();
@@ -108,11 +109,12 @@ export default class FoundScreen extends Component {
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
-          <View>
-            <Text style={{fontSize: 25, fontWeight: 'bold', color: 'green'}}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('HomeScreen')} style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+            <Ionicons name='arrow-back' size= {25} color='green'/>
+            <Text style={{fontSize: 25, fontWeight: 'bold', color: 'green',marginLeft:5}}>
               TemuBarang
             </Text>
-          </View>
+          </TouchableOpacity>
 
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text
