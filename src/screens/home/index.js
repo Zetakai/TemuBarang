@@ -209,7 +209,7 @@ export class HomeScreen extends Component {
                 return (x&&
                   <TouchableOpacity
                     key={i}
-                    style={{...styles.menu, backgroundColor: '#ccb494'}}
+                    style={{...styles.menu, backgroundColor: '#a4d2ac'}}
                     onPress={() =>
                       this.props.navigation.navigate('DetailsScreen', x)
                     }>
@@ -245,7 +245,7 @@ export class HomeScreen extends Component {
                 return (x&&
                   <TouchableOpacity
                     key={i}
-                    style={{...styles.menu, backgroundColor: '#a4d2ac'}}
+                    style={{...styles.menu, backgroundColor: '#ccb494'}}
                     onPress={() =>
                       this.props.navigation.navigate('DetailsScreen', x)
                     }>

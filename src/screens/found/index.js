@@ -14,6 +14,7 @@ import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 export default class FoundScreen extends Component {
   constructor() {
     super();
@@ -166,19 +167,30 @@ export default class FoundScreen extends Component {
         </View>
 
         <ScrollView
-          style={{marginTop: 25}}
+          style={{
+            marginTop: 10,
+            backgroundColor: 'green',
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+          }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
               onRefresh={this._onRefresh}
             />
           }>
+            <Text
+            style={{
+              color: 'black',
+              marginTop: 5,
+              alignSelf: 'center',
+              fontSize: 16,
+            }}>
+            Found Items
+          </Text>
           <View style={{marginBottom: 10}}>
-            <Text style={{color: 'grey', marginLeft: 25}}>
-              Recently Found Items
-            </Text>
           </View>
-          <View>
+          <View style={styles.itemMenu}>
             {this.mounted == true && renderData && renderData.length > 0
               ? renderData.map((x, i) => {
                   return (
@@ -188,13 +200,8 @@ export default class FoundScreen extends Component {
                           this.props.navigation.navigate('DetailsScreen', x)
                         }
                         key={i}
-                        style={{...styles.menu, borderWidth: 1}}>
-                        <View
-                          style={{
-                            marginBottom: 10,
-                            alignItems: 'stretch',
-                            flexDirection: 'row',
-                          }}>
+                        style={{...styles.item, borderWidth: 5}}>
+                        <View>
                           <View>
                             <Image
                               source={
@@ -203,28 +210,28 @@ export default class FoundScreen extends Component {
                                   : require('../../assets/galeryImages.jpeg')
                               }
                               style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 25,
+                                width: '100%',
+                                height: 200,
+                                borderTopLeftRadius: 15,
+                                borderTopRightRadius: 15,
                               }}
                             />
                           </View>
-                          <View style={{flexShrink: 1}}>
-                            <Text style={{color: 'black'}}>
-                              Nama Barang: {x.namabarang}
+                          <View style={{flexShrink: 1, margin: 5}}>
+                            <Text style={{color: 'black', fontSize: 16}}>
+                              {x.namabarang}
+                            </Text>
+                            <Text style={{color: 'black', fontSize: 14}}>
+                              {x.kategori}
                             </Text>
                             <Text style={{color: 'black'}}>
-                              Kategori Barang : {x.kategori}
+                              Hadiah : {x.hadiah}
                             </Text>
-                            <Text style={{color: 'black'}}>
-                              Lokasi ditemukan :{x.lokasi}
+                            <Text style={{color: 'grey', marginTop: 5}}>
+                              <EvilIcons name="location" size={16} />
+                              {x.lokasi}
                             </Text>
                           </View>
-                        </View>
-                        <View>
-                          <Text style={{color: 'black'}}>
-                            Hadiah baagi yang menemukan: {x.hadiah}
-                          </Text>
                         </View>
                       </TouchableOpacity>
                     )
@@ -238,13 +245,8 @@ export default class FoundScreen extends Component {
                           this.props.navigation.navigate('DetailsScreen', x)
                         }
                         key={i}
-                        style={{...styles.menu, borderWidth: 1}}>
-                        <View
-                          style={{
-                            marginBottom: 10,
-                            alignItems: 'stretch',
-                            flexDirection: 'row',
-                          }}>
+                        style={{...styles.item, borderWidth: 5}}>
+                        <View>
                           <View>
                             <Image
                               source={
@@ -253,28 +255,28 @@ export default class FoundScreen extends Component {
                                   : require('../../assets/galeryImages.jpeg')
                               }
                               style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 25,
+                                width: '100%',
+                                height: 200,
+                                borderTopLeftRadius: 15,
+                                borderTopRightRadius: 15,
                               }}
                             />
                           </View>
-                          <View style={{flexShrink: 1}}>
-                            <Text style={{color: 'black'}}>
-                              Nama Barang: {x.namabarang}
+                          <View style={{flexShrink: 1, margin: 5}}>
+                            <Text style={{color: 'black', fontSize: 16}}>
+                              {x.namabarang}
                             </Text>
-                            <Text style={{color: 'black'}}>
-                              Kategori Barang : {x.kategori}
+                            <Text style={{color: 'black', fontSize: 14}}>
+                              {x.kategori}
                             </Text>
-                            <Text style={{color: 'black'}}>
-                              Lokasi ditemukan :{x.lokasi}
+                            {/* <Text style={{color: 'black'}}>
+                              Hadiah : {x.hadiah}
+                            </Text> */}
+                            <Text style={{color: 'grey', marginTop: 10}}>
+                              <EvilIcons name="location" size={16} />
+                              {x.lokasi}
                             </Text>
                           </View>
-                        </View>
-                        <View>
-                          <Text style={{color: 'black'}}>
-                            Hadiah baagi yang menemukan: {x.hadiah}
-                          </Text>
                         </View>
                       </TouchableOpacity>
                     )
@@ -319,5 +321,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'silver',
     borderRadius: 10,
+  },
+  itemMenu: {
+    flex: 1,
+    // margin: 5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    // justifyContent: 'center',
+    alignContent: 'space-between',
+  },
+  item: {
+    width: '50%',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // marginBottom: 0,
+    backgroundColor: 'white',
+    borderColor: 'green',
+    borderRadius: 20,
   },
 });
