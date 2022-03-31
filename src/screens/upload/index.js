@@ -9,7 +9,8 @@ import {
   TextInput,
   Pressable,
   Image,
-  PermissionsAndroid,ToastAndroid
+  PermissionsAndroid,
+  ToastAndroid,
 } from 'react-native';
 import React, {Component} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -40,7 +41,7 @@ export default class UploadScreen extends Component {
       modalVisible: false,
     };
   }
-  _requestCameraPermission = async (x) => {
+  _requestCameraPermission = async x => {
     try {
       const granted =
         (await PermissionsAndroid.request(
@@ -51,7 +52,7 @@ export default class UploadScreen extends Component {
         ));
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can use the camera');
-        x=='c'?this._openCamera():this._openGallery()
+        x == 'c' ? this._openCamera() : this._openGallery();
         console.log('Camera permission denied');
       }
     } catch (err) {
@@ -66,7 +67,6 @@ export default class UploadScreen extends Component {
       cameraType: 'back',
       saveToPhotos: true,
     };
-;
     await launchCamera(options, async res => {
       if (res.didCancel) {
         console.log('user cancel');
@@ -97,7 +97,7 @@ export default class UploadScreen extends Component {
       }
     });
   };
- 
+
   _postwoimg = async () => {
     const {
       selectedChoice,
@@ -241,21 +241,26 @@ export default class UploadScreen extends Component {
     this.setState({modalVisible: visible});
   };
   _emptyFrom = () => {
-    this.mounted==true&&this.setState({
-      insertedImage: null,
-      selectedChoice: '',
-      namabarang: '',
-      photoURL: '',
-      kategori: '',
-      lokasi: '',
-      uid: '',
-      path: '',
-      hadiah: '',
-      key: '',
-    });
+    this.mounted == true &&
+      this.setState({
+        insertedImage: null,
+        selectedChoice: '',
+        namabarang: '',
+        photoURL: '',
+        kategori: '',
+        lokasi: '',
+        uid: '',
+        path: '',
+        hadiah: '',
+        key: '',
+      });
   };
-  componentDidMount() {this.mounted=true}
-  componentWillUnmount(){this.mounted=false}
+  componentDidMount() {
+    this.mounted = true;
+  }
+  componentWillUnmount() {
+    this.mounted = false;
+  }
   render() {
     const {
       insertedImage,
@@ -350,7 +355,7 @@ export default class UploadScreen extends Component {
                     value={namabarang}
                     onChangeText={value => this.setState({namabarang: value})}
                   />
-                  </View>
+                </View>
                 <CText style={styles.textcolor}>Kategori Barang</CText>
                 <View style={styles.profInput}>
                   <TextInput
@@ -360,7 +365,7 @@ export default class UploadScreen extends Component {
                     value={kategori}
                     onChangeText={value => this.setState({kategori: value})}
                   />
-                  </View>
+                </View>
                 <CText style={styles.textcolor}>
                   {selectedChoice == 'Found'
                     ? 'Lokasi ditemukan'
@@ -374,8 +379,8 @@ export default class UploadScreen extends Component {
                     value={lokasi}
                     onChangeText={value => this.setState({lokasi: value})}
                   />
-                  </View>
-                <CText style={styles.textcolor}>Kunci Pembeda</CText>
+                </View>
+                <CText style={styles.textcolor}>Ciri-ciri barang</CText>
                 <View style={styles.profInput}>
                   <TextInput
                     placeholderTextColor={'dimgrey'}
@@ -384,7 +389,7 @@ export default class UploadScreen extends Component {
                     value={key}
                     onChangeText={value => this.setState({key: value})}
                   />
-                  </View>
+                </View>
                 {selectedChoice == 'Lost' ? (
                   <View>
                     <CText style={styles.textcolor}>
@@ -402,7 +407,7 @@ export default class UploadScreen extends Component {
                         value={hadiah}
                         onChangeText={value => this.setState({hadiah: value})}
                       />
-                      </View>
+                    </View>
                   </View>
                 ) : (
                   <View></View>
@@ -419,7 +424,10 @@ export default class UploadScreen extends Component {
                 title="post"
                 onPress={() => {
                   !selectedChoice || !namabarang
-                    ? ToastAndroid.show('pilih kategori post dan isi nama barang', ToastAndroid.SHORT)
+                    ? ToastAndroid.show(
+                        'pilih kategori post dan isi nama barang',
+                        ToastAndroid.SHORT,
+                      )
                     : path
                     ? this._postimg()
                     : this._postwoimg();
@@ -461,10 +469,12 @@ export default class UploadScreen extends Component {
                   flexDirection: 'row',
                   justifyContent: 'space-evenly',
                 }}>
-                <TouchableOpacity onPress={()=>this._requestCameraPermission("c")}>
+                <TouchableOpacity
+                  onPress={() => this._requestCameraPermission('c')}>
                   <Text style={{color: 'black'}}>Camera</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>this._requestCameraPermission("g")}>
+                <TouchableOpacity
+                  onPress={() => this._requestCameraPermission('g')}>
                   <Text style={{color: 'black'}}>Galeri</Text>
                 </TouchableOpacity>
               </View>

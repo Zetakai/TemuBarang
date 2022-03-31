@@ -91,8 +91,8 @@ export class Profile extends Component {
           .then(
             () => user.photoURL && storage().refFromURL(user.photoURL).delete(),
           )
-          .then(() => this.props.update())
-          // .then(() => this._updatePostProfile());
+          .then(() => this.props.update());
+        // .then(() => this._updatePostProfile());
       } catch (err) {
         console.log(err);
       }
@@ -108,8 +108,8 @@ export class Profile extends Component {
           .then(
             () => user.photoURL && storage().refFromURL(user.photoURL).delete(),
           )
-          .then(() => this.props.update())
-          // .then(() => this._updatePostProfile());
+          .then(() => this.props.update());
+        // .then(() => this._updatePostProfile());
       } catch (err) {
         console.log(err);
       }
@@ -391,17 +391,28 @@ export class Profile extends Component {
                 {auth().currentUser.phoneNumber}
               </Text>
             </View>
-            <TouchableOpacity>
+            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+              <TouchableOpacity>
+                <Text
+                  onPress={() => {
+                    this.props.navigation.navigate('ForgotScreen', {
+                      passEmail: auth().currentUser.email,
+                    });
+                  }}
+                  style={{color: 'green'}}>
+                  Change Password
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
               <Text
                 onPress={() => {
-                  this.props.navigation.navigate('ForgotScreen', {
-                    passEmail: auth().currentUser.email,
-                  });
+                  this.props.navigation.navigate('VerifyScreen');
                 }}
                 style={{color: 'green'}}>
-                Change Password
+                Verify Phone Number
               </Text>
             </TouchableOpacity>
+            </View>
           </View>
           {this.mounted == true && dataHistory ? (
             <View>

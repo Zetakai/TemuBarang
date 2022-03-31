@@ -24,6 +24,7 @@ export default class FoundScreen extends Component {
       dataFire: [],
       renderData: [],
       refreshing: false,
+      modalVisible: false,
     };
     let cari;
     let mounted;
@@ -63,6 +64,9 @@ export default class FoundScreen extends Component {
   //     this.mounted == true && this.setState({renderData: dataFire});
   //   }
   // };
+  _setModalVisible = visible => {
+    this.setState({modalVisible: visible});
+  };
   _barangSearch = text => {
     const {dataFire} = this.state;
     if (text) {
@@ -74,7 +78,21 @@ export default class FoundScreen extends Component {
         return itemData.indexOf(textData) > -1;
       });
       this.setState({renderData: newData});
-      
+    } else {
+      this.setState({renderData: null});
+    }
+  };
+  _barangSearchkategori = text => {
+    const {dataFire} = this.state;
+    if (text) {
+      const newData = dataFire.filter(item => {
+        const itemData = item.kategori
+          ? item.kategori.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({renderData: newData});
     } else {
       this.setState({renderData: null});
     }
@@ -105,13 +123,26 @@ export default class FoundScreen extends Component {
     });
   };
   render() {
-    const {dataFire, renderData, searchData, refreshing} = this.state;
+    const {dataFire, renderData, searchData, refreshing, modalVisible} =
+      this.state;
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('HomeScreen')} style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-            <Ionicons name='arrow-back' size= {25} color='green'/>
-            <Text style={{fontSize: 25, fontWeight: 'bold', color: 'green',marginLeft:5}}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('TabNav')}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Ionicons name="arrow-back" size={25} color="green" />
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: 'bold',
+                color: 'green',
+                marginLeft: 5,
+              }}>
               TemuBarang
             </Text>
           </TouchableOpacity>
@@ -158,14 +189,15 @@ export default class FoundScreen extends Component {
               color: 'black',
             }}
             value={searchData}
-            onChangeText={value => {this._barangSearch(value);this.setState({searchData: value})}}
-          />
-          <CButton
-            style={{borderColor: 'silver', width: 60}}
-            onPress={() => {
-              this._barangSearch(searchData);
+            onChangeText={value => {
+              this._barangSearch(value);
+              this.setState({searchData: value});
             }}
           />
+          
+          <Ionicons name="options" size={40} color="silver" onPress={() => {
+              this._setModalVisible(!modalVisible);
+            }}/>
         </View>
 
         <ScrollView
@@ -181,7 +213,7 @@ export default class FoundScreen extends Component {
               onRefresh={this._onRefresh}
             />
           }>
-            <Text
+          <Text
             style={{
               color: 'black',
               marginTop: 5,
@@ -190,8 +222,7 @@ export default class FoundScreen extends Component {
             }}>
             Found Items
           </Text>
-          <View style={{marginBottom: 10}}>
-          </View>
+          <View style={{marginBottom: 10}}></View>
           <View style={styles.itemMenu}>
             {this.mounted == true && renderData && renderData.length > 0
               ? renderData.map((x, i) => {
@@ -286,6 +317,34 @@ export default class FoundScreen extends Component {
                 })}
           </View>
         </ScrollView>
+        {modalVisible && (
+          <View
+            style={{
+              backgroundColor: 'white',
+              position: 'absolute',
+              top: 150,
+              right: 10,
+              borderWidth: 1,
+              borderColor: 'black',
+            }}>
+            {dataFire.map((value, index) => {
+              if (value.kategori) {
+                return (
+                  <View key={index}>
+                    <Text
+                      onPress={() => {
+                        this._barangSearchkategori(value.kategori);
+                        this._setModalVisible(false);
+                      }}
+                      style={{color: 'silver'}}>
+                      {value.kategori}
+                    </Text>
+                  </View>
+                );
+              }
+            })}
+          </View>
+        )}
       </View>
     );
   }

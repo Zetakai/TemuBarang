@@ -17,7 +17,7 @@ import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 export default class LostScreen extends Component {
   constructor() {
     super();
@@ -113,9 +113,21 @@ export default class LostScreen extends Component {
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <View style={styles.header}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('HomeScreen')} style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-            <Ionicons name='arrow-back' size= {25} color='green'/>
-            <Text style={{fontSize: 25, fontWeight: 'bold', color: 'green',marginLeft:5}}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('TabNav')}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Ionicons name="arrow-back" size={25} color="green" />
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: 'bold',
+                color: 'green',
+                marginLeft: 5,
+              }}>
               TemuBarang
             </Text>
           </TouchableOpacity>
@@ -167,8 +179,10 @@ export default class LostScreen extends Component {
               this.setState({searchData: value});
             }}
           />
-          <CButton
-            style={{borderColor: 'silver', width: 60}}
+          <Ionicons
+            name="options"
+            size={40}
+            color="silver"
             onPress={() => {
               this._setModalVisible(!modalVisible);
             }}
@@ -196,8 +210,7 @@ export default class LostScreen extends Component {
             }}>
             Lost Items
           </Text>
-          <View style={{marginBottom: 10}}>
-          </View>
+          <View style={{marginBottom: 10}}></View>
           <View style={styles.itemMenu}>
             {this.mounted == true && renderData && renderData.length > 0
               ? renderData.map((x, i) => {
