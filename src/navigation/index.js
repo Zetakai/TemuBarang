@@ -153,8 +153,7 @@ export default class App extends Component {
           <Stack.Screen
             name="DetailsScreen"
             component={DetailsScreen}
-            optio
-            ns={{headerShown: false}}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="NotifDetailsScreen"
