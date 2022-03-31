@@ -258,6 +258,16 @@ export class Profile extends Component {
             console.error('Error removing document: ', error);
           });
   };
+
+  _userLogout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        this.props.navigation.replace('OnboardScreen');
+      }).then(this.props.logout());
+  };
+
   render() {
     const {user} = this.props;
     const {
@@ -279,6 +289,18 @@ export class Profile extends Component {
     return (
       <View style={styles.container}>
         {edit == false ? (
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <TouchableOpacity
+            onPress={() => this._userLogout()}>
+            <Text
+              style={{
+                color: 'white',
+                paddingTop: 20,
+                paddingLeft: 20,
+              }}>
+              Log Out
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.setState({edit: !edit, editing: false})}>
             <Text
@@ -291,6 +313,7 @@ export class Profile extends Component {
               Edit Profile
             </Text>
           </TouchableOpacity>
+          </View>
         ) : (
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TouchableOpacity

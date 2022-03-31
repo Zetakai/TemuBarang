@@ -146,30 +146,6 @@ export default class FoundScreen extends Component {
               TemuBarang
             </Text>
           </TouchableOpacity>
-
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text
-              onPress={() => {
-                this._userLogout();
-              }}
-              style={{
-                fontSize: 10,
-                fontWeight: 'bold',
-                color: 'green',
-                marginRight: 5,
-              }}>
-              Log out
-            </Text>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('ProfileScreen')}>
-              <View>
-                <Image
-                  style={styles.circleImage}
-                  source={{uri: `${auth().currentUser.photoURL}`}}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
         </View>
         <View
           style={{

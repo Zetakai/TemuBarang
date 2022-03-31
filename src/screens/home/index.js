@@ -24,6 +24,7 @@ export class HomeScreen extends Component {
     };
     let mounted;
   }
+
   async componentDidMount() {
     console.log(auth().currentUser)
     this.mounted = true;
@@ -54,20 +55,15 @@ export class HomeScreen extends Component {
       }})
       this.props.update()
   }
+  
   componentWillUnmount() {
     this.mounted = false;
   }
-  _userLogout = () => {
-    auth()
-      .signOut()
-      .then(() => {
-        console.log('User signed out!');
-        this.props.navigation.replace('OnboardScreen');
-      }).then(this.props.logout());
-  };
+ 
   _wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
+
   _onRefresh = () => {
     this.mounted == true && this.setState({refreshing: true});
     this._wait(1000).then(() => {
@@ -79,6 +75,7 @@ export class HomeScreen extends Component {
         });
     });
   };
+
   render() {
     const {user}=this.props
     const {dataLost, dataFound, expandProfile, refreshing} = this.state;
@@ -94,18 +91,6 @@ export class HomeScreen extends Component {
             </View>
 
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text
-                onPress={() => {
-                  this._userLogout();
-                }}
-                style={{
-                  fontSize: 10,
-                  fontWeight: 'bold',
-                  color: '#43bdb5',
-                  marginRight: 5,
-                }}>
-                Log out
-              </Text>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('ProfileScreen')}>
                 <View>

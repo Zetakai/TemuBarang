@@ -18,7 +18,8 @@ import Close from 'react-native-vector-icons/AntDesign';
 import {NavigationContainer} from '@react-navigation/native';
 import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 export class DetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -168,6 +169,17 @@ export class DetailsScreen extends Component {
                 style={{width: '100%', height: 200}}
               />
             </TouchableOpacity>
+            <TouchableOpacity
+                    style={{position: 'absolute', top: 10, left: 10}}>
+                    <View>
+                      <Feather
+                        name="arrow-left-circle"
+                        color={'green'}
+                        size={40}
+                        onPress={() => this.props.navigation.goBack()}
+                      />
+                    </View>
+                  </TouchableOpacity>
           </View>
           <View style={{padding: 5, backgroundColor: 'white'}}>
             <CText style={{fontSize: 30, fontWeight: 'bold'}}>
