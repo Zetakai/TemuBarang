@@ -14,6 +14,10 @@ import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {colors, fonts, responsiveWidth} from '../../components/utils/Utility';
+import CGap from '../../components/CGap';
+import CText from '../../components/atoms/CText';
 export class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -216,6 +220,26 @@ export class HomeScreen extends Component {
                               <EvilIcons name="location" size={16} />
                               {x.lokasi}
                             </Text>
+                            
+                           <CGap height={60}/>
+                           <CText style={styles.element}>BAGIKAN 
+                           <CGap width={2}/>
+
+                           <FontAwesome5 name="share" color={colors.white}  size={20} />
+                           <CGap width={2}/>
+                           <Text style={{color:'white'}}>:
+                           <CGap width={5}/>
+                           <FontAwesome5  name="facebook" color={colors.primary}  size={20} />
+                           <CGap width={5}/>
+                           <FontAwesome5 name="whatsapp" color={'green'}  size={20} />
+                           <CGap width={5}/>
+                           <FontAwesome5 name="link" color={colors.gray}  size={20} />
+                           </Text>
+
+
+                           </CText>
+
+
                       </View>
                   </TouchableOpacity>
                 );
@@ -254,6 +278,23 @@ export class HomeScreen extends Component {
                               <EvilIcons name="location" size={16} />
                               {x.lokasi}
                             </Text>
+                            <CGap height={60}/>
+                           <CText style={styles.element}>BAGIKAN 
+                           <CGap width={2}/>
+
+                           <FontAwesome5 name="share" color={colors.white}  size={20} />
+                           <CGap width={2}/>
+                           <Text style={{color:'white'}}>:
+                           <CGap width={5}/>
+                           <FontAwesome5  name="facebook" color={colors.primary}  size={20} />
+                           <CGap width={5}/>
+                           <FontAwesome5 name="whatsapp" color={'green'}  size={20} />
+                           <CGap width={5}/>
+                           <FontAwesome5 name="link" color={colors.gray}  size={20} />
+                           </Text>
+
+
+                           </CText>
                       </View>
                   </TouchableOpacity>
                 );
@@ -315,6 +356,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  element:{
+    backgroundColor:colors.black ,
+    color:colors.redmuda, 
+    fontFamily: fonts.primary.Entypo,
+    borderBottomColor:colors.black,
+    borderRadius:10,
+    padding:'5%',
+    marginRight:10,
+    
+    flexDirection:'row',
+    shadowColor:'#000',
+shadowOffset: {
+	width: 0,
+	height: 4,
+},
+shadowOpacity: 0.32,
+shadowRadius: 5.46,
+
+elevation: 25,
+  }
 });
 
 const mapStateToProps = state => {
