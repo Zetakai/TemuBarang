@@ -144,14 +144,14 @@ export class Message extends Component {
           />
           <Text style={styles.name}>{params.displayName}</Text>
           <TouchableOpacity
-            style={{position: 'absolute', top: 15, right: 0}}
+            style={{position: 'absolute', top: 10, right: 20}}
             onPress={() => {
               this._deleteMessage();
             }}>
             <Delete color={'black'} name="trash-2" size={30} />
           </TouchableOpacity>
         </View>
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{flex: 1,paddingHorizontal:17}}>
           {messages ? (
             messages.map((value, index, array) => {
               let timenow = Math.round(new Date().valueOf() / 1000);
@@ -227,7 +227,7 @@ export class Message extends Component {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    paddingHorizontal: 17,
+    
     paddingTop: 30,
   },
   topBar: {
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginTop:1,
     alignItems: 'center',
-    borderBottomWidth:8,
+    borderBottomWidth:2,
     borderBottomColor:colors.redmuda,
     padding:10
   },

@@ -13,6 +13,7 @@ import CTextInput from '../../components/atoms/CTextInput';
 import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 export class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -191,7 +192,7 @@ export class HomeScreen extends Component {
           <TouchableOpacity style={styles.buttonMenu}></TouchableOpacity>
         </View> */}
         <ScrollView
-          style={{marginTop: 0}}
+          style={{marginTop: -15}}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -200,7 +201,7 @@ export class HomeScreen extends Component {
           }>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'black', marginLeft: 25}}>
-              BARU-BARU INI DITEMUKAN???
+              Barang Temuan Terbaru
             </Text>
             <ScrollView
               horizontal={true}
@@ -224,10 +225,12 @@ export class HomeScreen extends Component {
                         />
                       </View>
                       <View style={{justifyContent: 'center', flex: 1}}>
-                      <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 5}}>{x.namabarang}</Text>
-                        <Text>Kategori :{x.kategori}</Text>
-                        <Text>Jenis Kendaraan :</Text>
-                        <Text>Tahun : </Text>
+                      <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 5,color:'black'}}>{x.namabarang}</Text>
+                        <Text style={{color:'black'}}>Kategori :{x.kategori}</Text>
+                        <Text style={{color: 'white', marginTop: 5}}>
+                              <EvilIcons name="location" size={16} />
+                              {x.lokasi}
+                            </Text>
                       </View>
                   </TouchableOpacity>
                 );
@@ -236,7 +239,7 @@ export class HomeScreen extends Component {
           </View>
           <View style={{marginBottom: 20}}>
             <Text style={{color: 'grey', marginLeft: 25}}>
-              BARU-BARU INI HILANG!!!
+            Barang Hilang Terbaru
             </Text>
             <ScrollView
               horizontal={true}
@@ -260,10 +263,12 @@ export class HomeScreen extends Component {
                         />
                       </View>
                       <View style={{justifyContent: 'center', flex: 1}}>
-                        <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 5}}>{x.namabarang}</Text>
-                        <Text>Kategori :</Text>
-                        <Text>Jenis Kendaraan :</Text>
-                        <Text>Tahun : </Text>
+                        <Text style={{alignSelf: 'center', fontWeight: 'bold', paddingBottom: 5,color:'black'}}>{x.namabarang}</Text>
+                        <Text style={{color:'black'}}>Kategori :{x.kategori}</Text>
+                        <Text style={{color: 'white', marginTop: 5}}>
+                              <EvilIcons name="location" size={16} />
+                              {x.lokasi}
+                            </Text>
                       </View>
                   </TouchableOpacity>
                 );
