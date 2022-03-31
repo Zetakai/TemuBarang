@@ -7,4 +7,8 @@ export const fonts = {
     semiBold: 'Poppins-SemiBold',
     Entypo:'Entypo',
   },
+  scondary:{
+    ant:'AntDesign',
+    
+  }
 };
