@@ -97,38 +97,64 @@ export default class UploadScreen extends Component {
       }
     });
   };
-  _onPostStatsLost=async()=> {
+  _onPostStatsLost = async () => {
     // Create a reference to the post
-    const postReference = firestore().collection('Stats').doc(`${auth().currentUser.uid}`);
-  
-    return firestore().runTransaction(async transaction => {
-      // Get post data first
-      const postSnapshot = await transaction.get(postReference);
-  
-      if (!postSnapshot.exists) {
-        throw 'Post does not exist!';
-      }
-      !postSnapshot.data().lostposts?transaction.update(postReference, {
-        lostposts: 1,
-      }):transaction.update(postReference, {
-      lostposts: postSnapshot.data().lostposts + 1,
-    })})}
-      _onPostStatsFound=async()=> {
-        // Create a reference to the post
-        const postReference = firestore().collection('Stats').doc(`${auth().currentUser.uid}`);
-      
-        return firestore().runTransaction(async transaction => {
-          // Get post data first
-          const postSnapshot = await transaction.get(postReference);
-      
-          if (!postSnapshot.exists) {
-            throw 'Post does not exist!';
-          }
-          !postSnapshot.data().foundposts?transaction.update(postReference, {
-            foundposts: 1,
-          }):transaction.update(postReference, {
-          foundposts: postSnapshot.data().foundposts + 1,
-        })})}
+    const postReference = firestore()
+      .collection('Stats')
+      .doc(`${auth().currentUser.uid}`);
+
+    return firestore()
+      .runTransaction(async transaction => {
+        // Get post data first
+        const postSnapshot = await transaction.get(postReference);
+        const check = postSnapshot.data();
+        const lost = check && check.lostposts;
+        {
+          !lost
+            ? transaction.update(postReference, {
+                lostposts: 1,
+              })
+            : transaction.update(postReference, {
+                lostposts: postSnapshot.data().lostposts + 1,
+              });
+        }
+      })
+      .catch(e => {
+        console.log('document hasnt been made. making one');
+        postReference.set({
+          lostposts: 1,
+        });
+      });
+  };
+  _onPostStatsFound = async () => {
+    // Create a reference to the post
+    const postReference = firestore()
+      .collection('Stats')
+      .doc(`${auth().currentUser.uid}`);
+
+    return firestore()
+      .runTransaction(async transaction => {
+        // Get post data first
+        const postSnapshot = await transaction.get(postReference);
+        const check = postSnapshot.data();
+        const found = check && check.foundposts;
+        {
+          !found
+            ? transaction.update(postReference, {
+                foundposts: 1,
+              })
+            : transaction.update(postReference, {
+                foundposts: postSnapshot.data().foundposts + 1,
+              });
+        }
+      })
+      .catch(e => {
+        console.log('document hasnt been made. making one');
+        postReference.set({
+          foundposts: 1,
+        });
+      });
+  };
   _postwoimg = async () => {
     const {
       selectedChoice,
@@ -165,7 +191,8 @@ export default class UploadScreen extends Component {
                 }),
               },
               {merge: true},
-            ).then(this._onPostStatsFound())
+            )
+            .then(this._onPostStatsFound())
             .then(this._emptyFrom())
         : await firestore()
             .collection(this.state.selectedChoice)
@@ -188,7 +215,8 @@ export default class UploadScreen extends Component {
                 }),
               },
               {merge: true},
-            ).then(this._onPostStatsLost())
+            )
+            .then(this._onPostStatsLost())
             .then(this._emptyFrom());
     } finally {
       ToastAndroid.show('post berhasil dikirim', ToastAndroid.SHORT);
@@ -239,7 +267,8 @@ export default class UploadScreen extends Component {
                 }),
               },
               {merge: true},
-            ).then(this._onPostStatsFound())
+            )
+            .then(this._onPostStatsFound())
             .then(this._emptyFrom())
         : await firestore()
             .collection(this.state.selectedChoice)
@@ -262,7 +291,8 @@ export default class UploadScreen extends Component {
                 }),
               },
               {merge: true},
-            ).then(this._onPostStatsLost())
+            )
+            .then(this._onPostStatsLost())
             .then(this._emptyFrom());
     } finally {
       ToastAndroid.show('post berhasil dikirim', ToastAndroid.SHORT);

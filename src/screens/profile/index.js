@@ -265,9 +265,23 @@ export class Profile extends Component {
       .then(() => {
         console.log('User signed out!');
         this.props.navigation.replace('OnboardScreen');
-      }).then(this.props.logout());
+      })
+      .then(this.props.logout());
   };
-
+  _getStats = async () => {
+    firestore()
+      .collection('Stats')
+      .doc(auth().currentUser.uid)
+      .get()
+      .then(x =>
+        alert(`lostpost :${x.data().lostposts}
+  foundpost :${x.data().foundposts ? x.data().foundposts : 0}`),
+      )
+      .catch(e =>
+        alert(`lostpost:0
+  foundpost:0`),
+      );
+  };
   render() {
     const {user} = this.props;
     const {
@@ -290,29 +304,28 @@ export class Profile extends Component {
       <View style={styles.container}>
         {edit == false ? (
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <TouchableOpacity onPress={() => this._userLogout()}>
+              <Text
+                style={{
+                  color: 'white',
+                  paddingTop: 20,
+                  paddingLeft: 20,
+                }}>
+                Log Out
+              </Text>
+            </TouchableOpacity>
             <TouchableOpacity
-            onPress={() => this._userLogout()}>
-            <Text
-              style={{
-                color: 'white',
-                paddingTop: 20,
-                paddingLeft: 20,
-              }}>
-              Log Out
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.setState({edit: !edit, editing: false})}>
-            <Text
-              style={{
-                color: 'white',
-                alignSelf: 'flex-end',
-                paddingTop: 20,
-                paddingRight: 20,
-              }}>
-              Edit Profile
-            </Text>
-          </TouchableOpacity>
+              onPress={() => this.setState({edit: !edit, editing: false})}>
+              <Text
+                style={{
+                  color: 'white',
+                  alignSelf: 'flex-end',
+                  paddingTop: 20,
+                  paddingRight: 20,
+                }}>
+                Edit Profile
+              </Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -362,7 +375,22 @@ export class Profile extends Component {
             />
           </TouchableOpacity>
         </View>
-        <View style={{flexDirection:'row',justifyContent:'space-between',paddingHorizontal:20,}}><Text style={{color:'white'}}>Your Stats</Text><Text style={{color:'white'}}>Contact Us</Text></View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              this._getStats();
+            }}>
+            <Text style={{color: 'white'}}>Your Stats</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={{color: 'white'}}>Contact Us</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <CText style={styles.textcolor}>Name</CText>
@@ -415,7 +443,8 @@ export class Profile extends Component {
                 {auth().currentUser.phoneNumber}
               </Text>
             </View>
-            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableOpacity>
                 <Text
                   onPress={() => {
@@ -428,14 +457,14 @@ export class Profile extends Component {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity>
-              <Text
-                onPress={() => {
-                  this.props.navigation.navigate('VerifyScreen');
-                }}
-                style={{color: 'green'}}>
-                Verify Phone Number
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  onPress={() => {
+                    this.props.navigation.navigate('VerifyScreen');
+                  }}
+                  style={{color: 'green'}}>
+                  Verify Phone Number
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
           {this.mounted == true && dataHistory ? (
@@ -525,7 +554,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     backgroundColor: 'white',
-    
   },
   bodyContent: {
     padding: 30,
