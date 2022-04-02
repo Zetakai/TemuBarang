@@ -20,6 +20,7 @@ import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+import Verified from 'react-native-vector-icons/MaterialIcons';
 export class DetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -31,6 +32,7 @@ export class DetailsScreen extends Component {
       modalVisibleComment: false,
       dataCommentsChild: [],
       commentIDs: [],
+      isVerified: false,
     };
     let mounted;
   }
@@ -40,11 +42,28 @@ export class DetailsScreen extends Component {
   _setModalVisibleComment = visible => {
     this.setState({modalVisibleComment: visible});
   };
+  _isVerified = async () => {
+    const {user} = this.props;
+    const {params} = this.props.route;
+    const verifiedUsers = await firestore()
+      .collection('VerifiedAccounts')
+      .doc('Official')
+      .get();
+    const datauid = verifiedUsers.data().Users;
+
+    const newData = datauid.filter(user => {
+      const userData = user.uid;
+      return userData.indexOf(params.uid) > -1;
+    });
+
+    this.setState({isVerified: newData});
+  };
   async componentDidMount() {
     const {params} = this.props.route;
     const {data, showModal} = this.state;
     this.setState({data: params});
     this.mounted = true;
+    this._isVerified();
     await firestore()
       .collection('Comments')
       .doc(`${params.uid}` + `${params.postID}`)
@@ -89,7 +108,7 @@ export class DetailsScreen extends Component {
       .set(
         {
           comments: firestore.FieldValue.arrayUnion({
-            postUID:data.uid,
+            postUID: data.uid,
             commentID: data.postID + user.uid + new Date().valueOf(),
             displayName: user.displayName,
             photoURL: user.photoURL,
@@ -100,7 +119,7 @@ export class DetailsScreen extends Component {
         },
         {merge: true},
       )
-      .then(this.mounted==true&&this.setState({comment: ''}));
+      .then(this.mounted == true && this.setState({comment: ''}));
   };
   render() {
     const {navigation, user} = this.props;
@@ -113,6 +132,7 @@ export class DetailsScreen extends Component {
       modalVisible,
       modalVisibleComment,
       commentIDs,
+      isVerified,
     } = this.state;
 
     return (
@@ -169,17 +189,16 @@ export class DetailsScreen extends Component {
                 style={{width: '100%', height: 200}}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-                    style={{position: 'absolute', top: 10, left: 10}}>
-                    <View>
-                      <Feather
-                        name="arrow-left-circle"
-                        color={'green'}
-                        size={40}
-                        onPress={() => this.props.navigation.goBack()}
-                      />
-                    </View>
-                  </TouchableOpacity>
+            <TouchableOpacity style={{position: 'absolute', top: 10, left: 10}}>
+              <View>
+                <Feather
+                  name="arrow-left-circle"
+                  color={'green'}
+                  size={40}
+                  onPress={() => this.props.navigation.goBack()}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={{padding: 5, backgroundColor: 'white'}}>
             <CText style={{fontSize: 30, fontWeight: 'bold'}}>
@@ -216,22 +235,39 @@ export class DetailsScreen extends Component {
               </View>
               <View style={{justifyContent: 'center'}}>
                 <Text style={styles.textcolor}>Diposting oleh</Text>
-                <Text style={{fontWeight:'bold',color: 'black',borderRadius: 5,
-                                  paddingHorizontal: 8,
-                                  backgroundColor: 'lightgreen',}}>{data.displayName}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: 'black',
+                      borderRadius: 5,
+                      paddingHorizontal: 8,
+                      backgroundColor: 'lightgreen',
+                    }}>
+                    {data.displayName}
+                  </Text>
+                  {isVerified.length > 0 && (
+                    <Verified name="verified-user" size={25} color="black" />
+                  )}
+                </View>
               </View>
             </View>
             {data.uid != user.uid && (
-              <View style={{justifyContent:'center', marginRight: 25}}>
-                <TouchableOpacity onPress={() =>
+              <View style={{justifyContent: 'center', marginRight: 25}}>
+                <TouchableOpacity
+                  onPress={() =>
                     navigation.navigate('Messaging', {
                       displayName: data.displayName,
                       uid: data.uid,
                       ppURL: data.ppURL,
                     })
                   }>
-                <Ionicons name='md-chatbox-ellipses-outline' size={40} color='black'/>
-                {/* <Text style={{color: 'black'}}>Chat</Text> */}
+                  <Ionicons
+                    name="md-chatbox-ellipses-outline"
+                    size={40}
+                    color="black"
+                  />
+                  {/* <Text style={{color: 'black'}}>Chat</Text> */}
                 </TouchableOpacity>
               </View>
             )}
@@ -284,21 +320,31 @@ export class DetailsScreen extends Component {
                                   : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
                               }}
                             />
-                            <View
-                              style={
-                                data.uid == x.uid && {
-                                  borderRadius: 5,
-                                  paddingHorizontal: 8,
-                                  backgroundColor: 'lightgreen',
-                                }
-                              }>
+                            <View style={{flexDirection: 'row'}}>
                               <Text
-                                style={{
-                                  ...styles.textcolor,
-                                  fontWeight: 'bold',
-                                }}>
+                                style={
+                                  data.uid == x.uid
+                                    ? {
+                                        borderRadius: 5,
+                                        paddingHorizontal: 8,
+                                        backgroundColor: 'lightgreen',
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                    : {
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                }>
                                 {x.displayName}
                               </Text>
+                              {isVerified.length > 0 && (
+                                <Verified
+                                  name="verified-user"
+                                  size={25}
+                                  color="black"
+                                />
+                              )}
                             </View>
                           </View>
                           <Text style={{...styles.textcolor, marginLeft: 40}}>
@@ -390,21 +436,31 @@ export class DetailsScreen extends Component {
                                   : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
                               }}
                             />
-                            <View
-                              style={
-                                data.uid == x.uid && {
-                                  borderRadius: 5,
-                                  paddingHorizontal: 8,
-                                  backgroundColor: 'lightgreen',
-                                }
-                              }>
+                             <View style={{flexDirection: 'row'}}>
                               <Text
-                                style={{
-                                  ...styles.textcolor,
-                                  fontWeight: 'bold',
-                                }}>
+                                style={
+                                  data.uid == x.uid
+                                    ? {
+                                        borderRadius: 5,
+                                        paddingHorizontal: 8,
+                                        backgroundColor: 'lightgreen',
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                    : {
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                }>
                                 {x.displayName}
                               </Text>
+                              {isVerified.length > 0 && (
+                                <Verified
+                                  name="verified-user"
+                                  size={25}
+                                  color="black"
+                                />
+                              )}
                             </View>
                           </View>
                           <Text style={{...styles.textcolor, marginLeft: 40}}>
