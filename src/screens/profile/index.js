@@ -362,6 +362,7 @@ export class Profile extends Component {
             />
           </TouchableOpacity>
         </View>
+        <View style={{flexDirection:'row',justifyContent:'space-between',paddingHorizontal:20,}}><Text style={{color:'white'}}>Your Stats</Text><Text style={{color:'white'}}>Contact Us</Text></View>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <CText style={styles.textcolor}>Name</CText>
@@ -524,7 +525,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     backgroundColor: 'white',
-    marginTop: 20,
+    
   },
   bodyContent: {
     padding: 30,
