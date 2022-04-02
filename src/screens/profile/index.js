@@ -94,7 +94,7 @@ export class Profile extends Component {
           .then(() => this.props.update());
         // .then(() => this._updatePostProfile());
       } catch (err) {
-        console.log(err);
+        console.log(err);this.props.update()
       }
     } else {
       try {
@@ -102,6 +102,7 @@ export class Profile extends Component {
           displayName: !displayName
             ? auth().currentUser.displayName
             : displayName,
+            
         };
         await auth()
           .currentUser.updateProfile(update)
@@ -111,7 +112,7 @@ export class Profile extends Component {
           .then(() => this.props.update());
         // .then(() => this._updatePostProfile());
       } catch (err) {
-        console.log(err);
+        console.log(err);this.props.update()
       }
     }
   };

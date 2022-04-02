@@ -39,6 +39,10 @@ export default class UploadScreen extends Component {
       hadiah: '',
       key: '',
       modalVisible: false,
+      dataLost: [],
+      dataFound: [],
+      renderData: [],
+      renderData2: [],
     };
   }
   _requestCameraPermission = async x => {
@@ -316,12 +320,80 @@ export default class UploadScreen extends Component {
         key: '',
       });
   };
-  componentDidMount() {
+  async componentDidMount() {
+    const {dataLost, dataFound, dataHistory} = this.state;
     this.mounted = true;
+    await firestore()
+      .collection('Lost')
+      .onSnapshot(x => {
+        if (x != null) {
+          let user = x.docs.map(y => {
+            return y.data();
+          });
+          let cup = user.map(x => {
+            return x.posts;
+          });
+          let sorted = cup.flat().sort((a, b) => b.time - a.time);
+          this.mounted == true && this.setState({dataLost: sorted});
+        }
+      });
+    await firestore()
+      .collection('Found')
+      .onSnapshot(x => {
+        if (x != null) {
+          let user = x.docs.map(y => {
+            return y.data();
+          });
+          let cup = user.map(x => {
+            return x.posts;
+          });
+          let sorted = cup.flat().sort((a, b) => b.time - a.time);
+          this.mounted == true && this.setState({dataFound: sorted});
+        }
+      });
   }
   componentWillUnmount() {
     this.mounted = false;
   }
+  _barangSearchkategori = text => {
+    const {
+      renderData,
+      renderData2,
+      dataHistory,
+      kategori,
+      dataFound,
+      dataLost,
+      selectedChoice,
+    } = this.state;
+
+    if (selectedChoice == 'Found') {
+      if (text) {
+        const newData = dataFound.filter(item => {
+          const itemData = item.kategori
+            ? item.kategori.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        });
+        this.setState({renderData2: newData});
+        console.log(renderData2);
+      } else {
+        this.setState({renderData2: []});
+      }
+    }
+    if (selectedChoice == 'Lost'){if (text) {
+      const newData = dataLost.filter(item => {
+        const itemData = item.kategori
+          ? item.kategori.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({renderData: newData});
+    } else {
+      this.setState({renderData: []});
+    }}
+  };
   render() {
     const {
       insertedImage,
@@ -335,6 +407,10 @@ export default class UploadScreen extends Component {
       key,
       path,
       modalVisible,
+      dataLost,
+      dataFound,
+      renderData,
+      renderData2,
     } = this.state;
     console.log(selectedChoice);
     return (
@@ -424,8 +500,44 @@ export default class UploadScreen extends Component {
                     placeholder="kategori barang"
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={kategori}
-                    onChangeText={value => this.setState({kategori: value})}
+                    onChangeText={value => {
+                      this._barangSearchkategori(value);
+                      this.setState({kategori: value});
+                    }}
                   />
+                </View>
+                <View style={{}}>
+                  {selectedChoice == 'Lost'
+                    ? renderData.map((value, index) => {
+                        if (value.kategori) {
+                          return (
+                            <View key={index}>
+                              <Text
+                                onPress={() => {
+                                  this.setState({kategori: value.kategori,renderData:[]});
+                                }}
+                                style={{color: 'black'}}>
+                                {value.kategori}
+                              </Text>
+                            </View>
+                          );
+                        }
+                      })
+                    : renderData2.map((value, index) => {
+                        if (value.kategori) {
+                          return (
+                            <View key={index}>
+                              <Text
+                                onPress={() => {
+                                  this.setState({kategori: value.kategori,renderData2:[]});
+                                }}
+                                style={{color: 'black'}}>
+                                {value.kategori}
+                              </Text>
+                            </View>
+                          );
+                        }
+                      })}
                 </View>
                 <CText style={styles.textcolor}>
                   {selectedChoice == 'Found'
