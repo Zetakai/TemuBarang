@@ -436,7 +436,11 @@ export default class UploadScreen extends Component {
             ? {flex: 1, backgroundColor: 'green'}
             : {flex: 1, backgroundColor: 'chocolate'}
         }>
-        <ScrollView>
+        <ScrollView ref={ref => {
+                    this.scrollView = ref;
+                  }}
+                  onContentSizeChange={() =>
+                    this.scrollView.scrollTo({ y: 200, animated: true })}>
           {/* <Pressable onPress={this._requestCameraPermission} style={styles.tombol}>
           <Text>opencamera</Text>
         </Pressable> */}
@@ -513,6 +517,7 @@ export default class UploadScreen extends Component {
                 <CText style={styles.textcolor}>Kategori Barang</CText>
                 <View style={styles.profInput}>
                   <TextInput
+                  
                     placeholderTextColor={'dimgrey'}
                     placeholder="kategori barang"
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}

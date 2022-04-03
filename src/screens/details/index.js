@@ -21,7 +21,7 @@ import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Verified from 'react-native-vector-icons/MaterialIcons';
-import {timeSince} from '../../components/utils/moment';
+import {timeSince,convertDateOnly,getHour} from '../../components/utils/moment';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 export class DetailsScreen extends Component {
   constructor(props) {
@@ -214,7 +214,8 @@ export class DetailsScreen extends Component {
             {data.keyunik?<Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>:<></>}
             {data.hadiah?<Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>:<></>}
             {data.deskripsi?<Text style={styles.textcolor}>Deskripsi detail: {data.deskripsi}</Text>:<></>}
-            <Text style={styles.textcolor}>{timeSince(params.time.seconds)}lalu</Text>
+            <Text style={styles.textcolor}>{convertDateOnly(new Date(params.time.seconds*1000))}</Text>
+            <Text style={styles.textcolor}>{getHour(new Date(params.time.seconds*1000))}</Text>
           </View>
           <View
             style={{

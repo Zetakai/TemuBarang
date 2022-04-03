@@ -68,7 +68,6 @@ export class Profile extends Component {
     } = this.state;
     const {user} = this.props;
     if (path) {
-      console.log(path);
       const photoID = new Date().valueOf();
       const reference = storage().ref(
         `profile-photos/${auth().currentUser.uid}/${photoID}`,

@@ -12,7 +12,7 @@ export default class CBubbleText extends Component {
           styles.container,
           {
             alignSelf: isMe ? 'flex-end' : 'flex-start',
-            backgroundColor: isMe ? colors.whites : colors.redmuda,
+            backgroundColor: isMe ? "lightblue" : "#00ca74",
           },
         ]}>
         <Text style={styles.text}> {text} </Text>
