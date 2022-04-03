@@ -26,7 +26,7 @@ export default class FoundScreen extends Component {
       renderData: [],
       refreshing: false,
       modalVisible: false,
-      pressedIndex: null,
+      pressedIndex: null,pressedAll:false
     };
     let cari;
     let mounted;
@@ -125,7 +125,7 @@ export default class FoundScreen extends Component {
     });
   };
   render() {
-    const {dataFire, renderData, searchData, refreshing, pressedIndex} =
+    const {pressedAll,dataFire, renderData, searchData, refreshing, pressedIndex} =
       this.state;
     return (
       <View style={{backgroundColor: '#e5e5e5', flex: 1}}>
@@ -219,13 +219,39 @@ export default class FoundScreen extends Component {
             />
           }>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <TouchableOpacity
+                    onPress={() => {
+                      this._barangSearchkategori(null);
+                      this.setState({pressedAll: true,pressedIndex:null});
+                    }}
+                    style={{
+                      marginRight: 10,
+                      marginVertical: 15,
+                      borderRadius: 25,
+                      height: 50,
+                      flexDirection: 'row',
+                      backgroundColor:
+                        pressedAll != true ? '#549670' : 'white',
+                      alignSelf: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        paddingHorizontal: 15,
+                        color: pressedAll != true ? 'white' : '#549670',
+                        fontSize: 14
+                      }}>
+                      All
+                      <Text style={{color: '#e5e5e5'}}>   {dataFire.length}</Text>
+                    </Text>
+                  </TouchableOpacity>
             {dataFire.map((value, index) => {
               if (value.kategori) {
                 return (
                   <TouchableOpacity
                     onPress={() => {
                       this._barangSearchkategori(value.kategori);
-                      this.setState({pressedIndex: index});
+                      this.setState({pressedIndex: index,pressedAll:false});
                     }}
                     key={index}
                     style={{
@@ -280,7 +306,7 @@ export default class FoundScreen extends Component {
                               }}
                             />
                           </View>
-                          <View style={{flexShrink: 1, margin: 5}}>
+                          <View style={{flexShrink: 1, margin: 5,justifyContent:'center',alignItems:'center'}}>
                             <Text style={{color: 'black', fontSize: 16}}>
                               {x.namabarang}
                             </Text>
