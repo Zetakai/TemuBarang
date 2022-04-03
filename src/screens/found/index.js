@@ -199,6 +199,12 @@ export default class FoundScreen extends Component {
         <View
           style={{
             width: '100%',
+            height: 10,
+            backgroundColor: '#00ca74',
+          }}></View>
+        <View
+          style={{
+            width: '100%',
             height: 150,
             backgroundColor: '#00ca74',
             position: 'absolute',
@@ -208,6 +214,7 @@ export default class FoundScreen extends Component {
 
         <ScrollView
           style={{
+            top: -10,
             marginTop: 0,
             padding: 0,
             marginHorizontal: 15,
@@ -228,7 +235,7 @@ export default class FoundScreen extends Component {
                       marginRight: 10,
                       marginVertical: 15,
                       borderRadius: 25,
-                      height: 50,
+                      height: 40,
                       flexDirection: 'row',
                       backgroundColor:
                         pressedAll != true ? '#549670' : 'white',
@@ -241,7 +248,7 @@ export default class FoundScreen extends Component {
                         color: pressedAll != true ? 'white' : '#549670',
                         fontSize: 14
                       }}>
-                      All
+                      Semua
                       <Text style={{color: '#e5e5e5'}}>   {dataFire.length}</Text>
                     </Text>
                   </TouchableOpacity>
@@ -258,7 +265,7 @@ export default class FoundScreen extends Component {
                       marginRight: 10,
                       marginVertical: 15,
                       borderRadius: 25,
-                      height: 50,
+                      height: 40,
                       flexDirection: 'row',
                       backgroundColor:
                         pressedIndex != index ? '#549670' : 'white',
@@ -289,7 +296,7 @@ export default class FoundScreen extends Component {
                           this.props.navigation.navigate('DetailsScreen', x)
                         }
                         key={i}
-                        style={{...styles.item, borderWidth: 5}}>
+                        style={{...styles.item, borderWidth: 7}}>
                         <View>
                           <View>
                             <Image
@@ -306,16 +313,14 @@ export default class FoundScreen extends Component {
                               }}
                             />
                           </View>
-                          <View style={{flexShrink: 1, margin: 5,justifyContent:'center',alignItems:'center'}}>
-                            <Text style={{color: 'black', fontSize: 16}}>
+                          <View style={{flexShrink: 1, margin: 5, alignItems:'center'}}>
+                            <Text style={{color: 'black', fontSize: 15, fontWeight: 'bold'}}>
                               {x.namabarang}
                             </Text>
                             <Text style={{color: 'black', fontSize: 14}}>
                               {x.kategori}
                             </Text>
-                            <Text>
-                            </Text>
-                            <Text style={{color: 'grey', marginTop: 10}}>
+                            <Text style={{color: '#808080', marginTop: 5, marginBottom: 5}}>
                               <EvilIcons name="location" size={16} />
                               {x.lokasi}
                             </Text>
@@ -357,7 +362,6 @@ export default class FoundScreen extends Component {
                             <Text style={{color: 'black', fontSize: 14}}>
                               {x.kategori}
                             </Text>
-                            <Text></Text>
                             <Text style={{color: '#808080', marginTop: 5, marginBottom: 5}}>
                               <EvilIcons name="location" size={16} />
                               {x.lokasi}
