@@ -28,7 +28,7 @@ export default class LostScreen extends Component {
       renderData: [],
       refreshing: false,
       modalVisible: false,
-      pressedIndex: null,
+      pressedIndex: null,pressedAll:false
     };
     let cari;
     let mounted;
@@ -117,7 +117,7 @@ export default class LostScreen extends Component {
       searchData,
       refreshing,
       modalVisible,
-      pressedIndex,
+      pressedIndex,pressedAll
     } = this.state;
     return (
       <View style={{backgroundColor: '#e5e5e5', flex: 1}}>
@@ -211,13 +211,39 @@ export default class LostScreen extends Component {
             />
           }>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <TouchableOpacity
+                    onPress={() => {
+                      this._barangSearchkategori(null);
+                      this.setState({pressedAll: true,pressedIndex:null});
+                    }}
+                    style={{
+                      marginRight: 10,
+                      marginVertical: 15,
+                      borderRadius: 25,
+                      height: 50,
+                      flexDirection: 'row',
+                      backgroundColor:
+                        pressedAll != true ? '#549670' : 'white',
+                      alignSelf: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        paddingHorizontal: 15,
+                        color: pressedAll != true ? 'white' : '#549670',
+                        fontSize: 14
+                      }}>
+                      All
+                      <Text style={{color: '#e5e5e5'}}>   {dataFire.length}</Text>
+                    </Text>
+                  </TouchableOpacity>
             {dataFire.map((value, index) => {
               if (value.kategori) {
                 return (
                   <TouchableOpacity
                     onPress={() => {
                       this._barangSearchkategori(value.kategori);
-                      this.setState({pressedIndex: index});
+                      this.setState({pressedIndex: index,pressedAll:false});
                     }}
                     key={index}
                     style={{
@@ -272,15 +298,12 @@ export default class LostScreen extends Component {
                               }}
                             />
                           </View>
-                          <View style={{flexShrink: 1, margin: 5}}>
+                          <View style={{flexShrink: 1, margin: 5,alignItems:'center'}}>
                             <Text style={{color: 'black', fontSize: 16}}>
                               {x.namabarang}
                             </Text>
                             <Text style={{color: 'black', fontSize: 14}}>
                               {x.kategori}
-                            </Text>
-                            <Text style={{color: 'black'}}>
-                              Hadiah : {x.hadiah}
                             </Text>
                             <Text style={{color: 'grey', marginTop: 10}}>
                               <EvilIcons name="location" size={16} />

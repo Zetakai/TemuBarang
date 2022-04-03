@@ -42,7 +42,7 @@ export default class UploadScreen extends Component {
       dataLost: [],
       dataFound: [],
       renderData: [],
-      renderData2: [],
+      renderData2: [],showcat:false
     };
   }
   _requestCameraPermission = async x => {
@@ -363,7 +363,7 @@ export default class UploadScreen extends Component {
       kategori,
       dataFound,
       dataLost,
-      selectedChoice,
+      selectedChoice,showcat
     } = this.state;
 
     if (selectedChoice == 'Found') {
@@ -410,7 +410,7 @@ export default class UploadScreen extends Component {
       dataLost,
       dataFound,
       renderData,
-      renderData2,
+      renderData2,showcat
     } = this.state;
     console.log(selectedChoice);
     return (
@@ -429,14 +429,15 @@ export default class UploadScreen extends Component {
           <View
             style={{
               padding: 5,
-              margin: 15,
+              margin: selectedChoice?15:100,
               borderWidth: 1,
               borderColor: 'black',
               borderRadius: 25,
               backgroundColor: 'white',
+              
             }}>
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
+            <View style={{flexDirection: 'row',justifyContent:'center'}}>
+              {/[o]/.test(selectedChoice)&&<TouchableOpacity
                 onPress={() => {
                   // this._requestCameraPermission();
                   this._setModalVisible(true);
@@ -455,7 +456,7 @@ export default class UploadScreen extends Component {
                     borderRadius: 25,
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity>}
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <CText style={styles.textcolor}>kategori post</CText>
                 <View
@@ -504,10 +505,12 @@ export default class UploadScreen extends Component {
                       this._barangSearchkategori(value);
                       this.setState({kategori: value});
                     }}
+                    onFocus={()=>this.setState({showcat:true})}
+                    onBlur={()=>this.setState({showcat:false})}
                   />
                 </View>
-                <View style={{}}>
-                  {selectedChoice == 'Lost'
+                <View style={{position:'absolute',top:150,borderColor:'black',borderWidth:kategori&&showcat?1:0,backgroundColor:'black',width:'100%'}}>
+                  {selectedChoice == 'Lost'&&showcat==true
                     ? renderData.map((value, index) => {
                         if (value.kategori) {
                           return (
@@ -516,7 +519,7 @@ export default class UploadScreen extends Component {
                                 onPress={() => {
                                   this.setState({kategori: value.kategori,renderData:[]});
                                 }}
-                                style={{color: 'black'}}>
+                                style={{color: 'white'}}>
                                 {value.kategori}
                               </Text>
                             </View>
