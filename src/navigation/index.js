@@ -33,14 +33,16 @@ export class TabNav extends Component {
   render(){
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Beranda"
       activeColor="green"
+      labeled={true}
       barStyle={{backgroundColor: 'white',borderTopColor:'silver',borderTopWidth:1}}>
       <Tab.Screen
-        name="Home"
+        name="Beranda"
         component={HomeScreen}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Beranda',
+          showLabel: true,
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
@@ -49,6 +51,7 @@ export class TabNav extends Component {
       <Tab.Screen
         options={{
           tabBarLabel: 'Pesan',
+          showLabel: true,
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="chat-processing" color={color} size={26} />
           ),
@@ -66,7 +69,7 @@ export class TabNav extends Component {
           )
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         options={{
           tabBarLabel: 'Notifications',
           tabBarIcon: ({color}) => (
@@ -75,10 +78,11 @@ export class TabNav extends Component {
         }}
         name="NotifScreen"
         component={NotifScreen}
-      />
+      /> */}
        <Tab.Screen
         options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: 'Profil',
+          showLabel: true,
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="account" color={color} size={26} />
           ),

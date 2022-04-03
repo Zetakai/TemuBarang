@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 export default class FoundScreen extends Component {
   constructor() {
     super();
@@ -25,6 +26,7 @@ export default class FoundScreen extends Component {
       renderData: [],
       refreshing: false,
       modalVisible: false,
+      pressedIndex: null,
     };
     let cari;
     let mounted;
@@ -123,65 +125,92 @@ export default class FoundScreen extends Component {
     });
   };
   render() {
-    const {dataFire, renderData, searchData, refreshing, modalVisible} =
+    const {dataFire, renderData, searchData, refreshing, pressedIndex} =
       this.state;
     return (
-      <View style={{backgroundColor: 'white', flex: 1}}>
+      <View style={{backgroundColor: '#e5e5e5', flex: 1}}>
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('TabNav')}
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Ionicons name="arrow-back" size={25} color="green" />
+          <View>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('TabNav')}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View style={{marginLeft: 10}}>
+                <Ionicons name="arrow-back" size={25} color="white" />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View>
             <Text
               style={{
                 fontSize: 25,
                 fontWeight: 'bold',
-                color: 'green',
-                marginLeft: 5,
+                color: 'white',
               }}>
-              TemuBarang
+              Barang Ditemukan
             </Text>
-          </TouchableOpacity>
+          </View>
+          <View></View>
+        </View>
+        <View style={{backgroundColor: '#00ca74'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 5,
+              marginLeft: 15,
+              marginRight: 15,
+              marginBottom: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#549670',
+              borderRadius: 25,
+            }}>
+            <Entypo name="magnifying-glass" size={24} color="white" />
+            <TextInput
+              placeholderTextColor={'white'}
+              placeholder="Pencarian"
+              style={{
+                backgroundColor: '#549670',
+                width: '80%',
+                color: 'white',
+                borderRadius: 25,
+                height: 45,
+                marginLeft: 10,
+              }}
+              value={searchData}
+              onChangeText={value => {
+                this._barangSearch(value);
+                this.setState({searchData: value});
+              }}
+            />
+            {/* <Ionicons
+            name="options"
+            size={40}
+            color="silver"
+            onPress={() => {
+              this._setModalVisible(!modalVisible);
+            }}
+          /> */}
+          </View>
         </View>
         <View
           style={{
-            flexDirection: 'row',
-            marginTop: 15,
-            justifyContent: 'space-evenly',
-          }}>
-          <TextInput
-            placeholderTextColor={'silver'}
-            placeholder="cari barang"
-            textAlign={'center'}
-            style={{
-              borderColor: 'silver',
-              borderWidth: 1,
-              width: '80%',
-              alignItems: 'center',
-              color: 'black',
-            }}
-            value={searchData}
-            onChangeText={value => {
-              this._barangSearch(value);
-              this.setState({searchData: value});
-            }}
-          />
-          
-          <Ionicons name="options" size={40} color="silver" onPress={() => {
-              this._setModalVisible(!modalVisible);
-            }}/>
-        </View>
+            width: '100%',
+            height: 150,
+            backgroundColor: '#00ca74',
+            position: 'absolute',
+            top: 108,
+            borderBottomLeftRadius: 75,
+          }}></View>
 
         <ScrollView
           style={{
-            marginTop: 10,
-            backgroundColor: 'green',
-            borderTopLeftRadius: 15,
-            borderTopRightRadius: 15,
+            marginTop: 0,
+            padding: 0,
+            marginHorizontal: 15,
           }}
           refreshControl={
             <RefreshControl
@@ -189,16 +218,41 @@ export default class FoundScreen extends Component {
               onRefresh={this._onRefresh}
             />
           }>
-          <Text
-            style={{
-              color: 'black',
-              marginTop: 5,
-              alignSelf: 'center',
-              fontSize: 16,
-            }}>
-            Found Items
-          </Text>
-          <View style={{marginBottom: 10}}></View>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {dataFire.map((value, index) => {
+              if (value.kategori) {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      this._barangSearchkategori(value.kategori);
+                      this.setState({pressedIndex: index});
+                    }}
+                    key={index}
+                    style={{
+                      marginRight: 10,
+                      marginVertical: 15,
+                      borderRadius: 25,
+                      height: 50,
+                      flexDirection: 'row',
+                      backgroundColor:
+                        pressedIndex != index ? '#549670' : 'white',
+                      alignSelf: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        paddingHorizontal: 15,
+                        color: pressedIndex != index ? 'white' : '#549670',
+                        fontSize: 14
+                      }}>
+                      {value.kategori}  
+                      <Text style={{color: '#e5e5e5'}}>   {dataFire.filter((v) => (v.kategori === value.kategori)).length}</Text>
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }
+            })}
+          </ScrollView>
           <View style={styles.itemMenu}>
             {this.mounted == true && renderData && renderData.length > 0
               ? renderData.map((x, i) => {
@@ -220,7 +274,7 @@ export default class FoundScreen extends Component {
                               }
                               style={{
                                 width: '100%',
-                                height: 200,
+                                height: 150,
                                 borderTopLeftRadius: 15,
                                 borderTopRightRadius: 15,
                               }}
@@ -233,10 +287,9 @@ export default class FoundScreen extends Component {
                             <Text style={{color: 'black', fontSize: 14}}>
                               {x.kategori}
                             </Text>
-                            <Text style={{color: 'black'}}>
-                              Hadiah : {x.hadiah}
+                            <Text>
                             </Text>
-                            <Text style={{color: 'grey', marginTop: 5}}>
+                            <Text style={{color: 'grey', marginTop: 10}}>
                               <EvilIcons name="location" size={16} />
                               {x.lokasi}
                             </Text>
@@ -254,7 +307,7 @@ export default class FoundScreen extends Component {
                           this.props.navigation.navigate('DetailsScreen', x)
                         }
                         key={i}
-                        style={{...styles.item, borderWidth: 5}}>
+                        style={{...styles.item, borderWidth: 7}}>
                         <View>
                           <View>
                             <Image
@@ -265,23 +318,21 @@ export default class FoundScreen extends Component {
                               }
                               style={{
                                 width: '100%',
-                                height: 200,
+                                height: 150,
                                 borderTopLeftRadius: 15,
                                 borderTopRightRadius: 15,
                               }}
                             />
                           </View>
-                          <View style={{flexShrink: 1, margin: 5}}>
-                            <Text style={{color: 'black', fontSize: 16}}>
+                          <View style={{flexShrink: 1, margin: 5, alignItems:'center'}}>
+                            <Text style={{color: 'black', fontSize: 15, fontWeight: 'bold'}}>
                               {x.namabarang}
                             </Text>
                             <Text style={{color: 'black', fontSize: 14}}>
                               {x.kategori}
                             </Text>
-                            {/* <Text style={{color: 'black'}}>
-                              Hadiah : {x.hadiah}
-                            </Text> */}
-                            <Text style={{color: 'grey', marginTop: 10}}>
+                            <Text></Text>
+                            <Text style={{color: '#808080', marginTop: 5, marginBottom: 5}}>
                               <EvilIcons name="location" size={16} />
                               {x.lokasi}
                             </Text>
@@ -293,34 +344,6 @@ export default class FoundScreen extends Component {
                 })}
           </View>
         </ScrollView>
-        {modalVisible && (
-          <View
-            style={{
-              backgroundColor: 'white',
-              position: 'absolute',
-              top: 150,
-              right: 10,
-              borderWidth: 1,
-              borderColor: 'black',
-            }}>
-            {dataFire.map((value, index) => {
-              if (value.kategori) {
-                return (
-                  <View key={index}>
-                    <Text
-                      onPress={() => {
-                        this._barangSearchkategori(value.kategori);
-                        this._setModalVisible(false);
-                      }}
-                      style={{color: 'silver'}}>
-                      {value.kategori}
-                    </Text>
-                  </View>
-                );
-              }
-            })}
-          </View>
-        )}
       </View>
     );
   }
@@ -328,17 +351,11 @@ export default class FoundScreen extends Component {
 
 const styles = StyleSheet.create({
   header: {
+    backgroundColor: '#00ca74',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    borderBottomWidth: 1,
-    borderColor: 'silver',
-  },
-  menu: {
-    marginHorizontal: 10,
-    borderRadius: 15,
-    marginBottom: 5,
   },
   cardText: {
     fontStyle: 'italic',
@@ -373,7 +390,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // marginBottom: 0,
     backgroundColor: 'white',
-    borderColor: 'green',
-    borderRadius: 20,
+    borderColor: 'rgba(158, 150, 150, .0)',
+    borderRadius: 22,
   },
 });
