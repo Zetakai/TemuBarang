@@ -211,7 +211,7 @@ export class HomeScreen extends Component {
               padding: 10,
             }}>
             <Text style={{color: 'black', marginBottom: 5, marginLeft: 10}}>
-              Temuan Terbaru
+              Barang Temuan Terbaru
             </Text>
             <View>
               {dataFound.map((x, i) => {

@@ -21,6 +21,7 @@ import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Verified from 'react-native-vector-icons/MaterialIcons';
+import {timeSince} from '../../components/utils/moment';
 export class DetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -212,7 +213,7 @@ export class DetailsScreen extends Component {
             <Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>
             <Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>
 
-            <Text style={styles.textcolor}>{data.uid}</Text>
+            <Text style={styles.textcolor}>{timeSince(params.time.seconds)}yang lalu</Text>
           </View>
           <View
             style={{
