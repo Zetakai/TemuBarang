@@ -32,7 +32,7 @@ export default class FoundScreen extends Component {
     let mounted;
   }
   async componentDidMount() {
-    this.mounted = true;
+    this.mounted = true
     await firestore()
       .collection('Found')
       .onSnapshot(x => {
@@ -46,7 +46,7 @@ export default class FoundScreen extends Component {
           let sorted = cup.flat().sort((a, b) => b.time - a.time);
           this.mounted == true && this.setState({dataFire: sorted});
         }
-      });
+      });this.setState({pressedAll: true})
   }
   // _barangSearch = () => {
   //   let {cari} = this;

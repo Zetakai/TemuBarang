@@ -42,7 +42,7 @@ export default class UploadScreen extends Component {
       dataLost: [],
       dataFound: [],
       renderData: [],
-      renderData2: [],showcat:false
+      renderData2: [],showcat:false,deskripsi:''
     };
   }
   _requestCameraPermission = async x => {
@@ -160,7 +160,7 @@ export default class UploadScreen extends Component {
       });
   };
   _postwoimg = async () => {
-    const {
+    const {deskripsi,
       selectedChoice,
       namabarang,
       photoURL,
@@ -192,6 +192,7 @@ export default class UploadScreen extends Component {
                   time: new Date(),
                   uid: auth().currentUser.uid,
                   keyunik: key,
+                  deskripsi:deskripsi
                 }),
               },
               {merge: true},
@@ -216,6 +217,7 @@ export default class UploadScreen extends Component {
                   hadiah: hadiah,
                   uid: auth().currentUser.uid,
                   keyunik: key,
+                  deskripsi:deskripsi
                 }),
               },
               {merge: true},
@@ -227,7 +229,7 @@ export default class UploadScreen extends Component {
     }
   };
   _postimg = async () => {
-    const {
+    const {deskripsi,
       selectedChoice,
       namabarang,
       photoURL,
@@ -268,6 +270,7 @@ export default class UploadScreen extends Component {
                   time: new Date(),
                   uid: auth().currentUser.uid,
                   keyunik: key,
+                  deskripsi:deskripsi
                 }),
               },
               {merge: true},
@@ -292,6 +295,7 @@ export default class UploadScreen extends Component {
                   hadiah: hadiah,
                   uid: auth().currentUser.uid,
                   keyunik: key,
+                  deskripsi:deskripsi
                 }),
               },
               {merge: true},
@@ -317,7 +321,7 @@ export default class UploadScreen extends Component {
         uid: '',
         path: '',
         hadiah: '',
-        key: '',
+        key: '',deskripsi:'',
       });
   };
   async componentDidMount() {
@@ -395,7 +399,7 @@ export default class UploadScreen extends Component {
     }}
   };
   render() {
-    const {
+    const {deskripsi,
       insertedImage,
       dataFire,
       selectedChoice,
@@ -509,7 +513,7 @@ export default class UploadScreen extends Component {
                     onBlur={()=>this.setState({showcat:false})}
                   />
                 </View>
-                <View style={{position:'absolute',top:150,borderColor:'black',borderWidth:kategori&&showcat?1:0,backgroundColor:'black',width:'100%'}}>
+                <View style={{borderColor:'black',borderWidth:kategori&&showcat?1:0,backgroundColor:'black',width:'100%'}}>
                   {selectedChoice == 'Lost'&&showcat==true
                     ? renderData.map((value, index) => {
                         if (value.kategori) {
@@ -534,7 +538,7 @@ export default class UploadScreen extends Component {
                                 onPress={() => {
                                   this.setState({kategori: value.kategori,renderData2:[]});
                                 }}
-                                style={{color: 'black'}}>
+                                style={{color: 'white'}}>
                                 {value.kategori}
                               </Text>
                             </View>
@@ -564,6 +568,16 @@ export default class UploadScreen extends Component {
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={key}
                     onChangeText={value => this.setState({key: value})}
+                  />
+                </View>
+                <CText style={styles.textcolor}>Deskripsi Barang</CText>
+                <View style={styles.profInput}>
+                  <TextInput
+                    placeholderTextColor={'dimgrey'}
+                    placeholder="deskripsi"
+                    style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
+                    value={deskripsi}
+                    onChangeText={value => this.setState({deskripsi: value})}
                   />
                 </View>
                 {selectedChoice == 'Lost' ? (
@@ -646,11 +660,11 @@ export default class UploadScreen extends Component {
                   justifyContent: 'space-evenly',
                 }}>
                 <TouchableOpacity
-                  onPress={() => this._requestCameraPermission('c')}>
+                  onPress={() => {this._requestCameraPermission('c');this._setModalVisible(!modalVisible)}}>
                   <Text style={{color: 'black'}}>Camera</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => this._requestCameraPermission('g')}>
+                  onPress={() => {this._requestCameraPermission('g');this._setModalVisible(!modalVisible)}}>
                   <Text style={{color: 'black'}}>Galeri</Text>
                 </TouchableOpacity>
               </View>

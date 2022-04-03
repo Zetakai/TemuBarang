@@ -52,7 +52,7 @@ export default class LostScreen extends Component {
           let sorted = cup.flat().sort((a, b) => b.time - a.time);
           this.mounted == true && this.setState({dataFire: sorted});
         }
-      });
+      });this.setState({pressedAll: true})
   }
   componentWillUnmount() {
     this.mounted = false;
