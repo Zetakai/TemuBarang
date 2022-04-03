@@ -265,7 +265,7 @@ export class HomeScreen extends Component {
                           </Text>
                         </View>
                         <View style={{marginRight: 10}}>
-                          <Text style={{textAlign: 'right'}}>{timeSince(x.time.seconds)} lalu</Text>
+                          <Text style={{textAlign: 'right'}}>{timeSince(x.time.seconds)}lalu</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -340,7 +340,7 @@ export class HomeScreen extends Component {
                           </Text>
                         </View>
                         <View style={{marginRight: 10}}>
-                          <Text style={{textAlign: 'right'}}>{timeSince(x.time.seconds)} lalu</Text>
+                          <Text style={{textAlign: 'right'}}>{timeSince(x.time.seconds)}lalu</Text>
                         </View>
                       </View>
                     </TouchableOpacity>

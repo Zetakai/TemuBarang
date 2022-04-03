@@ -42,7 +42,9 @@ export default class UploadScreen extends Component {
       dataLost: [],
       dataFound: [],
       renderData: [],
-      renderData2: [],showcat:false,deskripsi:''
+      renderData2: [],
+      showcat: false,
+      deskripsi: '',
     };
   }
   _requestCameraPermission = async x => {
@@ -160,7 +162,8 @@ export default class UploadScreen extends Component {
       });
   };
   _postwoimg = async () => {
-    const {deskripsi,
+    const {
+      deskripsi,
       selectedChoice,
       namabarang,
       photoURL,
@@ -192,7 +195,7 @@ export default class UploadScreen extends Component {
                   time: new Date(),
                   uid: auth().currentUser.uid,
                   keyunik: key,
-                  deskripsi:deskripsi
+                  deskripsi: deskripsi,
                 }),
               },
               {merge: true},
@@ -217,7 +220,7 @@ export default class UploadScreen extends Component {
                   hadiah: hadiah,
                   uid: auth().currentUser.uid,
                   keyunik: key,
-                  deskripsi:deskripsi
+                  deskripsi: deskripsi,
                 }),
               },
               {merge: true},
@@ -229,7 +232,8 @@ export default class UploadScreen extends Component {
     }
   };
   _postimg = async () => {
-    const {deskripsi,
+    const {
+      deskripsi,
       selectedChoice,
       namabarang,
       photoURL,
@@ -270,7 +274,7 @@ export default class UploadScreen extends Component {
                   time: new Date(),
                   uid: auth().currentUser.uid,
                   keyunik: key,
-                  deskripsi:deskripsi
+                  deskripsi: deskripsi,
                 }),
               },
               {merge: true},
@@ -295,7 +299,7 @@ export default class UploadScreen extends Component {
                   hadiah: hadiah,
                   uid: auth().currentUser.uid,
                   keyunik: key,
-                  deskripsi:deskripsi
+                  deskripsi: deskripsi,
                 }),
               },
               {merge: true},
@@ -321,7 +325,8 @@ export default class UploadScreen extends Component {
         uid: '',
         path: '',
         hadiah: '',
-        key: '',deskripsi:'',
+        key: '',
+        deskripsi: '',
       });
   };
   async componentDidMount() {
@@ -367,7 +372,8 @@ export default class UploadScreen extends Component {
       kategori,
       dataFound,
       dataLost,
-      selectedChoice,showcat
+      selectedChoice,
+      showcat,
     } = this.state;
 
     if (selectedChoice == 'Found') {
@@ -385,21 +391,24 @@ export default class UploadScreen extends Component {
         this.setState({renderData2: []});
       }
     }
-    if (selectedChoice == 'Lost'){if (text) {
-      const newData = dataLost.filter(item => {
-        const itemData = item.kategori
-          ? item.kategori.toUpperCase()
-          : ''.toUpperCase();
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      });
-      this.setState({renderData: newData});
-    } else {
-      this.setState({renderData: []});
-    }}
+    if (selectedChoice == 'Lost') {
+      if (text) {
+        const newData = dataLost.filter(item => {
+          const itemData = item.kategori
+            ? item.kategori.toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        });
+        this.setState({renderData: newData});
+      } else {
+        this.setState({renderData: []});
+      }
+    }
   };
   render() {
-    const {deskripsi,
+    const {
+      deskripsi,
       insertedImage,
       dataFire,
       selectedChoice,
@@ -414,7 +423,8 @@ export default class UploadScreen extends Component {
       dataLost,
       dataFound,
       renderData,
-      renderData2,showcat
+      renderData2,
+      showcat,
     } = this.state;
     console.log(selectedChoice);
     return (
@@ -432,35 +442,37 @@ export default class UploadScreen extends Component {
         </Pressable> */}
           <View
             style={{
-              padding: 5,
-              margin: selectedChoice?15:100,
+              padding: 5,marginBottom: selectedChoice ? 15 : 0,
+              marginTop: selectedChoice ? 15 : 50,
+              marginHorizontal: selectedChoice ? 15 : 100,
               borderWidth: 1,
               borderColor: 'black',
               borderRadius: 25,
               backgroundColor: 'white',
-              
             }}>
-            <View style={{flexDirection: 'row',justifyContent:'center'}}>
-              {/[o]/.test(selectedChoice)&&<TouchableOpacity
-                onPress={() => {
-                  // this._requestCameraPermission();
-                  this._setModalVisible(true);
-                }}>
-                <Image
-                  source={
-                    insertedImage
-                      ? insertedImage
-                      : require('../../assets/dummy.png')
-                  }
-                  style={{
-                    width: 200,
-                    height: 200,
-                    borderWidth: 1,
-                    borderColor: 'black',
-                    borderRadius: 25,
-                  }}
-                />
-              </TouchableOpacity>}
+            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              {/[o]/.test(selectedChoice) && (
+                <TouchableOpacity
+                  onPress={() => {
+                    // this._requestCameraPermission();
+                    this._setModalVisible(true);
+                  }}>
+                  <Image
+                    source={
+                      insertedImage
+                        ? insertedImage
+                        : require('../../assets/dummy.png')
+                    }
+                    style={{
+                      width: 200,
+                      height: 200,
+                      borderWidth: 1,
+                      borderColor: 'black',
+                      borderRadius: 25,
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <CText style={styles.textcolor}>kategori post</CText>
                 <View
@@ -509,19 +521,28 @@ export default class UploadScreen extends Component {
                       this._barangSearchkategori(value);
                       this.setState({kategori: value});
                     }}
-                    onFocus={()=>this.setState({showcat:true})}
-                    onBlur={()=>this.setState({showcat:false})}
+                    onFocus={() => this.setState({showcat: true})}
+                    onBlur={() => this.setState({showcat: false})}
                   />
                 </View>
-                <View style={{borderColor:'black',borderWidth:kategori&&showcat?1:0,backgroundColor:'black',width:'100%'}}>
-                  {selectedChoice == 'Lost'&&showcat==true
+                <View
+                  style={{
+                    borderColor: 'black',
+                    borderWidth: kategori && showcat ? 1 : 0,
+                    backgroundColor: 'black',
+                    width: '100%',
+                  }}>
+                  {selectedChoice == 'Lost' && showcat == true
                     ? renderData.map((value, index) => {
                         if (value.kategori) {
                           return (
                             <View key={index}>
                               <Text
                                 onPress={() => {
-                                  this.setState({kategori: value.kategori,renderData:[]});
+                                  this.setState({
+                                    kategori: value.kategori,
+                                    renderData: [],
+                                  });
                                 }}
                                 style={{color: 'white'}}>
                                 {value.kategori}
@@ -536,7 +557,10 @@ export default class UploadScreen extends Component {
                             <View key={index}>
                               <Text
                                 onPress={() => {
-                                  this.setState({kategori: value.kategori,renderData2:[]});
+                                  this.setState({
+                                    kategori: value.kategori,
+                                    renderData2: [],
+                                  });
                                 }}
                                 style={{color: 'white'}}>
                                 {value.kategori}
@@ -625,6 +649,29 @@ export default class UploadScreen extends Component {
               />
             </View>
           </View>
+          {!selectedChoice && (
+            <View
+              style={{
+                padding: 5,
+                marginTop: 50,
+                borderWidth: 1,
+                borderColor: 'black',
+                borderRadius: 25,
+                backgroundColor: 'white',marginHorizontal:15
+              }}>
+                <Text style={{color:'black',alignSelf:'center',fontWeight:'bold'}}>Disclaimer</Text>
+              <Text style={{color:'black'}}>
+                1. jika barang merupakan dokumen harap perhatikan privasi
+                pemilik barang, mohon untuk tidak manampikan/di sensor nomer id,
+                Tanggal lahir, contoh: KTP, Ijazah{' '}
+              </Text >
+              <Text style={{color:'black'}}>
+                2. jika barang merupakan barang berharga di harapkan untuk
+                meyerahkan ke pihak terkait: kantor polisi, pos satpam dan
+                pelayanan masyarakat terdekat
+              </Text>
+            </View>
+          )}
         </ScrollView>
         <Modal
           style={{}}
@@ -660,11 +707,17 @@ export default class UploadScreen extends Component {
                   justifyContent: 'space-evenly',
                 }}>
                 <TouchableOpacity
-                  onPress={() => {this._requestCameraPermission('c');this._setModalVisible(!modalVisible)}}>
+                  onPress={() => {
+                    this._requestCameraPermission('c');
+                    this._setModalVisible(!modalVisible);
+                  }}>
                   <Text style={{color: 'black'}}>Camera</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => {this._requestCameraPermission('g');this._setModalVisible(!modalVisible)}}>
+                  onPress={() => {
+                    this._requestCameraPermission('g');
+                    this._setModalVisible(!modalVisible);
+                  }}>
                   <Text style={{color: 'black'}}>Galeri</Text>
                 </TouchableOpacity>
               </View>

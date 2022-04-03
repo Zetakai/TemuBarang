@@ -22,6 +22,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Verified from 'react-native-vector-icons/MaterialIcons';
 import {timeSince} from '../../components/utils/moment';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 export class DetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -178,7 +179,7 @@ export class DetailsScreen extends Component {
                 </View>
               </View>
             </Modal>
-            <TouchableOpacity
+            <TouchableOpacity style={{marginBottom:-25}}
               activeOpacity={!data.photoURL && 1}
               onPress={() => data.photoURL && this._setModalVisible(true)}>
               <Image
@@ -187,7 +188,7 @@ export class DetailsScreen extends Component {
                     ? {uri: `${data.photoURL}`}
                     : require('../../assets/dummy.png')
                 }
-                style={{width: '100%', height: 200}}
+                style={{width: '100%', height: 225}}
               />
             </TouchableOpacity>
             <TouchableOpacity style={{position: 'absolute', top: 10, left: 10}}>
@@ -201,19 +202,19 @@ export class DetailsScreen extends Component {
               </View>
             </TouchableOpacity>
           </View>
-          <View style={{padding: 5, backgroundColor: 'white'}}>
+          <View style={{padding: 5, backgroundColor: 'white',borderTopLeftRadius:25,borderTopRightRadius:25}}>
             <CText style={{fontSize: 30, fontWeight: 'bold'}}>
               {data.namabarang}
             </CText>
-            <Text style={styles.textcolor}>Lokasi : {data.lokasi}</Text>
+            <Text style={styles.textcolor}><EvilIcons name="location" size={16} />Lokasi : {data.lokasi}</Text>
           </View>
           <View style={{padding: 5, backgroundColor: 'white', marginBottom: 3}}>
             <CText style={{fontSize: 25}}>Deskripsi</CText>
             <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
-            <Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>
-            <Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>
-
-            <Text style={styles.textcolor}>{timeSince(params.time.seconds)}yang lalu</Text>
+            {data.keyunik?<Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>:<></>}
+            {data.hadiah?<Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>:<></>}
+            {data.deskripsi?<Text style={styles.textcolor}>Deskripsi detail: {data.deskripsi}</Text>:<></>}
+            <Text style={styles.textcolor}>{timeSince(params.time.seconds)}lalu</Text>
           </View>
           <View
             style={{
