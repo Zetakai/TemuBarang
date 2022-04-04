@@ -35,7 +35,7 @@ export class DetailsScreen extends Component {
       modalVisibleComment: false,
       dataCommentsChild: [],
       commentIDs: [],
-      isVerified: false,
+      isVerified: false,isVerifiedAll:[]
     };
     let mounted;
   }
@@ -45,7 +45,7 @@ export class DetailsScreen extends Component {
   _setModalVisibleComment = visible => {
     this.setState({modalVisibleComment: visible});
   };
-  _isVerified = async () => {
+  _isVerified = async (uid) => {
     const {user} = this.props;
     const {params} = this.props.route;
     const verifiedUsers = await firestore()
@@ -56,17 +56,33 @@ export class DetailsScreen extends Component {
 
     const newData = datauid.filter(user => {
       const userData = user.uid;
-      return userData.indexOf(params.uid) > -1;
+      return userData.indexOf(uid) > -1;
     });
+    this.setState({isVerified: newData})
+    ;
+  };
+  _isVerifiedAll = async () => {
+    const {user} = this.props;
+    const {params} = this.props.route;
+    await firestore()
+      .collection('VerifiedAccounts')
+      .doc('Official')
+      .get().then(x=>x.data().Users).then(x=>this.setState({isVerifiedAll: x}))
 
-    this.setState({isVerified: newData});
+   
   };
   async componentDidMount() {
     const {params} = this.props.route;
     const {data, showModal} = this.state;
     this.setState({data: params});
     this.mounted = true;
-    this._isVerified();
+    this._isVerified(params.uid);
+    this._isVerifiedAll()
+    console.log(this.state.isVerifiedAll)
+    await firestore()
+      .collection('VerifiedAccounts')
+      .doc('Official')
+      .get().then(x=>x.data().Users).then(x=> this.setState({isVerifiedAll: x}))
     await firestore()
       .collection('Comments')
       .doc(`${params.uid}` + `${params.postID}`)
@@ -135,7 +151,7 @@ export class DetailsScreen extends Component {
       modalVisible,
       modalVisibleComment,
       commentIDs,
-      isVerified,
+      isVerified,isVerifiedAll,
     } = this.state;
     return (
       <View style={styles.container}>
@@ -345,6 +361,17 @@ export class DetailsScreen extends Component {
                 {dataComments &&
                   dataComments
                     .map((x, i) => {
+                      const repsum=dataCommentsChild &&
+                      dataCommentsChild.map((y, i) => {
+                        let check;
+                        if (
+                          x.commentID == y.commentID &&
+                          y.commentID == x.commentID
+                        ) {
+                          check = true;
+                          // console.log(check);
+                        }
+                        if (check == true) {return}}).length
                       return (
                         <View
                           key={i}
@@ -391,7 +418,7 @@ export class DetailsScreen extends Component {
                                 }>
                                 {x.displayName}
                               </Text>
-                              {isVerified.length > 0 && (
+                              {isVerifiedAll.some(v=>v.uid==x.uid) && (
                                 <Verified
                                   name="verified-user"
                                   size={25}
@@ -402,7 +429,10 @@ export class DetailsScreen extends Component {
                           </View>
                           <Text style={{...styles.textcolor, marginLeft: 40}}>
                             {x.comment}
-                          </Text>
+                          </Text>{repsum>0&&<Text style={{color:'grey',marginLeft: 40}}>
+Replies{' '+repsum}
+                          
+                          </Text>}
                         </View>
                       );
                     })
@@ -507,7 +537,7 @@ export class DetailsScreen extends Component {
                                 }>
                                 {x.displayName}
                               </Text>
-                              {isVerified.length > 0 && (
+                              {isVerifiedAll.some(v=>v.uid==x.uid) && (
                                 <Verified
                                   name="verified-user"
                                   size={25}
@@ -582,7 +612,7 @@ export class DetailsScreen extends Component {
                                 }>
                                 {y.displayName}
                               </Text>
-                              {isVerified.length > 0 && (
+                              {isVerifiedAll.some(v=>v.uid==y.uid) && (
                                 <Verified
                                   name="verified-user"
                                   size={25}

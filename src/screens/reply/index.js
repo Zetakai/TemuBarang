@@ -28,7 +28,7 @@ export class ReplyScreen extends Component {
       dataComments: [],
       modalVisible: false,
       modalVisibleComment: false,
-      dataCommentsChild: [],isVerified:false
+      dataCommentsChild: [],isVerified:false,isVerifiedAll:[]
     };let mounted
   }
   _isVerified = async () => {
@@ -47,12 +47,23 @@ export class ReplyScreen extends Component {
 
     this.setState({isVerified: newData});
   };
+  _isVerifiedAll = async () => {
+    const {user} = this.props;
+    const {params} = this.props.route;
+    await firestore()
+      .collection('VerifiedAccounts')
+      .doc('Official')
+      .get().then(x=>x.data().Users).then(x=>this.setState({isVerifiedAll: x}))
+
+   
+  };
   async componentDidMount() {
     const {params} = this.props.route;
     const {data, showModal} = this.state;
     this.setState({data: params});
     this.mounted = true;
 this._isVerified()
+this._isVerifiedAll()
     await firestore()
       .collection('CommentsChild')
       .doc(`${params.postID}`)
@@ -100,7 +111,7 @@ this._isVerified()
       dataComments,
       dataCommentsChild,
       modalVisible,
-      modalVisibleComment,isVerified
+      modalVisibleComment,isVerified,isVerifiedAll
     } = this.state;
     const {user} = this.props;
     return (
@@ -149,7 +160,7 @@ this._isVerified()
                                 }>
                                 {params.displayName}
                               </Text>
-                              {isVerified.length > 0 && (
+                              {isVerifiedAll.some(v=>v.uid==params.uid) && (
                                 <Verified
                                   name="verified-user"
                                   size={25}
@@ -221,7 +232,7 @@ this._isVerified()
                                 }>
                                 {x.displayName}
                               </Text>
-                              {isVerified.length > 0 && (
+                              {isVerifiedAll.some(v=>v.uid==x.uid)&& (
                                 <Verified
                                   name="verified-user"
                                   size={25}
