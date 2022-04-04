@@ -19,6 +19,7 @@ import CGap from '../../components/CGap';
 import {convertDate} from '../../components/utils/Utility/util/date';
 import CBubbleText from '../../components/CBubbleText';
 import Delete from 'react-native-vector-icons/Feather';
+import Send from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   getHour,
   convertDayMonthOnly,
@@ -33,14 +34,15 @@ export class Message extends Component {
       target: this.props.route.params,
       messages: [],
       inputText: '',
-    };let mounted
+    };
+    let mounted;
   }
 
   componentDidMount() {
     const {user} = this.props;
     const {params} = this.props.route;
     const {target, messages} = this.state;
-    this.mounted=true
+    this.mounted = true;
     firestore()
       .collection('Message')
       .doc(user.uid)
@@ -48,7 +50,9 @@ export class Message extends Component {
       .doc(params.uid)
       .onSnapshot(res => {
         if (res)
-          if (res.data()) this.mounted==true&&this.setState({messages: res.data()?.messages});
+          if (res.data())
+            this.mounted == true &&
+              this.setState({messages: res.data()?.messages});
       });
   }
 
@@ -106,14 +110,15 @@ export class Message extends Component {
       );
   };
   _deleteMessage = () => {
-    const {user,navigation} = this.props;
+    const {user, navigation} = this.props;
     const {params} = this.props.route;
     firestore()
       .collection('Message')
       .doc(user.uid)
       .collection('chatWith')
       .doc(params.uid)
-      .delete().then(()=>navigation.replace('TabNav'))
+      .delete()
+      .then(() => navigation.replace('TabNav'));
   };
   componentWillUnmount() {
     this.mounted = false;
@@ -130,33 +135,58 @@ export class Message extends Component {
     return (
       <View style={styles.page}>
         <View style={styles.topBar}>
-          <TouchableOpacity
-            style={{marginRight: 40}}
-            onPress={() => {
-              navigation.goBack('');
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
-            <IconBack />
-          </TouchableOpacity>
-          <CImageCircle
-            image={{uri: params.ppURL}}
-            height={responsiveWidth(40)}
-            width={responsiveWidth(40)}
-          />
-          <Text style={styles.name}>{params.displayName}</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity
+                style={{marginRight: 40}}
+                onPress={() => {
+                  navigation.goBack('');
+                }}>
+                <IconBack />
+              </TouchableOpacity>
+              <CImageCircle
+                image={{uri: params.ppURL}}
+                height={responsiveWidth(40)}
+                width={responsiveWidth(40)}
+              />
+            </View>
+            <Text style={styles.name}>{params.displayName}</Text>
+          </View>
           <TouchableOpacity
-            style={{position: 'absolute', top: 10, right: 20}}
+            style={
+              {
+                // position: 'absolute', top: 10, right: 20
+              }
+            }
             onPress={() => {
               this._deleteMessage();
             }}>
             <Delete color={'black'} name="trash-2" size={30} />
           </TouchableOpacity>
         </View>
-        <ScrollView style={{flex: 1,paddingHorizontal:17}}>
+        <ScrollView
+          style={{flex: 1, paddingHorizontal: 17,paddingTop:15}}
+          ref={ref => {
+            this.scrollView = ref;
+          }}
+          onContentSizeChange={() =>
+            this.scrollView.scrollToEnd({animated: true})
+          }>
           {messages ? (
             messages.map((value, index, array) => {
               let timenow = Math.round(new Date().valueOf() / 1000);
-              
-              return ( 
+
+              return (
                 <View key={index}>
                   <CBubbleText
                     isMe={value.sendBy == user.uid}
@@ -198,7 +228,7 @@ export class Message extends Component {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'space-evenly',
             alignItems: 'center',
           }}>
           <CTextInput
@@ -209,13 +239,8 @@ export class Message extends Component {
               this.setState({inputText});
             }}
           />
-          <TouchableOpacity onPress={() => this._send()}>
-            <CImageCircle
-              image={require('../../assets/Arrow-Right.svg')}
-              width={responsiveWidth(40)}
-              height={responsiveWidth(40)}
-              backgroundColor={colors.primary}
-            />
+          <TouchableOpacity activeOpacity={inputText?0.6:1} onPress={() => inputText&&this._send()}>
+            <Send color={'dimgrey'} name="send-outline" size={30} />
           </TouchableOpacity>
         </View>
         <CGap height={15} />
@@ -227,17 +252,17 @@ export class Message extends Component {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    
     paddingTop: 30,
   },
   topBar: {
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    marginBottom: 15,
-    marginTop:1,
+    marginTop: 1,
     alignItems: 'center',
-    borderBottomWidth:2,
-    borderBottomColor:colors.redmuda,
-    padding:10
+    borderBottomWidth: 2,
+    borderBottomColor: 'black',
+    paddingHorizontal: 20,
+    paddingBottom:10,
   },
   name: {
     color: 'black',

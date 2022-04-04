@@ -21,7 +21,7 @@ import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Back from 'react-native-vector-icons/FontAwesome5';
 import Verified from 'react-native-vector-icons/MaterialIcons';
-import {convertDateOnly, getHour} from '../../components/utils/moment';
+import {timeSince,convertDateOnly,getHour} from '../../components/utils/moment';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Date from 'react-native-vector-icons/Fontisto';
 export class DetailsScreen extends Component {
@@ -253,27 +253,14 @@ export class DetailsScreen extends Component {
               </View>
             </View>
           </View>
-          <View style={{paddingHorizontal: 15, paddingVertical: 10, backgroundColor: 'white', marginBottom: 3}}>
-          <Text style={{color: 'grey'}}>Deskripsi tambahan:</Text>
-            {/* <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
-            {data.keyunik ? (
-              <Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>
-            ) : (
-              <></>
-            )}
-            {data.hadiah ? (
-              <Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>
-            ) : (
-              <></>
-            )}
-            {data.deskripsi ? (
-              <Text style={styles.textcolor}>
-                Deskripsi detail: {data.deskripsi}
-              </Text>
-            ) : (
-              <></>
-            )} */}
-            <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>Tidak ada.</Text>
+          <View style={{padding: 5, backgroundColor: 'white', marginBottom: 3}}>
+            <CText style={{fontSize: 25}}>Deskripsi</CText>
+            <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
+            {data.keyunik?<Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>:<></>}
+            {data.hadiah?<Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>:<></>}
+            {data.deskripsi?<Text style={styles.textcolor}>Deskripsi detail: {data.deskripsi}</Text>:<></>}
+            <Text style={styles.textcolor}>{convertDateOnly(new Date(params.time.seconds*1000))}</Text>
+            <Text style={styles.textcolor}>{getHour(new Date(params.time.seconds*1000))}</Text>
           </View>
           <View
             style={{
