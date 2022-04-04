@@ -596,7 +596,7 @@ export default class UploadScreen extends Component {
                     onFocus={() => this.setState({showcat: false})}
                   />
                 </View>
-                <CText style={styles.textcolor}>Ciri-ciri barang</CText>
+                {/* <CText style={styles.textcolor}>Ciri-ciri barang</CText>
                 <View style={styles.profInput}>
                   <TextInput
                     placeholderTextColor={'dimgrey'}
@@ -606,7 +606,7 @@ export default class UploadScreen extends Component {
                     onChangeText={value => this.setState({key: value})}
                     onFocus={() => this.setState({showcat: false})}
                   />
-                </View>
+                </View> */}
                 <CText style={styles.textcolor}>Deskripsi Barang</CText>
                 <View style={styles.profInput}>
                   <TextInput

@@ -23,7 +23,7 @@ import Back from 'react-native-vector-icons/FontAwesome5';
 import Verified from 'react-native-vector-icons/MaterialIcons';
 import {timeSince,convertDateOnly,getHour} from '../../components/utils/moment';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Date from 'react-native-vector-icons/Fontisto';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 export class DetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -139,7 +139,7 @@ export class DetailsScreen extends Component {
     } = this.state;
     return (
       <View style={styles.container}>
-        <View style={{}}>
+        <ScrollView style={{}}>
           <View style={{backgroundColor: 'white'}}>
             <Modal
               animationType="fade"
@@ -192,24 +192,7 @@ export class DetailsScreen extends Component {
                 style={{width: '100%', height: 225}}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={{position: 'absolute', top: 10, left: 10}}>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  borderRadius: 100,
-                  height: 40,
-                  width: 40,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Back
-                  name="arrow-left"
-                  color={'black'}
-                  size={22}
-                  onPress={() => this.props.navigation.goBack()}
-                />
-              </View>
-            </TouchableOpacity>
+            
           </View>
           <View
             style={{
@@ -220,31 +203,32 @@ export class DetailsScreen extends Component {
             <CText style={{fontSize: 30, fontWeight: 'bold', color: 'black'}}>
               {data.namabarang}
             </CText>
+            <Text style={{color:'grey'}}>{data.kategori}</Text>
             <View style={{paddingTop: 15}}>
               <View style={{flexDirection: 'row'}}>
                 <View style={{width: '55%'}}>
                   <Text style={{color: 'grey'}}>Dipost pada:</Text>
-                  <View style={{paddingVertical: 5, flexDirection: 'row', paddingTop: 10}}>
-                    <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                      <Date name="date" size={30} color="#00ca74" />
+                  <View style={{ flexDirection: 'row', paddingTop: 15}}>
+                    <View style={{justifyContent: 'center', alignSelf:'flex-start'}}>
+                      <Fontisto name="date" size={30} color="#00ca74" />
                     </View>
-                    <View style={{paddingHorizontal: 7}}>
+                    <View style={{paddingHorizontal: 8}}>
                       <Text
                         style={{
                           color: 'black',
                           fontWeight: 'bold',
                           fontSize: 15,
                         }}>
-                        Disini tgl bulan tahun
+                        {convertDateOnly(new Date(params.time.seconds*1000))}
                       </Text>
-                      <Text style={{fontSize: 14}}>Pukul: disini jam</Text>
+                      <Text style={{fontSize: 14, color: 'black',}}>{getHour(new Date(params.time.seconds*1000))}</Text>
                     </View>
                   </View>
                 </View>
                 <View style={{width: '35%'}}>
-                  <Text>Ditemukan di: </Text>
-                  <View style={{flexDirection: 'row', alignItems: 'center', paddingTop: 15}}>
-                    <View style={{justifyContent: 'center', alignContent: 'center'}}>
+                  <Text style={{color: 'grey'}}>Ditemukan di: </Text>
+                  <View style={{flexDirection: 'row', paddingTop: 15}}>
+                    <View style={{justifyContent: 'center', alignSelf:'flex-start'}}>
                     <EvilIcons name="location" size={40} color='#00ca74' />
                     </View>
                     <Text style={{color: 'black', fontSize: 15, fontWeight: 'bold'}}>{data.lokasi}</Text>
@@ -253,14 +237,35 @@ export class DetailsScreen extends Component {
               </View>
             </View>
           </View>
-          <View style={{padding: 5, backgroundColor: 'white', marginBottom: 3}}>
-            <CText style={{fontSize: 25}}>Deskripsi</CText>
-            <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
-            {data.keyunik?<Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>:<></>}
-            {data.hadiah?<Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>:<></>}
-            {data.deskripsi?<Text style={styles.textcolor}>Deskripsi detail: {data.deskripsi}</Text>:<></>}
-            <Text style={styles.textcolor}>{convertDateOnly(new Date(params.time.seconds*1000))}</Text>
-            <Text style={styles.textcolor}>{getHour(new Date(params.time.seconds*1000))}</Text>
+          <View style={{paddingHorizontal: 15, paddingVertical: 10, backgroundColor: 'white', marginBottom: 3}}>
+          <Text style={{color: 'grey'}}>Deskripsi tambahan: </Text>
+          {data.deskripsi ? (
+              <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
+                {data.deskripsi}
+              </Text>
+            ) : (
+              <></>
+            )}
+            
+            {/* <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
+            {data.keyunik ? (
+              <Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>
+            ) : (
+              <></>
+            )}
+            {data.hadiah ? (
+              <Text style={styles.textcolor}>Hadiah: {data.hadiah}</Text>
+            ) : (
+              <></>
+            )}
+            {data.deskripsi ? (
+              <Text style={styles.textcolor}>
+                Deskripsi detail: {data.deskripsi}
+              </Text>
+            ) : (
+              <></>
+            )} */}
+            <Text >Tidak ada.</Text>
           </View>
           <View
             style={{
@@ -336,7 +341,7 @@ export class DetailsScreen extends Component {
                 <CText>Komentar</CText>
                 <CText> {dataComments.length + dataCommentsChild.length}</CText>
               </View>
-              <View style={{}}>
+              <View style={{minHeight:190}}>
                 {dataComments &&
                   dataComments
                     .map((x, i) => {
@@ -592,6 +597,7 @@ export class DetailsScreen extends Component {
                     })}
                 </View>
               </ScrollView>
+              
               <TouchableOpacity
                 style={{position: 'absolute', top: 15, right: 15}}>
                 <View>
@@ -632,7 +638,25 @@ export class DetailsScreen extends Component {
               </View>
             </View>
           </Modal>
-        </View>
+        </ScrollView>
+        <TouchableOpacity style={{position: 'absolute', top: 10, left: 10}}>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: 100,
+                  height: 40,
+                  width: 40,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Back
+                  name="arrow-left"
+                  color={'black'}
+                  size={22}
+                  onPress={() => this.props.navigation.goBack()}
+                />
+              </View>
+            </TouchableOpacity>
       </View>
     );
   }
