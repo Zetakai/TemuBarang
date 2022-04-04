@@ -564,22 +564,32 @@ export class DetailsScreen extends Component {
                                             : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
                                         }}
                                       />
-                                      <View
-                                        style={
-                                          data.uid == y.uid && {
-                                            borderRadius: 5,
-                                            paddingHorizontal: 8,
-                                            backgroundColor: 'lightgreen',
-                                          }
-                                        }>
-                                        <Text
-                                          style={{
-                                            ...styles.textcolor,
-                                            fontWeight: 'bold',
-                                          }}>
-                                          {y.displayName}
-                                        </Text>
-                                      </View>
+                                      <View style={{flexDirection: 'row'}}>
+                              <Text
+                                style={
+                                  data.uid == y.uid
+                                    ? {
+                                        borderRadius: 5,
+                                        paddingHorizontal: 8,
+                                        backgroundColor: 'lightgreen',
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                    : {
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                }>
+                                {y.displayName}
+                              </Text>
+                              {isVerified.length > 0 && (
+                                <Verified
+                                  name="verified-user"
+                                  size={25}
+                                  color="black"
+                                />
+                              )}
+                            </View>
                                     </View>
                                     <Text
                                       style={{
