@@ -181,6 +181,7 @@ export default class App extends Component {
             <Stack.Screen
             name="VerifyScreen"
             component={VerifyScreen}
+            options={{headerShown: false}}
             />
         </Stack.Navigator>
       </NavigationContainer>

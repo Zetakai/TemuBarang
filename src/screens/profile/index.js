@@ -8,15 +8,19 @@ import {
   TextInput,
   ScrollView,
   PermissionsAndroid,
+  Modal,
 } from 'react-native';
 import CText from '../../components/atoms/CText';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Edit from 'react-native-vector-icons/Feather';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import Delete from 'react-native-vector-icons/Feather';
 import storage from '@react-native-firebase/storage';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {connect} from 'react-redux';
+import Back from 'react-native-vector-icons/FontAwesome5';
+import Menu from 'react-native-vector-icons/Ionicons';
+import Logout from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export class Profile extends Component {
   constructor() {
@@ -34,8 +38,15 @@ export class Profile extends Component {
       path: '',
       confirm: null,
       code: '',
+      settingAcc: false,
+      modalVisible: false,
     };
   }
+
+  _setModalVisible = visible => {
+    this.setState({modalVisible: visible});
+  };
+
   _verifyPhoneNumber = async () => {
     const confirmation = await auth().verifyPhoneNumber(phoneNumber);
     this.setState({confirm: confirmation});
@@ -93,7 +104,8 @@ export class Profile extends Component {
           .then(() => this.props.update());
         // .then(() => this._updatePostProfile());
       } catch (err) {
-        console.log(err);this.props.update()
+        console.log(err);
+        this.props.update();
       }
     } else {
       try {
@@ -101,7 +113,6 @@ export class Profile extends Component {
           displayName: !displayName
             ? auth().currentUser.displayName
             : displayName,
-            
         };
         await auth()
           .currentUser.updateProfile(update)
@@ -111,7 +122,8 @@ export class Profile extends Component {
           .then(() => this.props.update());
         // .then(() => this._updatePostProfile());
       } catch (err) {
-        console.log(err);this.props.update()
+        console.log(err);
+        this.props.update();
       }
     }
   };
@@ -298,6 +310,8 @@ export class Profile extends Component {
       path,
       dataLost,
       dataFound,
+      settingAcc,
+      modalVisible,
     } = this.state;
     let dataHistory = [...dataLost, ...dataFound].sort(
       (a, b) => b.time - a.time,
@@ -305,98 +319,125 @@ export class Profile extends Component {
 
     return (
       <View style={styles.container}>
-        {edit == false ? (
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity onPress={() => this._userLogout()}>
-              <Text
-                style={{
-                  color: 'white',
-                  paddingTop: 20,
-                  paddingLeft: 20,
-                }}>
-                Log Out
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.setState({edit: !edit, editing: false})}>
-              <Text
-                style={{
-                  color: 'white',
-                  alignSelf: 'flex-end',
-                  paddingTop: 20,
-                  paddingRight: 20,
-                }}>
-                Edit Profile
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity
-              onPress={() => {
-                this._saveprofile(), this.setState({edit: !edit});
-              }}>
-              <Text
-                style={{
-                  color: 'white',
-                  paddingTop: 20,
-                  paddingLeft: 20,
-                }}>
-                Save
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.setState({edit: !edit})}>
-              <Text
-                style={{
-                  color: 'white',
-                  paddingTop: 20,
-                  paddingRight: 20,
-                }}>
-                Cancel
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        <View style={styles.header}>
-          <TouchableOpacity
-            activeOpacity={edit == false ? 1 : 0}
-            style={{justifyContent: 'center'}}
-            onPress={() => {
-              edit == true && this._requestCameraPermission();
-            }}>
-            <Image
-              style={styles.avatar}
-              source={
-                edit == false
-                  ? {
-                      uri: `${user.photoURL}`,
-                    }
-                  : imageGallery
-                  ? imageGallery
-                  : require('../../assets/dummy.png')
-              }
-            />
-          </TouchableOpacity>
-        </View>
         <View
           style={{
-            flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingHorizontal: 20,
+            flexDirection: 'row',
+            paddingHorizontal: 15,
+            backgroundColor: '#00ca74',
+            borderBottomLeftRadius: 50,
           }}>
-          <TouchableOpacity
-            onPress={() => {
-              this._getStats();
-            }}>
-            <Text style={{color: 'white'}}>Your Stats</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={{color: 'white'}}>Contact Us</Text>
-          </TouchableOpacity>
+          <View style={{paddingTop: 10, width: '35%'}}>
+            <View
+              style={{
+                borderRadius: 100,
+                height: 40,
+                width: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {edit == false && (
+                <Back
+                  name="arrow-left"
+                  color={'white'}
+                  size={25}
+                  onPress={() => this.props.navigation.goBack()}
+                />
+              )}
+            </View>
+          </View>
+          <View style={styles.header}>
+            <TouchableOpacity
+              activeOpacity={edit == false ? 1 : 0}
+              style={{justifyContent: 'center'}}
+              onPress={() => {
+                edit == true && this._requestCameraPermission();
+              }}>
+              <Image
+                style={styles.avatar}
+                source={
+                  edit == false
+                    ? {
+                        uri: `${user.photoURL}`,
+                      }
+                    : imageGallery
+                    ? imageGallery
+                    : require('../../assets/dummy.png')
+                }
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={{paddingTop: 10, width: '35%', alignItems: 'flex-end'}}>
+            <View
+              style={{
+                borderRadius: 100,
+                height: 40,
+                width: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {edit == false && (
+                <Menu
+                  name="menu"
+                  color={'white'}
+                  size={30}
+                  onPress={() => this.setState({settingAcc: !settingAcc})}
+                />
+              )}
+            </View>
+            {settingAcc == true && (
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: 5,
+                  paddingHorizontal: 7,
+                  top: -10,
+                }}>
+                <TouchableOpacity
+                  style={styles.setting}
+                  onPress={() => {
+                    this.setState({edit: !edit, settingAcc: !settingAcc});
+                  }}>
+                  <Text style={styles.textSetting}>Edit Profil</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.setting}
+                  onPress={() => {
+                    this._getStats();
+                  }}>
+                  <Text style={styles.textSetting}>Statistik</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.setting}>
+                  <Text style={styles.textSetting}>Kontak Kami</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.setting}
+                  onPress={() => {
+                    this.props.navigation.navigate('VerifyScreen');
+                  }}>
+                  <Text style={styles.textSetting}>Verifikasi</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.setting}
+                  onPress={() => {
+                    this.props.navigation.navigate('ForgotScreen', {
+                      passEmail: auth().currentUser.email,
+                    });
+                  }}>
+                  <Text style={styles.textSetting}>Reset Password</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.setting}
+                  onPress={() => {this._setModalVisible(true), this.setState({settingAcc: !settingAcc})}}>
+                  <Text style={styles.textSetting}>Logout</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         </View>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-            <CText style={styles.textcolor}>Name</CText>
+            <Text style={styles.textcolor}>Nama</Text>
             <View
               style={{
                 justifyContent: 'space-between',
@@ -404,22 +445,33 @@ export class Profile extends Component {
                 flexDirection: 'row',
                 marginBottom: 10,
                 borderBottomWidth: 1,
+                paddingVertical: 5,
               }}>
-              {editing == true && edit == true ? (
+              {edit == true ? (
                 <TextInput
                   placeholderTextColor={'dimgrey'}
                   placeholder={auth().currentUser.displayName}
-                  style={{color: 'dimgrey', width: '80%'}}
+                  style={{
+                    color: 'black',
+                    width: '80%',
+                    height: 30,
+                    textAlignVertical: 'bottom',
+                    paddingBottom: -20,
+                    marginTop: -5,
+                    fontSize: 15,
+                  }}
                   value={displayName}
                   onChangeText={value => this.setState({displayName: value})}
                 />
               ) : (
-                <Text style={{color: 'dimgrey'}}>{user.displayName}</Text>
+                <Text style={{color: 'black', fontSize: 15}}>
+                  {user.displayName}
+                </Text>
               )}
               {edit == true ? (
                 <TouchableOpacity
                   onPress={() => this.setState({editing: !editing})}>
-                  <AntDesign color={'black'} name="edit" size={24} />
+                  <Edit color={'black'} name="edit-2" size={24} />
                 </TouchableOpacity>
               ) : (
                 <View></View>
@@ -430,10 +482,13 @@ export class Profile extends Component {
               style={{
                 marginBottom: 10,
                 borderBottomWidth: 1,
+                paddingVertical: 5,
               }}>
-              <Text style={{color: 'dimgrey'}}>{auth().currentUser.email}</Text>
+              <Text style={{color: 'black', fontSize: 15}}>
+                {auth().currentUser.email}
+              </Text>
             </View>
-            <CText style={styles.textcolor}>Phone Number</CText>
+            <CText style={styles.textcolor}>Nomor Telepon</CText>
             <View
               style={{
                 justifyContent: 'space-between',
@@ -441,39 +496,57 @@ export class Profile extends Component {
                 flexDirection: 'row',
                 marginBottom: 10,
                 borderBottomWidth: 1,
+                paddingVertical: 5,
               }}>
-              <Text style={{color: 'dimgrey'}}>
+              <Text style={{color: 'black', fontSize: 15}}>
                 {auth().currentUser.phoneNumber}
               </Text>
             </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <TouchableOpacity>
-                <Text
-                  onPress={() => {
-                    this.props.navigation.navigate('ForgotScreen', {
-                      passEmail: auth().currentUser.email,
-                    });
+            {edit == true && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 5,
+                }}>
+                <TouchableOpacity
+                  style={{
+                    width: '49%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 2,
+                    borderColor: '#00ca74',
+                    borderRadius: 5,
+                    height: 40,
                   }}
-                  style={{color: 'green'}}>
-                  Change Password
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text
                   onPress={() => {
-                    this.props.navigation.navigate('VerifyScreen');
+                    this.setState({edit: !edit});
+                  }}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>BATAL</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: '49%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 2,
+                    borderColor: '#00ca74',
+                    backgroundColor: '#00ca74',
+                    borderRadius: 5,
+                    height: 40,
                   }}
-                  style={{color: 'green'}}>
-                  Verify Phone Number
-                </Text>
-              </TouchableOpacity>
-            </View>
+                  onPress={() => {
+                    this._saveprofile(), this.setState({edit: !edit});
+                  }}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>SIMPAN</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
           {this.mounted == true && dataHistory ? (
-            <View>
+            <View style={{marginLeft: 25}}>
               <View>
-                <Text style={{color: 'grey', marginLeft: 25}}>Your Posts</Text>
+                <Text style={{color: 'grey', marginBottom: 5}}>Pos Anda</Text>
               </View>
               <ScrollView
                 horizontal={true}
@@ -484,7 +557,7 @@ export class Profile extends Component {
                       x && (
                         <TouchableOpacity
                           key={i}
-                          style={{marginLeft: 10}}
+                          style={{marginLeft: 0}}
                           onPress={() =>
                             this.props.navigation.navigate('DetailsScreen', x)
                           }>
@@ -495,9 +568,9 @@ export class Profile extends Component {
                                 : require('../../assets/galeryImages.jpeg')
                             }
                             style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 25,
+                              width: 150,
+                              height: 150,
+                              borderRadius: 20,
                               borderWidth: 2,
                               borderColor:
                                 x.kategoripos == 'Found'
@@ -528,6 +601,92 @@ export class Profile extends Component {
             <View></View>
           )}
         </View>
+        <Modal
+          animationType="fade"
+          transparent
+          visible={modalVisible}
+          onRequestClose={() => {
+            this._setModalVisible(!modalVisible);
+          }}>
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View
+              style={{
+                width: 300,
+                height: 255,
+                backgroundColor: '#eeeeee',
+                borderRadius: 10,
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#00ca74',
+                  height: 40,
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                }}>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: 'black'}}>
+                  LOGOUT
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: 10,
+                }}>
+                <Logout name="logout" size={75} color='black' />
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10}}>
+                <Text
+                  style={{fontSize: 15, color: 'black', textAlign: 'center'}}>
+                  Apakah anda yakin ingin logout? Anda dapat login kembali jika
+                  ingin menggunakan aplikasi.
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 10,
+                  paddingBottom: 15,
+                  marginTop: 10
+                }}>
+                <TouchableOpacity
+                  style={{
+                    width: '48%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 2,
+                    borderColor: '#00ca74',
+                    borderRadius: 5,
+                    height: 40,
+                  }}
+                  onPress={() => {
+                    this._setModalVisible(!modalVisible);
+                  }}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>BATAL</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: '48%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 2,
+                    borderColor: '#00ca74',
+                    backgroundColor: '#00ca74',
+                    borderRadius: 5,
+                    height: 40,
+                  }}
+                  onPress={() => this._userLogout()}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>LOGOUT</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -536,21 +695,31 @@ export class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'green',
+    backgroundColor: 'white',
   },
   header: {
-    height: 150,
+    width: '30%',
+    height: 220,
     justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 30,
+    paddingBottom: 20,
   },
   avatar: {
     width: 130,
     height: 130,
     borderRadius: 63,
-    borderWidth: 3,
+    borderWidth: 1,
     borderColor: 'white',
-    marginBottom: 10,
-    alignSelf: 'center',
-    position: 'absolute',
+  },
+  setting: {
+    marginVertical: 4,
+    // borderColor: 'grey',
+    // borderBottomWidth: 0.5,
+    justifyContent: 'center',
+  },
+  textSetting: {
+    color: 'green',
   },
   body: {
     flex: 1,
@@ -559,7 +728,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   bodyContent: {
-    padding: 30,
+    paddingHorizontal: 25,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   profValue: {
     borderBottomWidth: 1,
@@ -575,7 +746,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderBottomWidth: 1,
   },
-  textcolor: {color: 'black'},
+  textcolor: {color: 'grey'},
 });
 const mapStateToProps = state => {
   return {
