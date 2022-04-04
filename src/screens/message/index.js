@@ -34,6 +34,8 @@ export class Message extends Component {
       target: this.props.route.params,
       messages: [],
       inputText: '',
+      validationCode: '',
+      post: null,
     };
     let mounted;
   }
@@ -52,63 +54,118 @@ export class Message extends Component {
         if (res)
           if (res.data())
             this.mounted == true &&
-              this.setState({messages: res.data()?.messages});
+              this.setState({
+                messages: res.data()?.messages,
+                post: res.data().post,
+              });
       });
   }
 
   _send = () => {
     const {user} = this.props;
     const {params} = this.props.route;
-    const {target, inputText} = this.state;
-    firestore()
-      .collection('Message')
-      .doc(user.uid)
-      .collection('chatWith')
-      .doc(params.uid)
-      .set(
-        {
-          messages: firestore.FieldValue.arrayUnion({
-            text: inputText,
-            sendBy: user.uid,
-            time: new Date(),
-          }),
-          lastChat: {
-            uid: params.uid,
-            text: inputText,
-            ppURL: params.ppURL ? params.ppURL : '',
-            time: new Date(),
-            displayName: params.displayName,
-          },
-        },
-        {merge: true},
-      )
-      .then(() => {
-        this.setState({inputText: ''});
-      });
+    const {target, inputText, post} = this.state;
+    params.data
+      ? firestore()
+          .collection('Message')
+          .doc(user.uid)
+          .collection('chatWith')
+          .doc(params.uid)
+          .set(
+            {
+              messages: firestore.FieldValue.arrayUnion({
+                text: inputText,
+                sendBy: user.uid,
+                time: new Date(),
+              }),
+              lastChat: {
+                uid: params.uid,
+                text: inputText,
+                ppURL: params.ppURL ? params.ppURL : '',
+                time: new Date(),
+                displayName: params.displayName,
+              },
+              post: params.data,
+            },
+            {merge: true},
+          )
+          .then(() => {
+            this.setState({inputText: ''});
+          })
+      : firestore()
+          .collection('Message')
+          .doc(user.uid)
+          .collection('chatWith')
+          .doc(params.uid)
+          .set(
+            {
+              messages: firestore.FieldValue.arrayUnion({
+                text: inputText,
+                sendBy: user.uid,
+                time: new Date(),
+              }),
+              lastChat: {
+                uid: params.uid,
+                text: inputText,
+                ppURL: params.ppURL ? params.ppURL : '',
+                time: new Date(),
+                displayName: params.displayName,
+              },
+            },
+            {merge: true},
+          )
+          .then(() => {
+            this.setState({inputText: ''});
+          });
 
-    firestore()
-      .collection('Message')
-      .doc(params.uid)
-      .collection('chatWith')
-      .doc(user.uid)
-      .set(
-        {
-          messages: firestore.FieldValue.arrayUnion({
-            text: inputText,
-            sendBy: user.uid,
-            time: new Date(),
-          }),
-          lastChat: {
-            uid: user.uid,
-            text: inputText,
-            ppURL: user.photoURL ? user.photoURL : '',
-            time: new Date(),
-            displayName: user.displayName,
-          },
-        },
-        {merge: true},
-      );
+    params.data
+      ? firestore()
+          .collection('Message')
+          .doc(params.uid)
+          .collection('chatWith')
+          .doc(user.uid)
+          .set(
+            {
+              messages: firestore.FieldValue.arrayUnion({
+                text: inputText,
+                sendBy: user.uid,
+                time: new Date(),
+              }),
+              lastChat: {
+                uid: user.uid,
+                text: inputText,
+                ppURL: user.photoURL ? user.photoURL : '',
+                time: new Date(),
+                displayName: user.displayName,
+              },
+              post: params.data,
+            },
+            {merge: true},
+          )
+      : firestore()
+          .collection('Message')
+          .doc(params.uid)
+          .collection('chatWith')
+          .doc(user.uid)
+          .set(
+            {
+              messages: firestore.FieldValue.arrayUnion({
+                text: inputText,
+                sendBy: user.uid,
+                time: new Date(),
+              }),
+              lastChat: {
+                uid: user.uid,
+                text: inputText,
+                ppURL: user.photoURL ? user.photoURL : '',
+                time: new Date(),
+                displayName: user.displayName,
+              },
+            },
+            {merge: true},
+          );
   };
+
   _deleteMessage = () => {
     const {user, navigation} = this.props;
     const {params} = this.props.route;
@@ -123,6 +180,23 @@ export class Message extends Component {
   componentWillUnmount() {
     this.mounted = false;
   }
+  _validate = () => {
+    const {user} = this.props;
+    const {params} = this.props.route;
+    this.setState({
+      validationCode: Math.floor(100000 + Math.random() * 900000),
+    });
+    firestore()
+      .collection('Validation')
+      .doc(params.uid)
+      .collection('ValidateWith')
+      .doc(user.uid)
+      .set({
+        targetuid: params.uid,
+        senderuid: user.uid,
+        code: validationCode,
+      });
+  };
 
   render() {
     const {navigation, dataUse, route, data, uid, user} = this.props;
@@ -130,7 +204,7 @@ export class Message extends Component {
     // const {data,uid}=navigation.route.params
 
     // const {image, name} = this.state.params;
-    const {inputText, messages} = this.state;
+    const {inputText, messages, post} = this.state;
 
     return (
       <View style={styles.page}>
@@ -138,7 +212,7 @@ export class Message extends Component {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'center',
+              justifyContent: 'space-between',
               alignItems: 'center',
             }}>
             <View
@@ -147,35 +221,79 @@ export class Message extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <TouchableOpacity
-                style={{marginRight: 40}}
-                onPress={() => {
-                  navigation.goBack('');
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
-                <IconBack />
-              </TouchableOpacity>
-              <CImageCircle
-                image={{uri: params.ppURL}}
-                height={responsiveWidth(40)}
-                width={responsiveWidth(40)}
-              />
+                <TouchableOpacity
+                  style={{marginRight: 40}}
+                  onPress={() => {
+                    navigation.goBack('');
+                  }}>
+                  <IconBack />
+                </TouchableOpacity>
+                <CImageCircle
+                  image={{uri: params.ppURL}}
+                  height={responsiveWidth(40)}
+                  width={responsiveWidth(40)}
+                />
+              </View>
+              <Text style={styles.name}>{params.displayName}</Text>
             </View>
-            <Text style={styles.name}>{params.displayName}</Text>
-          </View>
-          <TouchableOpacity
-            style={
-              {
-                // position: 'absolute', top: 10, right: 20
+            <TouchableOpacity
+              style={
+                {
+                  // position: 'absolute', top: 10, right: 20
+                }
               }
-            }
-            onPress={() => {
-              this._deleteMessage();
-            }}>
-            <Delete color={'black'} name="trash-2" size={30} />
-          </TouchableOpacity>
+              onPress={() => {
+                this._deleteMessage();
+              }}>
+              <Delete color={'black'} name="trash-2" size={30} />
+            </TouchableOpacity>
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+            <TouchableOpacity
+              onPress={() =>
+                post != null
+                  ? this.props.navigation.navigate('DetailsScreen', post)
+                  : this.props.navigation.goBack()
+              }
+              style={{
+                marginTop: 15,
+                borderRadius: 25,
+                height: 40,
+                width: '25%',
+                borderWidth: 1,
+                borderColor: 'black',
+                backgroundColor: 'lightblue',
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: 'black'}}>Ke Post</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                marginTop: 15,
+                borderRadius: 25,
+                height: 40,
+                width: '70%',
+                borderWidth: 1,
+                borderColor: 'black',
+                backgroundColor: 'pink',
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: 'black'}}>Konfirmasi Barang Kembali</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <ScrollView
-          style={{flex: 1, paddingHorizontal: 17,paddingTop:15}}
+          style={{flex: 1, paddingHorizontal: 17, paddingTop: 15}}
           ref={ref => {
             this.scrollView = ref;
           }}
@@ -239,7 +357,9 @@ export class Message extends Component {
               this.setState({inputText});
             }}
           />
-          <TouchableOpacity activeOpacity={inputText?0.6:1} onPress={() => inputText&&this._send()}>
+          <TouchableOpacity
+            activeOpacity={inputText ? 0.6 : 1}
+            onPress={() => inputText && this._send()}>
             <Send color={'dimgrey'} name="send-outline" size={30} />
           </TouchableOpacity>
         </View>
@@ -255,14 +375,11 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   topBar: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
     marginTop: 1,
-    alignItems: 'center',
     borderBottomWidth: 2,
     borderBottomColor: 'black',
     paddingHorizontal: 20,
-    paddingBottom:10,
+    paddingBottom: 10,
   },
   name: {
     color: 'black',

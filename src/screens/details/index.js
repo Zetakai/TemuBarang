@@ -78,7 +78,7 @@ export class DetailsScreen extends Component {
     this.mounted = true;
     this._isVerified(params.uid);
     this._isVerifiedAll()
-    console.log(this.state.isVerifiedAll)
+    
     await firestore()
       .collection('VerifiedAccounts')
       .doc('Official')
@@ -329,6 +329,8 @@ export class DetailsScreen extends Component {
                       displayName: data.displayName,
                       uid: data.uid,
                       ppURL: data.ppURL,
+                      data:params
+                      
                     })
                   }>
                   <Ionicons
