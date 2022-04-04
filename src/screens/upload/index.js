@@ -11,6 +11,7 @@ import {
   Image,
   PermissionsAndroid,
   ToastAndroid,
+  Keyboard,
 } from 'react-native';
 import React, {Component} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -426,7 +427,7 @@ export default class UploadScreen extends Component {
       renderData2,
       showcat,
     } = this.state;
-    console.log(selectedChoice);
+
     return (
       <SafeAreaView
         style={
@@ -436,17 +437,20 @@ export default class UploadScreen extends Component {
             ? {flex: 1, backgroundColor: 'green'}
             : {flex: 1, backgroundColor: 'chocolate'}
         }>
-        <ScrollView ref={ref => {
-                    this.scrollView = ref;
-                  }}
-                  onContentSizeChange={() =>
-                    this.scrollView.scrollTo({ y: 200, animated: true })}>
+        <ScrollView
+          ref={ref => {
+            this.scrollView = ref;
+          }}
+          onContentSizeChange={() =>
+            this.scrollView.scrollTo({y: 200, animated: true})
+          }>
           {/* <Pressable onPress={this._requestCameraPermission} style={styles.tombol}>
           <Text>opencamera</Text>
         </Pressable> */}
           <View
             style={{
-              padding: 5,marginBottom: selectedChoice ? 15 : 0,
+              padding: 5,
+              marginBottom: selectedChoice ? 15 : 0,
               marginTop: selectedChoice ? 15 : 50,
               marginHorizontal: selectedChoice ? 15 : 100,
               borderWidth: 1,
@@ -512,12 +516,12 @@ export default class UploadScreen extends Component {
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={namabarang}
                     onChangeText={value => this.setState({namabarang: value})}
+                    onFocus={() => this.setState({showcat: false})}
                   />
                 </View>
                 <CText style={styles.textcolor}>Kategori Barang</CText>
                 <View style={styles.profInput}>
                   <TextInput
-                  
                     placeholderTextColor={'dimgrey'}
                     placeholder="kategori barang"
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
@@ -527,7 +531,7 @@ export default class UploadScreen extends Component {
                       this.setState({kategori: value});
                     }}
                     onFocus={() => this.setState({showcat: true})}
-                    onBlur={() => this.setState({showcat: false})}
+                    
                   />
                 </View>
                 <View
@@ -547,6 +551,7 @@ export default class UploadScreen extends Component {
                                   this.setState({
                                     kategori: value.kategori,
                                     renderData: [],
+                                    showcat: false,
                                   });
                                 }}
                                 style={{color: 'white'}}>
@@ -565,6 +570,7 @@ export default class UploadScreen extends Component {
                                   this.setState({
                                     kategori: value.kategori,
                                     renderData2: [],
+                                    showcat: false,
                                   });
                                 }}
                                 style={{color: 'white'}}>
@@ -587,6 +593,7 @@ export default class UploadScreen extends Component {
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={lokasi}
                     onChangeText={value => this.setState({lokasi: value})}
+                    onFocus={() => this.setState({showcat: false})}
                   />
                 </View>
                 <CText style={styles.textcolor}>Ciri-ciri barang</CText>
@@ -597,6 +604,7 @@ export default class UploadScreen extends Component {
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={key}
                     onChangeText={value => this.setState({key: value})}
+                    onFocus={() => this.setState({showcat: false})}
                   />
                 </View>
                 <CText style={styles.textcolor}>Deskripsi Barang</CText>
@@ -607,6 +615,7 @@ export default class UploadScreen extends Component {
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={deskripsi}
                     onChangeText={value => this.setState({deskripsi: value})}
+                    onFocus={() => this.setState({showcat: false})}
                   />
                 </View>
                 {selectedChoice == 'Lost' ? (
@@ -625,6 +634,7 @@ export default class UploadScreen extends Component {
                         }}
                         value={hadiah}
                         onChangeText={value => this.setState({hadiah: value})}
+                        onFocus={() => this.setState({showcat: false})}
                       />
                     </View>
                   </View>
@@ -662,15 +672,23 @@ export default class UploadScreen extends Component {
                 borderWidth: 1,
                 borderColor: 'black',
                 borderRadius: 25,
-                backgroundColor: 'white',marginHorizontal:15
+                backgroundColor: 'white',
+                marginHorizontal: 15,
               }}>
-                <Text style={{color:'black',alignSelf:'center',fontWeight:'bold'}}>Disclaimer</Text>
-              <Text style={{color:'black'}}>
+              <Text
+                style={{
+                  color: 'black',
+                  alignSelf: 'center',
+                  fontWeight: 'bold',
+                }}>
+                Disclaimer
+              </Text>
+              <Text style={{color: 'black'}}>
                 1. jika barang merupakan dokumen harap perhatikan privasi
                 pemilik barang, mohon untuk tidak manampikan/di sensor nomer id,
                 Tanggal lahir, contoh: KTP, Ijazah{' '}
-              </Text >
-              <Text style={{color:'black'}}>
+              </Text>
+              <Text style={{color: 'black'}}>
                 2. jika barang merupakan barang berharga di harapkan untuk
                 meyerahkan ke pihak terkait: kantor polisi, pos satpam dan
                 pelayanan masyarakat terdekat
