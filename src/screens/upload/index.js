@@ -561,7 +561,7 @@ export default class UploadScreen extends Component {
                           );
                         }
                       })
-                    : renderData2.map((value, index) => {
+                    : showcat == true&&renderData2.map((value, index) => {
                         if (value.kategori) {
                           return (
                             <View key={index}>
