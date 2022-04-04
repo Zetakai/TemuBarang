@@ -18,7 +18,7 @@ import Close from 'react-native-vector-icons/AntDesign';
 import {NavigationContainer} from '@react-navigation/native';
 import CButton from '../../components/atoms/CButton';
 import {connect} from 'react-redux';
-
+import Verified from 'react-native-vector-icons/MaterialIcons';
 export class ReplyScreen extends Component {
   constructor(props) {
     super(props);
@@ -28,15 +28,31 @@ export class ReplyScreen extends Component {
       dataComments: [],
       modalVisible: false,
       modalVisibleComment: false,
-      dataCommentsChild: [],
+      dataCommentsChild: [],isVerified:false
     };let mounted
   }
+  _isVerified = async () => {
+    const {user} = this.props;
+    const {params} = this.props.route;
+    const verifiedUsers = await firestore()
+      .collection('VerifiedAccounts')
+      .doc('Official')
+      .get();
+    const datauid = verifiedUsers.data().Users;
+
+    const newData = datauid.filter(user => {
+      const userData = user.uid;
+      return userData.indexOf(params.uid) > -1;
+    });
+
+    this.setState({isVerified: newData});
+  };
   async componentDidMount() {
     const {params} = this.props.route;
     const {data, showModal} = this.state;
     this.setState({data: params});
     this.mounted = true;
-
+this._isVerified()
     await firestore()
       .collection('CommentsChild')
       .doc(`${params.postID}`)
@@ -84,7 +100,7 @@ export class ReplyScreen extends Component {
       dataComments,
       dataCommentsChild,
       modalVisible,
-      modalVisibleComment,
+      modalVisibleComment,isVerified
     } = this.state;
     const {user} = this.props;
     return (
@@ -115,22 +131,32 @@ export class ReplyScreen extends Component {
                   : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
               }}
             />
-            <View
-              style={
-                data.uid == params.postUID && {
-                  borderRadius: 5,
-                  paddingHorizontal: 8,
-                  backgroundColor: 'lightgreen',
-                }
-              }>
-              <Text
-                style={{
-                  ...styles.textcolor,
-                  fontWeight: 'bold',
-                }}>
-                {params.displayName}
-              </Text>
-            </View>
+            <View style={{flexDirection: 'row'}}>
+                              <Text
+                                style={
+                                  data.uid == params.uid
+                                    ? {
+                                        borderRadius: 5,
+                                        paddingHorizontal: 8,
+                                        backgroundColor: 'lightgreen',
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                    : {
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                }>
+                                {params.displayName}
+                              </Text>
+                              {isVerified.length > 0 && (
+                                <Verified
+                                  name="verified-user"
+                                  size={25}
+                                  color="black"
+                                />
+                              )}
+                            </View>
           </View>
           <Text style={{...styles.textcolor, marginLeft: 40}}>
             {params.comment}
@@ -177,22 +203,32 @@ export class ReplyScreen extends Component {
                             : 'https://www.shareicon.net/data/2016/09/01/822742_user_512x512.png',
                         }}
                       />
-                      <View
-                        style={
-                          user.uid == params.postUID && {
-                            borderRadius: 5,
-                            paddingHorizontal: 8,
-                            backgroundColor: 'lightgreen',
-                          }
-                        }>
-                        <Text
-                          style={{
-                            ...styles.textcolor,
-                            fontWeight: 'bold',
-                          }}>
-                          {x.displayName}
-                        </Text>
-                      </View>
+                      <View style={{flexDirection: 'row'}}>
+                              <Text
+                                style={
+                                  data.uid == params.uid
+                                    ? {
+                                        borderRadius: 5,
+                                        paddingHorizontal: 8,
+                                        backgroundColor: 'lightgreen',
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                    : {
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                      }
+                                }>
+                                {x.displayName}
+                              </Text>
+                              {isVerified.length > 0 && (
+                                <Verified
+                                  name="verified-user"
+                                  size={25}
+                                  color="black"
+                                />
+                              )}
+                            </View>
                     </View>
                     <Text style={{...styles.textcolor, marginLeft: 50}}>
                       {x.comment}
