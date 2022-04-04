@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   text:{
-    color:'#077B82'
+    color:'black'
   }
 });
