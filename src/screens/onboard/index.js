@@ -28,7 +28,7 @@ export default class OnboardScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: '#201C1B'}}>
+      <View style={{flex: 1, backgroundColor: '#D4CEC6'}}>
          <View style={{flex:1/10,justifyContent:'center'}} >
         <Upvector color={'green'} />
         </View>
@@ -70,10 +70,10 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     fontSize: 40,
     fontWeight: 'bold',
-    color: '#0B7B86',
+    color: 'darkgreen',
   },
   button: {
     width: 300,
-    backgroundColor:'#1F1B1A'
+    backgroundColor:'grey',
   },
 });
