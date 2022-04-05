@@ -687,14 +687,17 @@ export default class UploadScreen extends Component {
               </View><View style={{padding: 5,paddingBottom:10,}}>
 
               <Text style={{color: 'black',}}>
-                1. jika barang merupakan dokumen harap perhatikan privasi
+                1. Jika barang merupakan dokumen harap perhatikan privasi
                 pemilik barang, mohon untuk tidak manampikan/di sensor nomer id,
-                Tanggal lahir, contoh: KTP, Ijazah{' '}
+                Tanggal lahir, contoh: KTP, Ijazah.{' '}
               </Text>
               <Text style={{color: 'black'}}>
-                2. jika barang merupakan barang berharga di harapkan untuk
+                2. Jika barang merupakan barang berharga di harapkan untuk
                 meyerahkan ke pihak terkait: kantor polisi, pos satpam dan
-                pelayanan masyarakat terdekat
+                pelayanan masyarakat terdekat.
+              </Text>
+              <Text style={{color: 'black'}}>
+                3. Anda dianjurkan mencari barang hilang atau barang temuan di halaman daftar barang sebelum mengepos barang hilang atau barang temuan anda.
               </Text>
               </View>
             </View>

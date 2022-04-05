@@ -140,7 +140,7 @@ export class HomeScreen extends Component {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    justifyContent: 'space-evenly',
+                    justifyContent: 'center',
                   }}>
                   <Image
                     style={{
@@ -148,7 +148,7 @@ export class HomeScreen extends Component {
                       height: 50,
                       borderRadius: 150 / 2,
                       borderWidth: 1,
-                      borderColor: 'black',
+                      borderColor: 'black',marginRight:15
                     }}
                     source={{
                       uri: `https://cdn-icons-png.flaticon.com/512/1201/1201867.png?w=740&t=st=1648131697~exp=1648132297~hmac=d6bfe1e0bc84ce6f6d951f667c23e8bad006e6603955034d481ec6eedcb5f1e4`,
@@ -157,7 +157,7 @@ export class HomeScreen extends Component {
                   <Text style={{color: 'black', fontSize: 16}}>Barang{'\n'}Hilang</Text>
                 </View>
                 <Text style={{color: 'silver', marginTop: 10}}>
-                  Umumkan barangmu yang hilang disini
+                  Daftar barang hilang yang dicari
                 </Text>
               </View>
             </TouchableOpacity>
@@ -179,7 +179,7 @@ export class HomeScreen extends Component {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    justifyContent: 'space-evenly',
+                    justifyContent: 'center',
                   }}>
                   <Image
                     style={{
@@ -187,7 +187,7 @@ export class HomeScreen extends Component {
                       height: 50,
                       borderRadius: 150 / 2,
                       borderWidth: 1,
-                      borderColor: 'black',
+                      borderColor: 'black',marginRight:15
                     }}
                     source={{
                       uri: `https://cdn4.iconfinder.com/data/icons/search-blue-line/64/168_search-magnifier-find-item-cargo-1024.png`,
@@ -196,25 +196,30 @@ export class HomeScreen extends Component {
                   <Text style={{color: 'black', fontSize: 16}}>Barang{'\n'}Temuan</Text>
                 </View>
                 <Text style={{color: 'silver', marginTop: 10}}>
-                  Temukan barangmu yang hilang disini
+                  Daftar barang hilang yang ditemukan
                 </Text>
               </View>
             </TouchableOpacity>
           </View>
         </View>
         
+          
           <View
             style={{
-              marginBottom: 5,
               backgroundColor: 'white',
-              marginTop: 5,
-              padding: 10,
+              padding: 5,marginTop: 5,
             }}>
-            <Text style={{color: 'black', marginBottom: 5, marginLeft: 10}}>
-              Barang Temuan Terbaru
+            <Text
+              style={{
+                color: 'black',
+                marginLeft: 10,
+                marginBottom: 5,
+                marginTop: 10,
+              }}>
+              Barang Hilang Terbaru
             </Text>
             <View>
-              {dataFound.map((x, i) => {
+              {dataLost.map((x, i) => {
                 return (
                   x && (
                     <TouchableOpacity
@@ -276,20 +281,16 @@ export class HomeScreen extends Component {
           </View>
           <View
             style={{
+              marginBottom: 5,
               backgroundColor: 'white',
-              padding: 5,
+              marginTop: 5,
+              padding: 10,
             }}>
-            <Text
-              style={{
-                color: 'black',
-                marginLeft: 10,
-                marginBottom: 5,
-                marginTop: 10,
-              }}>
-              Barang Hilang Terbaru
+            <Text style={{color: 'black', marginBottom: 5, marginLeft: 10}}>
+              Barang Temuan Terbaru
             </Text>
             <View>
-              {dataLost.map((x, i) => {
+              {dataFound.map((x, i) => {
                 return (
                   x && (
                     <TouchableOpacity
