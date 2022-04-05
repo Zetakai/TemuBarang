@@ -61,6 +61,7 @@ export class ReplyScreen extends Component {
     const {params} = this.props.route;
     const {data, showModal} = this.state;
     this.setState({data: params});
+    console.log(params)
     this.mounted = true;
 this._isVerified()
 this._isVerifiedAll()
@@ -145,7 +146,7 @@ this._isVerifiedAll()
             <View style={{flexDirection: 'row'}}>
                               <Text
                                 style={
-                                  data.uid == params.uid
+                                  data.uid == data.poster
                                     ? {
                                         borderRadius: 5,
                                         paddingHorizontal: 8,
@@ -153,7 +154,7 @@ this._isVerifiedAll()
                                         fontWeight: 'bold',
                                         color: 'black',
                                       }
-                                    : {
+                                    : {paddingLeft:8,
                                         fontWeight: 'bold',
                                         color: 'black',
                                       }
@@ -218,7 +219,7 @@ this._isVerifiedAll()
                       <View style={{flexDirection: 'row'}}>
                               <Text
                                 style={
-                                  data.uid == params.uid
+                                  data.poster == x.uid
                                     ? {
                                         borderRadius: 5,
                                         paddingHorizontal: 8,
@@ -226,7 +227,7 @@ this._isVerifiedAll()
                                         fontWeight: 'bold',
                                         color: 'black',
                                       }
-                                    : {
+                                    : {paddingLeft:8,
                                         fontWeight: 'bold',
                                         color: 'black',
                                       }

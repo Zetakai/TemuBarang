@@ -458,6 +458,7 @@ export class DetailsScreen extends Component {
                                         color: 'black',
                                       }
                                     : {
+                                      paddingLeft:8,
                                         fontWeight: 'bold',
                                         color: 'black',
                                       }
@@ -535,11 +536,12 @@ export class DetailsScreen extends Component {
                     dataComments.map((x, i) => {
                       return (
                         <TouchableOpacity
+                        activeOpacity={0.8}
                           onPress={() => {
                             this._setModalVisibleComment(false);
                             navigation.navigate('ReplyScreen', {
                               ...x,
-                              postID: data.uid + data.postID,
+                              postID: data.uid + data.postID,poster:data.uid
                             });
                           }}
                           key={i}
@@ -579,7 +581,7 @@ export class DetailsScreen extends Component {
                                         fontWeight: 'bold',
                                         color: 'black',
                                       }
-                                    : {
+                                    : {paddingLeft:8,
                                         fontWeight: 'bold',
                                         color: 'black',
                                       }
@@ -655,7 +657,7 @@ export class DetailsScreen extends Component {
                                                   fontWeight: 'bold',
                                                   color: 'black',
                                                 }
-                                              : {
+                                              : {paddingLeft:8,
                                                   fontWeight: 'bold',
                                                   color: 'black',
                                                 }
@@ -685,6 +687,9 @@ export class DetailsScreen extends Component {
                                 );
                               }
                             })}
+                            <Text style={{color: 'grey', marginLeft: 48}}>
+                              Reply
+                            </Text>
                         </TouchableOpacity>
                       );
                     })}
