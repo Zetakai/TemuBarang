@@ -784,7 +784,7 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: 'red',
   },
-  textcolor: {color: 'dimgrey', marginTop: 10},
+  textcolor: {color: 'black', marginTop: 10},
 });
 
 // import React, { Fragment, Component } from 'react';
