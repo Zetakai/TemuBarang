@@ -39,7 +39,7 @@ export class Profile extends Component {
       confirm: null,
       code: '',
       settingAcc: false,
-      modalVisible: false,editpost:false,modalVisiblePost:false
+      modalVisible: false,editpost:false,modalVisiblePost:false,selectedpost:null
     };
   }
 
@@ -106,7 +106,7 @@ export class Profile extends Component {
           .then(() => this.props.update());
         // .then(() => this._updatePostProfile());
       } catch (err) {
-        console.log(err, "Tidak mengubah foto");
+        console.log(err);
         this.props.update();
       }
     } else {
@@ -124,7 +124,7 @@ export class Profile extends Component {
           .then(() => this.props.update());
         // .then(() => this._updatePostProfile());
       } catch (err) {
-        console.log(err);
+        console.log(err,"\nTidak ada data foto. Tidak mengubah foto");
         this.props.update();
       }
     }
@@ -313,7 +313,7 @@ export class Profile extends Component {
       dataLost,
       dataFound,
       settingAcc,
-      modalVisible,editpost,modalVisiblePost
+      modalVisible,editpost,modalVisiblePost,selectedpost
     } = this.state;
     let dataHistory = [...dataLost, ...dataFound].sort(
       (a, b) => b.time - a.time,
@@ -557,7 +557,7 @@ export class Profile extends Component {
                 <Text style={{color: 'grey', marginBottom: 5,marginLeft: 25}}>Pos Anda</Text>
               </View>
               <ScrollView
-              style={{marginLeft: 15}}
+              style={{paddingHorizontal: 15}}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
                 {this.mounted == true &&
@@ -591,7 +591,7 @@ export class Profile extends Component {
                             <TouchableOpacity
                               style={{position: 'absolute', top: 10, right: 10}}
                               onPress={() => {this._setModalVisiblePost(true)
-                                
+                                ;this.setState({selectedpost:x})
                               }}>
                               <Delete
                                 color={'white'}
@@ -765,7 +765,7 @@ export class Profile extends Component {
                     backgroundColor: '#eeeeee'
                   }}
                   onPress={() => {
-                    this._setModalVisiblePost(!modalVisiblePost);
+                    this._setModalVisiblePost(!modalVisiblePost);this.setState({selectedpost:null})
                   }}>
                   <Text style={{fontWeight: 'bold', fontSize: 15,color:'#00ca74'}}>BATAL</Text>
                 </TouchableOpacity>
@@ -780,7 +780,7 @@ export class Profile extends Component {
                     borderRadius: 5,
                     height: 40,
                   }}
-                  onPress={() => this._userLogout()}>
+                  onPress={() => {this._deletePost(selectedpost);this.setState({selectedpost:null,modalVisiblePost:!modalVisiblePost,editpost:!editpost})}}>
                   <Text style={{fontWeight: 'bold', fontSize: 15}}>HAPUS</Text>
                 </TouchableOpacity>
               </View>
