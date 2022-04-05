@@ -449,10 +449,10 @@ export default class UploadScreen extends Component {
         </Pressable> */}
           <View
             style={{
-              padding: 5,
+              padding: 5,paddingBottom:selectedChoice ? 8 : 20,
               marginBottom: selectedChoice ? 15 : 0,
               marginTop: selectedChoice ? 15 : 50,
-              marginHorizontal: selectedChoice ? 15 : 100,
+              marginHorizontal: selectedChoice ? 15 : 60,
               borderWidth: 1,
               borderColor: 'black',
               borderRadius: 25,
@@ -482,7 +482,7 @@ export default class UploadScreen extends Component {
                 </TouchableOpacity>
               )}
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <CText style={styles.textcolor}>kategori post</CText>
+                <CText style={styles.textcolor}>kategori pos</CText>
                 <View
                   style={{
                     borderWidth: 1,
@@ -493,7 +493,7 @@ export default class UploadScreen extends Component {
                     mode="dropdown"
                     dropdownIconColor={'black'}
                     selectedValue={selectedChoice}
-                    style={{height: 50, width: 170, color: 'black'}}
+                    style={{height: 50, width: selectedChoice?170:250, color: 'black'}}
                     onValueChange={(itemValue, itemIndex) =>
                       this.setState({selectedChoice: itemValue})
                     }>
@@ -512,7 +512,7 @@ export default class UploadScreen extends Component {
                 <View style={styles.profInput}>
                   <TextInput
                     placeholderTextColor={'dimgrey'}
-                    placeholder="nama barang"
+                    placeholder="nama barang..."
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={namabarang}
                     onChangeText={value => this.setState({namabarang: value})}
@@ -523,7 +523,7 @@ export default class UploadScreen extends Component {
                 <View style={styles.profInput}>
                   <TextInput
                     placeholderTextColor={'dimgrey'}
-                    placeholder="kategori barang"
+                    placeholder="kategori barang..."
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={kategori}
                     onChangeText={value => {
@@ -589,7 +589,7 @@ export default class UploadScreen extends Component {
                 <View style={styles.profInput}>
                   <TextInput
                     placeholderTextColor={'dimgrey'}
-                    placeholder="lokasi"
+                    placeholder="lokasi..."
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={lokasi}
                     onChangeText={value => this.setState({lokasi: value})}
@@ -611,7 +611,7 @@ export default class UploadScreen extends Component {
                 <View style={styles.profInput}>
                   <TextInput
                     placeholderTextColor={'dimgrey'}
-                    placeholder="deskripsi"
+                    placeholder="deskripsi..."
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={deskripsi}
                     onChangeText={value => this.setState({deskripsi: value})}
@@ -626,7 +626,7 @@ export default class UploadScreen extends Component {
                     <View style={styles.profInput}>
                       <TextInput
                         placeholderTextColor={'dimgrey'}
-                        placeholder="nilai"
+                        placeholder="nilai..."
                         style={{
                           width: '80%',
                           color: 'dimgrey',
@@ -643,7 +643,7 @@ export default class UploadScreen extends Component {
                 )}
               </View>
             )}
-            <View
+            {/[o]/.test(selectedChoice) && (<View
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -662,28 +662,31 @@ export default class UploadScreen extends Component {
                     : this._postwoimg();
                 }}
               />
-            </View>
+            </View>)}
           </View>
           {!selectedChoice && (
             <View
               style={{
-                padding: 5,
+                
                 marginTop: 50,
-                borderWidth: 1,
+                borderWidth: 2,
                 borderColor: 'black',
-                borderRadius: 25,
+                borderRadius: 20,
                 backgroundColor: 'white',
                 marginHorizontal: 15,
-              }}>
+              }}><View style={{backgroundColor:'dimgrey',borderTopLeftRadius:18,borderTopRightRadius:18}}>
+
               <Text
                 style={{
-                  color: 'black',
+                  color: 'white',
                   alignSelf: 'center',
                   fontWeight: 'bold',
                 }}>
                 Disclaimer
               </Text>
-              <Text style={{color: 'black'}}>
+              </View><View style={{padding: 5,paddingBottom:10,}}>
+
+              <Text style={{color: 'black',}}>
                 1. jika barang merupakan dokumen harap perhatikan privasi
                 pemilik barang, mohon untuk tidak manampikan/di sensor nomer id,
                 Tanggal lahir, contoh: KTP, Ijazah{' '}
@@ -693,6 +696,7 @@ export default class UploadScreen extends Component {
                 meyerahkan ke pihak terkait: kantor polisi, pos satpam dan
                 pelayanan masyarakat terdekat
               </Text>
+              </View>
             </View>
           )}
         </ScrollView>
@@ -777,7 +781,7 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: 'red',
   },
-  text: {color: 'black', marginTop: 10},
+  textcolor: {color: 'dimgrey', marginTop: 10},
 });
 
 // import React, { Fragment, Component } from 'react';

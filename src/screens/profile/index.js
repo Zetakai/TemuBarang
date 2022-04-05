@@ -39,14 +39,16 @@ export class Profile extends Component {
       confirm: null,
       code: '',
       settingAcc: false,
-      modalVisible: false,
+      modalVisible: false,editpost:false,modalVisiblePost:false
     };
   }
 
   _setModalVisible = visible => {
     this.setState({modalVisible: visible});
   };
-
+  _setModalVisiblePost = visible => {
+    this.setState({modalVisiblePost: visible});
+  };
   _verifyPhoneNumber = async () => {
     const confirmation = await auth().verifyPhoneNumber(phoneNumber);
     this.setState({confirm: confirmation});
@@ -104,7 +106,7 @@ export class Profile extends Component {
           .then(() => this.props.update());
         // .then(() => this._updatePostProfile());
       } catch (err) {
-        console.log(err);
+        console.log(err, "Tidak mengubah foto");
         this.props.update();
       }
     } else {
@@ -311,7 +313,7 @@ export class Profile extends Component {
       dataLost,
       dataFound,
       settingAcc,
-      modalVisible,
+      modalVisible,editpost,modalVisiblePost
     } = this.state;
     let dataHistory = [...dataLost, ...dataFound].sort(
       (a, b) => b.time - a.time,
@@ -327,7 +329,7 @@ export class Profile extends Component {
             backgroundColor: '#00ca74',
             borderBottomLeftRadius: 50,
           }}>
-          <View style={{paddingTop: 10, width: '35%'}}>
+          <TouchableOpacity activeOpacity={0.5} onPress={() => this.props.navigation.goBack()} style={{paddingTop: 10, width: '35%'}}>
             <View
               style={{
                 borderRadius: 100,
@@ -341,11 +343,10 @@ export class Profile extends Component {
                   name="arrow-left"
                   color={'white'}
                   size={25}
-                  onPress={() => this.props.navigation.goBack()}
-                />
+                  />
               )}
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.header}>
             <TouchableOpacity
               activeOpacity={edit == false ? 1 : 0}
@@ -391,7 +392,7 @@ export class Profile extends Component {
                   backgroundColor: 'white',
                   borderRadius: 5,
                   paddingHorizontal: 7,
-                  top: -10,
+                  top: -7,
                 }}>
                 <TouchableOpacity
                   style={styles.setting}
@@ -399,6 +400,13 @@ export class Profile extends Component {
                     this.setState({edit: !edit, settingAcc: !settingAcc});
                   }}>
                   <Text style={styles.textSetting}>Edit Profil</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.setting}
+                  onPress={() => {
+                    this.setState({editpost: !editpost, settingAcc: !settingAcc});
+                  }}>
+                  <Text style={styles.textSetting}>Edit Pos</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.setting}
@@ -522,7 +530,7 @@ export class Profile extends Component {
                   onPress={() => {
                     this.setState({edit: !edit});
                   }}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>BATAL</Text>
+                  <Text style={{fontWeight: 'bold', fontSize: 15,color:'#00ca74'}}>BATAL</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
@@ -544,11 +552,12 @@ export class Profile extends Component {
             )}
           </View>
           {this.mounted == true && dataHistory ? (
-            <View style={{marginLeft: 25}}>
+            <View>
               <View>
-                <Text style={{color: 'grey', marginBottom: 5}}>Pos Anda</Text>
+                <Text style={{color: 'grey', marginBottom: 5,marginLeft: 25}}>Pos Anda</Text>
               </View>
               <ScrollView
+              style={{marginLeft: 15}}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
                 {this.mounted == true &&
@@ -557,7 +566,7 @@ export class Profile extends Component {
                       x && (
                         <TouchableOpacity
                           key={i}
-                          style={{marginLeft: 0}}
+                          style={{marginRight: 2}}
                           onPress={() =>
                             this.props.navigation.navigate('DetailsScreen', x)
                           }>
@@ -578,11 +587,11 @@ export class Profile extends Component {
                                   : 'chocolate',
                             }}
                           />
-                          {edit == true && (
+                          {editpost == true && (
                             <TouchableOpacity
                               style={{position: 'absolute', top: 10, right: 10}}
-                              onPress={() => {
-                                this._deletePost(x);
+                              onPress={() => {this._setModalVisiblePost(true)
+                                
                               }}>
                               <Delete
                                 color={'white'}
@@ -663,11 +672,12 @@ export class Profile extends Component {
                     borderColor: '#00ca74',
                     borderRadius: 5,
                     height: 40,
+                    backgroundColor: '#eeeeee'
                   }}
                   onPress={() => {
                     this._setModalVisible(!modalVisible);
                   }}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>BATAL</Text>
+                  <Text style={{fontWeight: 'bold', fontSize: 15,color:'#00ca74'}}>BATAL</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
@@ -682,6 +692,96 @@ export class Profile extends Component {
                   }}
                   onPress={() => this._userLogout()}>
                   <Text style={{fontWeight: 'bold', fontSize: 15}}>LOGOUT</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent
+          visible={modalVisiblePost}
+          onRequestClose={() => {
+            this._setModalVisiblePost(!modalVisiblePost);
+          }}>
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View
+              style={{
+                width: 300,
+                height: 255,
+                backgroundColor: '#eeeeee',
+                borderRadius: 10,
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#00ca74',
+                  height: 40,
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                }}>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: 'black'}}>
+                  Hapus Pos
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: 10,
+                }}>
+                <Delete
+                                color={'black'}
+                                name="trash-2"
+                                size={75}
+                              />
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10}}>
+                <Text
+                  style={{fontSize: 15, color: 'black', textAlign: 'center'}}>
+                  Apakah anda yakin ingin menghapus pos? Anda tidak dapat mengembalikan pos yang telah dihapus.
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 10,
+                  paddingBottom: 15,
+                  marginTop: 10
+                }}>
+                <TouchableOpacity
+                  style={{
+                    width: '48%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 2,
+                    borderColor: '#00ca74',
+                    borderRadius: 5,
+                    height: 40,
+                    backgroundColor: '#eeeeee'
+                  }}
+                  onPress={() => {
+                    this._setModalVisiblePost(!modalVisiblePost);
+                  }}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15,color:'#00ca74'}}>BATAL</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: '48%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 2,
+                    borderColor: '#00ca74',
+                    backgroundColor: '#00ca74',
+                    borderRadius: 5,
+                    height: 40,
+                  }}
+                  onPress={() => this._userLogout()}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>HAPUS</Text>
                 </TouchableOpacity>
               </View>
             </View>

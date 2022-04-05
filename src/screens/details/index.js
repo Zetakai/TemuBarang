@@ -21,7 +21,11 @@ import {connect} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Back from 'react-native-vector-icons/FontAwesome5';
 import Verified from 'react-native-vector-icons/MaterialIcons';
-import {timeSince,convertDateOnly,getHour} from '../../components/utils/moment';
+import {
+  timeSince,
+  convertDateOnly,
+  getHour,
+} from '../../components/utils/moment';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 export class DetailsScreen extends Component {
@@ -35,7 +39,8 @@ export class DetailsScreen extends Component {
       modalVisibleComment: false,
       dataCommentsChild: [],
       commentIDs: [],
-      isVerified: false,isVerifiedAll:[]
+      isVerified: false,
+      isVerifiedAll: [],
     };
     let mounted;
   }
@@ -45,7 +50,7 @@ export class DetailsScreen extends Component {
   _setModalVisibleComment = visible => {
     this.setState({modalVisibleComment: visible});
   };
-  _isVerified = async (uid) => {
+  _isVerified = async uid => {
     const {user} = this.props;
     const {params} = this.props.route;
     const verifiedUsers = await firestore()
@@ -58,8 +63,7 @@ export class DetailsScreen extends Component {
       const userData = user.uid;
       return userData.indexOf(uid) > -1;
     });
-    this.setState({isVerified: newData})
-    ;
+    this.setState({isVerified: newData});
   };
   _isVerifiedAll = async () => {
     const {user} = this.props;
@@ -67,9 +71,9 @@ export class DetailsScreen extends Component {
     await firestore()
       .collection('VerifiedAccounts')
       .doc('Official')
-      .get().then(x=>x.data().Users).then(x=>this.setState({isVerifiedAll: x}))
-
-   
+      .get()
+      .then(x => x.data().Users)
+      .then(x => this.setState({isVerifiedAll: x}));
   };
   async componentDidMount() {
     const {params} = this.props.route;
@@ -77,12 +81,14 @@ export class DetailsScreen extends Component {
     this.setState({data: params});
     this.mounted = true;
     this._isVerified(params.uid);
-    this._isVerifiedAll()
-    
+    this._isVerifiedAll();
+
     await firestore()
       .collection('VerifiedAccounts')
       .doc('Official')
-      .get().then(x=>x.data().Users).then(x=> this.setState({isVerifiedAll: x}))
+      .get()
+      .then(x => x.data().Users)
+      .then(x => this.setState({isVerifiedAll: x}));
     await firestore()
       .collection('Comments')
       .doc(`${params.uid}` + `${params.postID}`)
@@ -151,7 +157,8 @@ export class DetailsScreen extends Component {
       modalVisible,
       modalVisibleComment,
       commentIDs,
-      isVerified,isVerifiedAll,
+      isVerified,
+      isVerifiedAll,
     } = this.state;
     return (
       <View style={styles.container}>
@@ -171,14 +178,20 @@ export class DetailsScreen extends Component {
                   backgroundColor: 'white',
                 }}>
                 <View>
-                  <Image
-                    source={
-                      data.photoURL
-                        ? {uri: `${data.photoURL}`}
-                        : require('../../assets/dummy.png')
-                    }
-                    style={{width: '100%', height: '100%'}}
-                  />
+                  <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={() => {
+                      this._setModalVisible(false);
+                    }}>
+                    <Image
+                      source={
+                        data.photoURL
+                          ? {uri: `${data.photoURL}`}
+                          : require('../../assets/dummy.png')
+                      }
+                      style={{width: '100%', height: '100%'}}
+                    />
+                  </TouchableOpacity>
                   <TouchableOpacity
                     style={{position: 'absolute', top: 15, right: 15}}>
                     <View>
@@ -197,7 +210,7 @@ export class DetailsScreen extends Component {
             </Modal>
             <TouchableOpacity
               style={{marginBottom: -25}}
-              activeOpacity={!data.photoURL && 1}
+              activeOpacity={!data.photoURL ? 1 : 0.9}
               onPress={() => data.photoURL && this._setModalVisible(true)}>
               <Image
                 source={
@@ -208,10 +221,10 @@ export class DetailsScreen extends Component {
                 style={{width: '100%', height: 225}}
               />
             </TouchableOpacity>
-            
           </View>
           <View
             style={{
+              borderTopRightRadius: 25,
               paddingHorizontal: 15,
               paddingTop: 10,
               backgroundColor: 'white',
@@ -219,13 +232,17 @@ export class DetailsScreen extends Component {
             <CText style={{fontSize: 30, fontWeight: 'bold', color: 'black'}}>
               {data.namabarang}
             </CText>
-            <Text style={{color:'grey'}}>{data.kategori}</Text>
+            <Text style={{color: 'grey'}}>{data.kategori}</Text>
             <View style={{paddingTop: 15}}>
               <View style={{flexDirection: 'row'}}>
                 <View style={{width: '55%'}}>
                   <Text style={{color: 'grey'}}>Dipost pada:</Text>
-                  <View style={{ flexDirection: 'row', paddingTop: 15}}>
-                    <View style={{justifyContent: 'center', alignSelf:'flex-start'}}>
+                  <View style={{flexDirection: 'row', paddingTop: 15}}>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignSelf: 'flex-start',
+                      }}>
                       <Fontisto name="date" size={30} color="#00ca74" />
                     </View>
                     <View style={{paddingHorizontal: 8}}>
@@ -235,34 +252,53 @@ export class DetailsScreen extends Component {
                           fontWeight: 'bold',
                           fontSize: 15,
                         }}>
-                        {convertDateOnly(new Date(params.time.seconds*1000))}
+                        {convertDateOnly(new Date(params.time.seconds * 1000))}
                       </Text>
-                      <Text style={{fontSize: 14, color: 'black',}}>{getHour(new Date(params.time.seconds*1000))}</Text>
+                      <Text style={{fontSize: 14, color: 'black'}}>
+                        {getHour(new Date(params.time.seconds * 1000))}
+                      </Text>
                     </View>
                   </View>
                 </View>
                 <View style={{width: '35%'}}>
                   <Text style={{color: 'grey'}}>Ditemukan di: </Text>
                   <View style={{flexDirection: 'row', paddingTop: 15}}>
-                    <View style={{justifyContent: 'center', alignSelf:'flex-start'}}>
-                    <EvilIcons name="location" size={40} color='#00ca74' />
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignSelf: 'flex-start',
+                      }}>
+                      <EvilIcons name="location" size={40} color="#00ca74" />
                     </View>
-                    <Text style={{color: 'black', fontSize: 15, fontWeight: 'bold'}}>{data.lokasi}</Text>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 15,
+                        fontWeight: 'bold',
+                      }}>
+                      {data.lokasi}
+                    </Text>
                   </View>
                 </View>
               </View>
             </View>
           </View>
-          <View style={{paddingHorizontal: 15, paddingVertical: 10, backgroundColor: 'white', marginBottom: 3}}>
-          <Text style={{color: 'grey'}}>Deskripsi tambahan: </Text>
-          {data.deskripsi ? (
+          <View
+            style={{
+              paddingHorizontal: 15,
+              paddingVertical: 10,
+              backgroundColor: 'white',
+              marginBottom: 3,
+            }}>
+            <Text style={{color: 'grey'}}>Deskripsi tambahan: </Text>
+            {data.deskripsi ? (
               <Text style={{color: 'black', fontWeight: 'bold', fontSize: 15}}>
                 {data.deskripsi}
               </Text>
             ) : (
               <></>
             )}
-            
+
             {/* <Text style={styles.textcolor}>Kategori: {data.kategori}</Text>
             {data.keyunik ? (
               <Text style={styles.textcolor}>Ciri2: {data.keyunik}</Text>
@@ -281,7 +317,7 @@ export class DetailsScreen extends Component {
             ) : (
               <></>
             )} */}
-            <Text >Tidak ada.</Text>
+            <Text>Tidak ada.</Text>
           </View>
           <View
             style={{
@@ -316,7 +352,12 @@ export class DetailsScreen extends Component {
                     {data.displayName}
                   </Text>
                   {isVerified.length > 0 && (
-                    <Verified name="verified-user" size={25} color="black" />
+                    <Verified
+                      style={{marginLeft: 5}}
+                      name="verified-user"
+                      size={25}
+                      color="darkgreen"
+                    />
                   )}
                 </View>
               </View>
@@ -329,8 +370,7 @@ export class DetailsScreen extends Component {
                       displayName: data.displayName,
                       uid: data.uid,
                       ppURL: data.ppURL,
-                      data:params
-                      
+                      data: params,
                     })
                   }>
                   <Ionicons
@@ -359,21 +399,25 @@ export class DetailsScreen extends Component {
                 <CText>Komentar</CText>
                 <CText> {dataComments.length + dataCommentsChild.length}</CText>
               </View>
-              <View style={{minHeight:190}}>
+              <View style={{minHeight: 190}}>
                 {dataComments &&
                   dataComments
                     .map((x, i) => {
-                      const repsum=dataCommentsChild &&
-                      dataCommentsChild.map((y, i) => {
-                        let check;
-                        if (
-                          x.commentID == y.commentID &&
-                          y.commentID == x.commentID
-                        ) {
-                          check = true;
-                          // console.log(check);
-                        }
-                        if (check == true) {return}}).length
+                      const repsum =
+                        dataCommentsChild &&
+                        dataCommentsChild.map((y, i) => {
+                          let check;
+                          if (
+                            x.commentID == y.commentID &&
+                            y.commentID == x.commentID
+                          ) {
+                            check = true;
+                            // console.log(check);
+                          }
+                          if (check == true) {
+                            return;
+                          }
+                        }).length;
                       return (
                         <View
                           key={i}
@@ -420,21 +464,24 @@ export class DetailsScreen extends Component {
                                 }>
                                 {x.displayName}
                               </Text>
-                              {isVerifiedAll.some(v=>v.uid==x.uid) && (
+                              {isVerifiedAll.some(v => v.uid == x.uid) && (
                                 <Verified
+                                  style={{marginLeft: 5}}
                                   name="verified-user"
                                   size={25}
-                                  color="black"
+                                  color="darkgreen"
                                 />
                               )}
                             </View>
                           </View>
-                          <Text style={{...styles.textcolor, marginLeft: 40}}>
+                          <Text style={{...styles.textcolor, marginLeft: 48}}>
                             {x.comment}
-                          </Text>{repsum>0&&<Text style={{color:'grey',marginLeft: 40}}>
-Replies{' '+repsum}
-                          
-                          </Text>}
+                          </Text>
+                          {repsum > 0 && (
+                            <Text style={{color: 'grey', marginLeft: 48}}>
+                              Replies{' ' + repsum}
+                            </Text>
+                          )}
                         </View>
                       );
                     })
@@ -539,16 +586,17 @@ Replies{' '+repsum}
                                 }>
                                 {x.displayName}
                               </Text>
-                              {isVerifiedAll.some(v=>v.uid==x.uid) && (
+                              {isVerifiedAll.some(v => v.uid == x.uid) && (
                                 <Verified
+                                  style={{marginLeft: 5}}
                                   name="verified-user"
                                   size={25}
-                                  color="black"
+                                  color="darkgreen"
                                 />
                               )}
                             </View>
                           </View>
-                          <Text style={{...styles.textcolor, marginLeft: 40}}>
+                          <Text style={{...styles.textcolor, marginLeft: 48}}>
                             {x.comment}
                           </Text>
                           {dataCommentsChild &&
@@ -567,7 +615,7 @@ Replies{' '+repsum}
                                     key={i}
                                     style={
                                       {
-                                        marginLeft: 10,
+                                        marginLeft: 40,
                                         marginTop: 10,
                                         borderLeftWidth: 1,
                                         borderColor: 'silver',
@@ -597,36 +645,39 @@ Replies{' '+repsum}
                                         }}
                                       />
                                       <View style={{flexDirection: 'row'}}>
-                              <Text
-                                style={
-                                  data.uid == y.uid
-                                    ? {
-                                        borderRadius: 5,
-                                        paddingHorizontal: 8,
-                                        backgroundColor: 'lightgreen',
-                                        fontWeight: 'bold',
-                                        color: 'black',
-                                      }
-                                    : {
-                                        fontWeight: 'bold',
-                                        color: 'black',
-                                      }
-                                }>
-                                {y.displayName}
-                              </Text>
-                              {isVerifiedAll.some(v=>v.uid==y.uid) && (
-                                <Verified
-                                  name="verified-user"
-                                  size={25}
-                                  color="black"
-                                />
-                              )}
-                            </View>
+                                        <Text
+                                          style={
+                                            data.uid == y.uid
+                                              ? {
+                                                  borderRadius: 5,
+                                                  paddingHorizontal: 8,
+                                                  backgroundColor: 'lightgreen',
+                                                  fontWeight: 'bold',
+                                                  color: 'black',
+                                                }
+                                              : {
+                                                  fontWeight: 'bold',
+                                                  color: 'black',
+                                                }
+                                          }>
+                                          {y.displayName}
+                                        </Text>
+                                        {isVerifiedAll.some(
+                                          v => v.uid == y.uid,
+                                        ) && (
+                                          <Verified
+                                            style={{marginLeft: 5}}
+                                            name="verified-user"
+                                            size={25}
+                                            color="darkgreen"
+                                          />
+                                        )}
+                                      </View>
                                     </View>
                                     <Text
                                       style={{
                                         ...styles.textcolor,
-                                        marginLeft: 50,
+                                        marginLeft: 58,
                                       }}>
                                       {y.comment}
                                     </Text>
@@ -639,7 +690,7 @@ Replies{' '+repsum}
                     })}
                 </View>
               </ScrollView>
-              
+
               <TouchableOpacity
                 style={{position: 'absolute', top: 15, right: 15}}>
                 <View>
@@ -681,24 +732,21 @@ Replies{' '+repsum}
             </View>
           </Modal>
         </ScrollView>
-        <TouchableOpacity style={{position: 'absolute', top: 10, left: 10}}>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  borderRadius: 100,
-                  height: 40,
-                  width: 40,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Back
-                  name="arrow-left"
-                  color={'black'}
-                  size={22}
-                  onPress={() => this.props.navigation.goBack()}
-                />
-              </View>
-            </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.goBack()}
+          style={{position: 'absolute', top: 10, left: 10}}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              borderRadius: 100,
+              height: 40,
+              width: 40,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Back name="arrow-left" color={'black'} size={22} />
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }

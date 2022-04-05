@@ -161,15 +161,16 @@ this._isVerifiedAll()
                                 {params.displayName}
                               </Text>
                               {isVerifiedAll.some(v=>v.uid==params.uid) && (
-                                <Verified
-                                  name="verified-user"
-                                  size={25}
-                                  color="black"
-                                />
+                                 <Verified
+                                 style ={{marginLeft:5}}
+                                   name="verified-user"
+                                   size={25}
+                                   color="darkgreen"
+                                 />
                               )}
                             </View>
           </View>
-          <Text style={{...styles.textcolor, marginLeft: 40}}>
+          <Text style={{...styles.textcolor, marginLeft: 48}}>
             {params.comment}
           </Text>
           {dataCommentsChild &&
@@ -185,7 +186,7 @@ this._isVerifiedAll()
                     key={i}
                     style={
                       {
-                        marginLeft: 10,
+                        marginLeft: 14,
                         marginTop: 10,
                         borderLeftWidth: 1,
                         borderColor: 'silver',
@@ -233,15 +234,16 @@ this._isVerifiedAll()
                                 {x.displayName}
                               </Text>
                               {isVerifiedAll.some(v=>v.uid==x.uid)&& (
-                                <Verified
-                                  name="verified-user"
-                                  size={25}
-                                  color="black"
-                                />
+                                 <Verified
+                                 style ={{marginLeft:5}}
+                                   name="verified-user"
+                                   size={25}
+                                   color="darkgreen"
+                                 />
                               )}
                             </View>
                     </View>
-                    <Text style={{...styles.textcolor, marginLeft: 50}}>
+                    <Text style={{...styles.textcolor, marginLeft: 58}}>
                       {x.comment}
                     </Text>
                   </View>
