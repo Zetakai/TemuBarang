@@ -5,6 +5,8 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Modal,
+  TextInput
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
@@ -36,9 +38,14 @@ export class Message extends Component {
       inputText: '',
       validationCode: '',
       post: null,
+      modalConfirm: false,
     };
     let mounted;
   }
+
+  _setModalVisible = visible => {
+    this.setState({modalConfirm: visible});
+  };
 
   componentDidMount() {
     const {user} = this.props;
@@ -204,7 +211,7 @@ export class Message extends Component {
     // const {data,uid}=navigation.route.params
 
     // const {image, name} = this.state.params;
-    const {inputText, messages, post} = this.state;
+    const {inputText, messages, post, modalConfirm} = this.state;
 
     return (
       <View style={styles.page}>
@@ -287,7 +294,8 @@ export class Message extends Component {
                 alignSelf: 'center',
                 justifyContent: 'center',
                 alignItems: 'center',
-              }}>
+              }}
+              onPress= {()=>{this._setModalVisible(!modalConfirm)}}>
               <Text style={{color: 'black'}}>Konfirmasi Barang Kembali</Text>
             </TouchableOpacity>
           </View>
@@ -364,6 +372,121 @@ export class Message extends Component {
           </TouchableOpacity>
         </View>
         <CGap height={15} />
+          <Modal
+            animationType="fade"
+            transparent
+            visible={modalConfirm}
+            onRequestClose={() => {
+              this._setModalVisible(!modalConfirm);
+            }}>
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <View
+                style={{
+                  width: '75%',
+                  height: 400,
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                }}>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#00ca74',
+                    height: 40,
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                  }}>
+                  <Text
+                    style={{fontSize: 17, fontWeight: 'bold', color: 'black'}}>
+                    Konfirmasi
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: 10,
+                  }}>
+                  <Text>Kode Konfirmasi :</Text>
+                  <Text style={{fontSize: 25, color: 'black'}}>KOde disini</Text>
+                </View>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingHorizontal: 10,
+                  }}>
+                  <Text
+                    style={{fontSize: 15, textAlign: 'center'}}>
+                    Kode :
+                  </Text>
+                  <TextInput
+                  placeholder='Kode'
+                    style={{letterSpacing: 5, height: 60, width: 150, backgroundColor: '#eeeeee', fontSize: 30, textAlign: 'center'}}
+                  />
+                </View>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: 10,
+                  }}>
+                  <Text style={{fontSize: 14, color: 'black', textAlign: 'justify'}}>Minta lawan chat anda untuk mengisikan Kode Konfirmasi di atas, lalu minta Kode Konfirmasi dia untuk anda isikan di bagian Kode di atas.</Text>
+                </View>
+                <View
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 10,
+                    paddingBottom: 15,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      width: '48%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderWidth: 2,
+                      borderColor: '#00ca74',
+                      borderRadius: 5,
+                      height: 40,
+                      backgroundColor: '#eeeeee',
+                    }}
+                    onPress={() => {
+                      this._setModalVisible(!modalConfirm);
+                    }}>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        fontSize: 15,
+                        color: '#00ca74',
+                      }}>
+                      BATAL
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      width: '48%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderWidth: 2,
+                      borderColor: '#00ca74',
+                      backgroundColor: '#00ca74',
+                      borderRadius: 5,
+                      height: 40,
+                    }}
+                    onPress={() => this._userLogout()}>
+                    <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                      KONFIRMASI
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
       </View>
     );
   }
