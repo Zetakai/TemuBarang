@@ -622,7 +622,7 @@ export class Profile extends Component {
             <View
               style={{
                 width: 300,
-                height: 255,
+                height: 300,
                 backgroundColor: '#eeeeee',
                 borderRadius: 10,
               }}>
@@ -645,10 +645,11 @@ export class Profile extends Component {
                   justifyContent: 'center',
                   alignItems: 'center',
                   padding: 10,
+                  height: '40%',
                 }}>
                 <Logout name="logout" size={75} color='black' />
               </View>
-              <View style={{justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10}}>
+              <View style={{justifyContent: 'center', alignItems: 'center', height: '30%'}}>
                 <Text
                   style={{fontSize: 15, color: 'black', textAlign: 'center'}}>
                   Apakah anda yakin ingin logout? Anda dapat login kembali jika
@@ -657,11 +658,12 @@ export class Profile extends Component {
               </View>
               <View
                 style={{
+                  position: 'absolute',
+                  bottom: 0,
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   paddingHorizontal: 10,
                   paddingBottom: 15,
-                  marginTop: 10
                 }}>
                 <TouchableOpacity
                   style={{
