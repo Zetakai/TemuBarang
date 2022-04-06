@@ -596,17 +596,17 @@ export default class UploadScreen extends Component {
                     onFocus={() => this.setState({showcat: false})}
                   />
                 </View>
-                {/* <CText style={styles.textcolor}>Ciri-ciri barang</CText>
+                <CText style={styles.textcolor}>Key Unik</CText>
                 <View style={styles.profInput}>
                   <TextInput
                     placeholderTextColor={'dimgrey'}
-                    placeholder="ciri"
+                    placeholder="Key unik..."
                     style={{width: '80%', color: 'dimgrey', paddingLeft: 10}}
                     value={key}
                     onChangeText={value => this.setState({key: value})}
                     onFocus={() => this.setState({showcat: false})}
                   />
-                </View> */}
+                </View>
                 <CText style={styles.textcolor}>Deskripsi Barang</CText>
                 <View style={styles.profInput}>
                   <TextInput
@@ -698,6 +698,9 @@ export default class UploadScreen extends Component {
               </Text>
               <Text style={{color: 'black'}}>
                 3. Anda dianjurkan mencari barang hilang atau barang temuan di halaman daftar barang sebelum mengepos barang hilang atau barang temuan anda.
+              </Text>
+              <Text style={{color: 'black'}}>
+                4. Gunakan form key unik untuk informasi semisal: nomor KTP, nomor kendaraan, dll
               </Text>
               </View>
             </View>
