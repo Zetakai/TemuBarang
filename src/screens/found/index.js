@@ -174,6 +174,15 @@ export default class FoundScreen extends Component {
           <View></View>
         </View>
         <View style={{backgroundColor: '#00ca74'}}>
+        <View
+          style={{
+            width: '100%',
+            height: 150,
+            backgroundColor: '#00ca74',
+            position: 'absolute',
+            top:50,
+            borderBottomLeftRadius: 75,
+          }}></View>
           <View
             style={{
               flexDirection: 'row',
@@ -220,15 +229,7 @@ export default class FoundScreen extends Component {
             height: 10,
             backgroundColor: '#00ca74',
           }}></View>
-        <View
-          style={{
-            width: '100%',
-            height: 150,
-            backgroundColor: '#00ca74',
-            position: 'absolute',
-            top: 128,
-            borderBottomLeftRadius: 75,
-          }}></View>
+        
 
         <ScrollView
           style={{
@@ -427,6 +428,7 @@ export default class FoundScreen extends Component {
                 })}
           </View>
         </ScrollView>
+        
       </View>
     );
   }
