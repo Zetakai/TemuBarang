@@ -78,11 +78,20 @@ export default class FoundScreen extends Component {
         const itemData = item.namabarang
           ? item.namabarang.toUpperCase()
           : ''.toUpperCase();
-        const keyData = item.key ? item.key.toUpperCase() : ''.toUpperCase();
         const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1, keyData.indexOf(textData) > -1;
+        return itemData.indexOf(textData) > -1;
+        
       });
-      this.setState({renderData: newData});
+      const keyData = dataFire.filter(item => {
+        const itemData = item.keyunik
+          ? item.keyunik.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+        
+        
+      });console.log(keyData)
+      keyData.length>0?this.setState({renderData: keyData}):this.setState({renderData: newData})
     } else {
       this.setState({renderData: null});
     }
@@ -217,7 +226,7 @@ export default class FoundScreen extends Component {
             height: 150,
             backgroundColor: '#00ca74',
             position: 'absolute',
-            top: 108,
+            top: 128,
             borderBottomLeftRadius: 75,
           }}></View>
 

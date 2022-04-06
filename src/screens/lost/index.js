@@ -28,8 +28,7 @@ export default class LostScreen extends Component {
       renderData: [],
       refreshing: false,
       modalVisible: false,
-      pressedIndex: null,
-      pressedAll: false,
+      pressedIndex: null,pressedAll:false
     };
     let cari;
     let mounted;
@@ -53,8 +52,7 @@ export default class LostScreen extends Component {
           let sorted = cup.flat().sort((a, b) => b.time - a.time);
           this.mounted == true && this.setState({dataFire: sorted});
         }
-      });
-    this.setState({pressedAll: true});
+      });this.setState({pressedAll: true})
   }
   componentWillUnmount() {
     this.mounted = false;
@@ -66,11 +64,20 @@ export default class LostScreen extends Component {
         const itemData = item.namabarang
           ? item.namabarang.toUpperCase()
           : ''.toUpperCase();
-        const keyData = item.key ? item.key.toUpperCase() : ''.toUpperCase();
         const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1, keyData.indexOf(textData) > -1;
+        return itemData.indexOf(textData) > -1;
+        
       });
-      this.setState({renderData: newData});
+      const keyData = dataFire.filter(item => {
+        const itemData = item.keyunik
+          ? item.keyunik.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+        
+        
+      });console.log(keyData)
+      keyData.length>0?this.setState({renderData: keyData}):this.setState({renderData: newData})
     } else {
       this.setState({renderData: null});
     }
@@ -112,7 +119,7 @@ export default class LostScreen extends Component {
         });
     });
   };
-
+  
   render() {
     const {
       dataFire,
@@ -120,8 +127,7 @@ export default class LostScreen extends Component {
       searchData,
       refreshing,
       modalVisible,
-      pressedIndex,
-      pressedAll,
+      pressedIndex,pressedAll
     } = this.state;
     return (
       <View style={{backgroundColor: '#e5e5e5', flex: 1}}>
@@ -204,7 +210,7 @@ export default class LostScreen extends Component {
             height: 150,
             backgroundColor: '#00ca74',
             position: 'absolute',
-            top: 115,
+            top: 128,
             borderBottomLeftRadius: 75,
           }}></View>
 
@@ -222,38 +228,39 @@ export default class LostScreen extends Component {
             />
           }>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity
-              onPress={() => {
-                this._barangSearchkategori(null);
-                this.setState({pressedAll: true, pressedIndex: null});
-              }}
-              style={{
-                marginRight: 10,
-                marginVertical: 15,
-                borderRadius: 25,
-                height: 40,
-                flexDirection: 'row',
-                backgroundColor: pressedAll != true ? '#549670' : 'white',
-                alignSelf: 'flex-start',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  paddingHorizontal: 15,
-                  color: pressedAll != true ? 'white' : '#549670',
-                  fontSize: 14,
-                }}>
-                Semua
-                <Text style={{color: '#e5e5e5'}}> {dataFire.length}</Text>
-              </Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+                    onPress={() => {
+                      this._barangSearchkategori(null);
+                      this.setState({pressedAll: true,pressedIndex:null});
+                    }}
+                    style={{
+                      marginRight: 10,
+                      marginVertical: 15,
+                      borderRadius: 25,
+                      height: 40,
+                      flexDirection: 'row',
+                      backgroundColor:
+                        pressedAll != true ? '#549670' : 'white',
+                      alignSelf: 'flex-start',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        paddingHorizontal: 15,
+                        color: pressedAll != true ? 'white' : '#549670',
+                        fontSize: 14
+                      }}>
+                      Semua
+                      <Text style={{color: '#e5e5e5'}}>   {dataFire.length}</Text>
+                    </Text>
+                  </TouchableOpacity>
             {dataFire.map((value, index) => {
               if (value.kategori) {
                 return (
                   <TouchableOpacity
                     onPress={() => {
                       this._barangSearchkategori(value.kategori);
-                      this.setState({pressedIndex: index, pressedAll: false});
+                      this.setState({pressedIndex: index,pressedAll:false});
                     }}
                     key={index}
                     style={{
@@ -271,16 +278,10 @@ export default class LostScreen extends Component {
                       style={{
                         paddingHorizontal: 15,
                         color: pressedIndex != index ? 'white' : '#549670',
-                        fontSize: 14,
+                        fontSize: 14
                       }}>
-                      {value.kategori}
-                      <Text style={{color: '#e5e5e5'}}>
-                        {' '}
-                        {
-                          dataFire.filter(v => v.kategori === value.kategori)
-                            .length
-                        }
-                      </Text>
+                      {value.kategori}  
+                      <Text style={{color: '#e5e5e5'}}>   {dataFire.filter((v) => (v.kategori === value.kategori)).length}</Text>
                     </Text>
                   </TouchableOpacity>
                 );
@@ -314,29 +315,14 @@ export default class LostScreen extends Component {
                               }}
                             />
                           </View>
-                          <View
-                            style={{
-                              flexShrink: 1,
-                              margin: 5,
-                              alignItems: 'center',
-                            }}>
-                            <Text
-                              style={{
-                                color: 'black',
-                                fontSize: 15,
-                                fontWeight: 'bold',
-                              }}>
+                          <View style={{flexShrink: 1, margin: 5, alignItems:'center'}}>
+                            <Text style={{color: 'black', fontSize: 15, fontWeight: 'bold'}}>
                               {x.namabarang}
                             </Text>
                             <Text style={{color: 'black', fontSize: 14}}>
                               {x.kategori}
                             </Text>
-                            <Text
-                              style={{
-                                color: '#808080',
-                                marginTop: 5,
-                                marginBottom: 5,
-                              }}>
+                            <Text style={{color: '#808080', marginTop: 5, marginBottom: 5}}>
                               <EvilIcons name="location" size={16} />
                               {x.lokasi}
                             </Text>
@@ -371,29 +357,14 @@ export default class LostScreen extends Component {
                               }}
                             />
                           </View>
-                          <View
-                            style={{
-                              flexShrink: 1,
-                              margin: 5,
-                              alignItems: 'center',
-                            }}>
-                            <Text
-                              style={{
-                                color: 'black',
-                                fontSize: 15,
-                                fontWeight: 'bold',
-                              }}>
+                          <View style={{flexShrink: 1, margin: 5, alignItems:'center'}}>
+                            <Text style={{color: 'black', fontSize: 15, fontWeight: 'bold'}}>
                               {x.namabarang}
                             </Text>
                             <Text style={{color: 'black', fontSize: 14}}>
                               {x.kategori}
                             </Text>
-                            <Text
-                              style={{
-                                color: '#808080',
-                                marginTop: 5,
-                                marginBottom: 5,
-                              }}>
+                            <Text style={{color: '#808080', marginTop: 5, marginBottom: 5}}>
                               <EvilIcons name="location" size={16} />
                               {x.lokasi}
                             </Text>

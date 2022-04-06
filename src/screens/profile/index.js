@@ -253,8 +253,8 @@ export class Profile extends Component {
           .update({
             posts: dataFound.filter(post => post.postID != x.postID),
           })
-          .then(commentexists && commentexists.delete()).then(commentchildexists && commentchildexists.delete())
-          .then(x.photoURL && storage().refFromURL(x.photoURL).delete())
+          // .then(commentexists && commentexists.delete()).then(commentchildexists && commentchildexists.delete())
+          // .then(x.photoURL && storage().refFromURL(x.photoURL).delete())
           .catch(function (error) {
             console.error('Error removing document: ', error);
           })
@@ -269,8 +269,9 @@ export class Profile extends Component {
               .collection('Comments')
               .doc(x.uid + x.postID)
               .delete(),
-          ).then(commentchildexists && commentchildexists.delete())
-          .then(x.photoURL && storage().refFromURL(x.photoURL).delete())
+          )
+          // .then(commentchildexists && commentchildexists.delete())
+          // .then(x.photoURL && storage().refFromURL(x.photoURL).delete())
           .catch(function (error) {
             console.error('Error removing document: ', error);
           });
