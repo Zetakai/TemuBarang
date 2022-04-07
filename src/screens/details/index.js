@@ -160,6 +160,7 @@ export class DetailsScreen extends Component {
       isVerified,
       isVerifiedAll,
     } = this.state;
+    
     return (
       <View style={styles.container}>
         <ScrollView style={{}}>
@@ -261,7 +262,7 @@ export class DetailsScreen extends Component {
                   </View>
                 </View>
                 <View style={{width: '35%'}}>
-                  <Text style={{color: 'grey'}}>Ditemukan di: </Text>
+                  <Text style={{color: 'grey'}}>{params.kategoripos=='Found'?'Ditemukan di:':'Hilang di'} </Text>
                   <View style={{flexDirection: 'row', paddingTop: 15}}>
                     <View
                       style={{

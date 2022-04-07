@@ -33,8 +33,10 @@ export default class SplashScreen extends Component {
 
         <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center' }}>
           <Upvector11 style={{ width: 150, height: 150, alignSelf: 'center', justifyContent: 'center',alignContent:'center'}} />
-          <View>
-            <Text style={styles.logo} >Temu Barang</Text>
+          <View><View style={{flexDirection:'row',justifyContent:'center'}}>
+
+            <Text style={{...styles.logo,color:'darkgreen'}} >Temu </Text><Text style={{...styles.logo,color:'#745200'}} >Barang</Text>
+          </View>
             <ActivityIndicator style={{marginTop:50}} size="large" color="#00ff00" />
           </View>
 
