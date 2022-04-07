@@ -618,7 +618,7 @@ export default class UploadScreen extends Component {
                     onFocus={() => this.setState({showcat: false})}
                   />
                 </View>
-                {selectedChoice == 'Lost' ? (
+                {/* {selectedChoice == 'Lost' ? (
                   <View>
                     <CText style={styles.textcolor}>
                       Hadiah Bagi Yang Menemukan
@@ -640,7 +640,7 @@ export default class UploadScreen extends Component {
                   </View>
                 ) : (
                   <View></View>
-                )}
+                )} */}
               </View>
             )}
             {/[o]/.test(selectedChoice) && (<View

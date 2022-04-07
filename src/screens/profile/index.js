@@ -746,7 +746,7 @@ export class Profile extends Component {
               <View style={{justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10}}>
               <Text
                   style={{fontSize: 15, color: 'black', textAlign: 'center'}}>
-                  perihal pengajuan akun offical dan lain-lain. anda dapat menghubungi:
+                  perihal pengajuan akun offical, laporan dan lain-lain. Anda dapat menghubungi:
                  </Text>
                 <Text
                   style={{fontSize: 15, color: 'black', textAlign: 'left'}}>
