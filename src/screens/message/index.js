@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
-  TextInput
+  TextInput,ToastAndroid,ActivityIndicator
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
@@ -38,7 +38,7 @@ export class Message extends Component {
       inputText: '',
       validationCode: '',
       post: null,
-      modalConfirm: false,
+      modalConfirm: false,codeinput:'',codesnapshot:"",ourcode:'',theircode:'',isConfirmed:false,istheirConfirmed:false
     };
     let mounted;
   }
@@ -50,8 +50,32 @@ export class Message extends Component {
   componentDidMount() {
     const {user} = this.props;
     const {params} = this.props.route;
-    const {target, messages} = this.state;
+    const {target, messages,ourcode,theircode} = this.state;
     this.mounted = true;
+    firestore()
+      .collection('Validation')
+      .doc(user.uid)
+      .collection('ValidateWith')
+      .doc(params.uid)
+      .onSnapshot(res => {
+        if (res)
+          if (res.data())
+            this.mounted == true &&
+             this.setState({ourcode:res.data().code,isConfirmed:res.data().isConfirmed})
+             console.log(ourcode)
+      })
+firestore()
+      .collection('Validation')
+      .doc(params.uid)
+      .collection('ValidateWith')
+      .doc(user.uid)
+      .onSnapshot(res => {
+        if (res)
+          if (res.data())
+          this.mounted == true &&
+          this.setState({theircode:res.data().code,istheirConfirmed:res.data().isConfirmed})
+             
+      })
     firestore()
       .collection('Message')
       .doc(user.uid)
@@ -190,29 +214,41 @@ export class Message extends Component {
   _validate = () => {
     const {user} = this.props;
     const {params} = this.props.route;
-    this.setState({
-      validationCode: Math.floor(100000 + Math.random() * 900000),
-    });
+    
     firestore()
       .collection('Validation')
-      .doc(params.uid)
-      .collection('ValidateWith')
       .doc(user.uid)
+      .collection('ValidateWith')
+      .doc(params.uid)
       .set({
         targetuid: params.uid,
         senderuid: user.uid,
-        code: validationCode,
-      });
+        code: Math.floor(1000 + Math.random() * 9000),
+        isConfirmed:false
+      })
   };
-
+_checkvalidate=()=>{const {user} = this.props;
+const {params} = this.props.route;
+const{theircode,ourcode,codeinput}=this.state
+codeinput==theircode?firestore()
+.collection('Validation')
+.doc(user.uid)
+.collection('ValidateWith')
+.doc(params.uid)
+.update({isConfirmed:true
+}):ToastAndroid.show(
+  'Kode yang anda dimasukan salah',
+  ToastAndroid.SHORT,
+);
+}
   render() {
     const {navigation, dataUse, route, data, uid, user} = this.props;
     const {params} = this.props.route;
     // const {data,uid}=navigation.route.params
 
     // const {image, name} = this.state.params;
-    const {inputText, messages, post, modalConfirm} = this.state;
-
+    const {inputText, messages, post, modalConfirm,ourcode,theircode,codeinput,codesnapshot,isConfirmed,istheirConfirmed} = this.state;
+    console.log(isConfirmed,istheirConfirmed)
     return (
       <View style={styles.page}>
         <View style={styles.topBar}>
@@ -282,7 +318,7 @@ export class Message extends Component {
               }}>
               <Text style={{color: 'black'}}>Ke Post</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {isConfirmed==true&&istheirConfirmed==true?<TouchableOpacity
               style={{
                 marginTop: 15,
                 borderRadius: 25,
@@ -296,8 +332,23 @@ export class Message extends Component {
                 alignItems: 'center',
               }}
               onPress= {()=>{this._setModalVisible(!modalConfirm)}}>
+              <Text style={{color: 'black'}}>Selamat Barang Kembali</Text>
+            </TouchableOpacity>:<TouchableOpacity
+              style={{
+                marginTop: 15,
+                borderRadius: 25,
+                height: 40,
+                width: '70%',
+                borderWidth: 1,
+                borderColor: 'black',
+                backgroundColor: 'pink',
+                alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress= {()=>{this._validate();this._setModalVisible(!modalConfirm)}}>
               <Text style={{color: 'black'}}>Konfirmasi Barang Kembali</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
           </View>
         </View>
         <ScrollView
@@ -381,7 +432,72 @@ export class Message extends Component {
             }}>
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <View
+              {isConfirmed==true&&istheirConfirmed==true?<View
+                style={{
+                  width: '75%',
+                  
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                }}>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#00ca74',
+                    height: 40,
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                  }}>
+                  <Text
+                    style={{fontSize: 17, fontWeight: 'bold', color: 'black'}}>
+                    Selamat!
+                  </Text>
+                </View>
+                
+                
+                
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: 10,
+                  }}>
+                  <Text style={{fontSize: 14, color: 'black', textAlign: 'justify'}}>Terima Kasih telah menggunakan jasa TemuBarang!</Text>
+                </View>
+                <View
+                  style={{
+                    
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    paddingHorizontal: 10,
+                    paddingBottom: 15,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      width: '48%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderWidth: 2,
+                      borderColor: '#00ca74',
+                      borderRadius: 5,
+                      height: 40,
+                      backgroundColor: '#eeeeee',
+                    }}
+                    onPress={() => {navigation.replace('TabNav')
+                    }}>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        fontSize: 15,
+                        color: '#00ca74',
+                      }}>
+                      Oke
+                    </Text>
+                  </TouchableOpacity>
+                 
+                </View>
+              </View>:<View
                 style={{
                   width: '75%',
                   height: 400,
@@ -409,9 +525,9 @@ export class Message extends Component {
                     padding: 10,
                   }}>
                   <Text>Kode Konfirmasi :</Text>
-                  <Text style={{fontSize: 25, color: 'black'}}>KOde disini</Text>
+                  <Text style={{fontSize: 25, color: 'black'}}>{ourcode}</Text>
                 </View>
-                <View
+                {isConfirmed==true?<ActivityIndicator size="large" color="#00ff00" />:<View
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -423,9 +539,15 @@ export class Message extends Component {
                   </Text>
                   <TextInput
                   placeholder='Kode'
-                    style={{letterSpacing: 5, height: 60, width: 150, backgroundColor: '#eeeeee', fontSize: 30, textAlign: 'center'}}
-                  />
+                  placeholderTextColor={'white'}
+                    style={{color:'white',letterSpacing: 5, height: 60, width: 150, backgroundColor: 'dimgrey', fontSize: 30, textAlign: 'center'}}
+                    value={codeinput}
+                    onChangeText={code => {
+                      this.setState({codeinput:code});
+                    }}/>
                 </View>
+                }
+                
                 <View
                   style={{
                     justifyContent: 'center',
@@ -478,13 +600,13 @@ export class Message extends Component {
                       borderRadius: 5,
                       height: 40,
                     }}
-                    onPress={() => this._userLogout()}>
+                    onPress={() =>{this._checkvalidate()}}>
                     <Text style={{fontWeight: 'bold', fontSize: 15}}>
                       KONFIRMASI
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
+              </View>}
             </View>
           </Modal>
       </View>

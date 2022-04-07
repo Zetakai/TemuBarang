@@ -64,7 +64,7 @@ export default class RegisterScreen extends Component {
   render() {
     const {email, password,emailBox,passwordBox} = this.state;
     return (
-      <View style={{flex: 1, backgroundColor: '#201C1B'}}>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
          <View style={{  justifyContent:'center',flex:1/10,marginLeft:0,left:0}} >
         <Upvector color={'green'}/>
         </View>
@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#D4CEC6',
+    color: 'black',
   },
 });

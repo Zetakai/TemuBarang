@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#0B7B86',
+    color: 'black',
     shadowRadius: 2,
   },
   button: {width: 300, borderRadius: 15, borderColor: '#AFA69F'},

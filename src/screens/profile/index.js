@@ -39,10 +39,12 @@ export class Profile extends Component {
       confirm: null,
       code: '',
       settingAcc: false,
-      modalVisible: false,editpost:false,modalVisiblePost:false,selectedpost:null
+      modalVisible: false,editpost:false,modalVisiblePost:false,selectedpost:null,modalVisibleContact:false
     };
   }
-
+  _setModalVisibleContact = visible => {
+    this.setState({modalVisibleContact: visible});
+  };
   _setModalVisible = visible => {
     this.setState({modalVisible: visible});
   };
@@ -314,7 +316,7 @@ export class Profile extends Component {
       dataLost,
       dataFound,
       settingAcc,
-      modalVisible,editpost,modalVisiblePost,selectedpost
+      modalVisible,editpost,modalVisiblePost,selectedpost,modalVisibleContact
     } = this.state;
     let dataHistory = [...dataLost, ...dataFound].sort(
       (a, b) => b.time - a.time,
@@ -416,7 +418,7 @@ export class Profile extends Component {
                   }}>
                   <Text style={styles.textSetting}>Statistik</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.setting}>
+                <TouchableOpacity style={styles.setting} onPress={()=>{this._setModalVisibleContact(!modalVisibleContact);this.setState({settingAcc:false})}}>
                   <Text style={styles.textSetting}>Kontak Kami</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -696,6 +698,87 @@ export class Profile extends Component {
                   onPress={() => this._userLogout()}>
                   <Text style={{fontWeight: 'bold', fontSize: 15}}>LOGOUT</Text>
                 </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent
+          visible={modalVisibleContact}
+          onRequestClose={() => {
+            this._setModalVisibleContact(!modalVisibleContact);
+          }}>
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View
+              style={{
+                width:'90%',
+                backgroundColor: '#eeeeee',
+                borderRadius: 10,
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#00ca74',
+                  height: 40,
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                }}>
+                <Text
+                  style={{fontSize: 17, fontWeight: 'bold', color: 'black'}}>
+                  Kontak Kami
+                </Text>
+              </View>
+              {/* <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: 10,
+                }}>
+                <Delete
+                                color={'black'}
+                                name="trash-2"
+                                size={75}
+                              />
+              </View> */}
+              <View style={{justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10}}>
+              <Text
+                  style={{fontSize: 15, color: 'black', textAlign: 'center'}}>
+                  perihal pengajuan akun offical dan lain-lain. anda dapat menghubungi:
+                 </Text>
+                <Text
+                  style={{fontSize: 15, color: 'black', textAlign: 'left'}}>
+                  email: thecocoanutmedia@gmail.com {'\n'}
+                  telp: +62813900000719
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingHorizontal: 10,
+                  paddingBottom: 15,
+                  marginTop: 10
+                }}>
+                <TouchableOpacity
+                  style={{
+                    width: '48%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderWidth: 2,
+                    borderColor: '#00ca74',
+                    borderRadius: 5,
+                    height: 40,
+                    backgroundColor: '#eeeeee'
+                  }}
+                  onPress={() => {
+                    this._setModalVisibleContact(!modalVisibleContact)
+                  }}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15,color:'#00ca74'}}>OK</Text>
+                </TouchableOpacity>
+                
               </View>
             </View>
           </View>

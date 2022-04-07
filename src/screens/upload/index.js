@@ -702,6 +702,9 @@ export default class UploadScreen extends Component {
               <Text style={{color: 'black'}}>
                 4. Gunakan form key unik untuk informasi semisal: nomor KTP, nomor kendaraan, dll
               </Text>
+              <Text style={{color: 'black'}}>
+                5. Anda dapat melakukan pencarian key unik pada search bar di halaman barang hilang atau barang temuan
+              </Text>
               </View>
             </View>
           )}
