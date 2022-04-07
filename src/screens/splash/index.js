@@ -24,24 +24,24 @@ export default class SplashScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: 'white' }}>
-        <View style={{ flex: 1/2.3, justifyContent: 'center', alignContent: 'center', height: 200, width: 600 }} >
+        {/* <View style={{ flex: 1/2.3, justifyContent: 'center', alignContent: 'center', height: 200, width: 600 }} >
           <Upvector
            width={responsiveWidth(460)}
            height={responsiveWidth(360)} />
-        </View>
+        </View> */}
 
 
         <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center' }}>
           <Upvector11 style={{ width: 150, height: 150, alignSelf: 'center', justifyContent: 'center',alignContent:'center'}} />
           <View>
             <Text style={styles.logo} >Temu Barang</Text>
-            <ActivityIndicator size="large" color="#00ff00" />
+            <ActivityIndicator style={{marginTop:50}} size="large" color="#00ff00" />
           </View>
 
         </View>
-        <View style={{flex: 1, justifyContent: 'center'}}>
+        {/* <View style={{flex: 1, justifyContent: 'center'}}>
           <Upvector10 color={'green'} />
-        </View>
+        </View> */}
       </View>
     );
   }
